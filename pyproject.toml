@@ -1,0 +1,17 @@
+[project]
+name = "plc-process-management"
+version = "1.0.0"
+description = "挤出机工艺参数管理系统"
+requires-python = ">=3.10"
+dependencies = [
+    "fastapi>=0.115.0",
+    "uvicorn[standard]>=0.34.0",
+    "sqlalchemy>=2.0.36",
+    "pymysql>=1.1.1",
+    "python-multipart>=0.0.20",
+    "python-jose[cryptography]>=3.3.0",
+    "passlib[bcrypt]>=1.7.4",
+    "pydantic>=2.10.0",
+    "pydantic-settings>=2.7.0",
+    "python-snap7>=3.0.0",
+]
