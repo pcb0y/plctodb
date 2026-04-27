@@ -266,19 +266,65 @@ def read_machine_parameters(machine_id: int, db: Session = Depends(get_db), requ
         raise HTTPException(status_code=400, detail="机台未配置IP地址")
     
     print(f"开始读取机台 {machine.machine_name} (IP: {machine.ip_address}, Rack: {machine.rack}, Slot: {machine.slot})")
+    print(f"机台模板ID: {machine.template_id}")
     
     plc = PLCClient(machine.ip_address, machine.rack, machine.slot)
     if not plc.connect():
         raise HTTPException(status_code=500, detail=f"PLC连接失败，请检查IP地址、Rack和Slot配置")
     
-    parameters = db.query(ProcessParameter).filter(
-        ProcessParameter.machine_id == machine_id,
-        ProcessParameter.is_active == True
-    ).all()
-    
-    if not parameters:
-        plc.disconnect()
-        raise HTTPException(status_code=404, detail="该机台没有配置工艺参数，请先添加工艺参数")
+    # 检查机台是否关联了模板
+    if machine.template_id:
+        print(f"机台关联了模板 ID: {machine.template_id}")
+        # 获取模板参数
+        template = db.query(Template).filter(Template.id == machine.template_id).first()
+        if template:
+                print(f"找到模板: {template.name}")
+                # 显式加载模板参数
+                from sqlalchemy.orm import joinedload
+                template = db.query(Template).options(joinedload(Template.template_parameters)).filter(Template.id == machine.template_id).first()
+                print(f"模板参数数量: {len(template.template_parameters) if template.template_parameters else 0}")
+                # 从模板参数创建临时参数列表
+                parameters = []
+                if template.template_parameters:
+                    for param in template.template_parameters:
+                        print(f"模板参数: {param.parameter_name}, 地址: {param.parameter_address}")
+                        # 创建临时ProcessParameter对象
+                        temp_param = ProcessParameter(
+                            machine_id=machine_id,
+                            product_id=None,
+                            parameter_name=param.parameter_name,
+                            parameter_address=param.parameter_address,
+                            parameter_value=param.parameter_value,
+                            parameter_unit=param.parameter_unit,
+                            parameter_type=param.parameter_type,
+                            is_active=True
+                        )
+                        parameters.append(temp_param)
+                
+                if not parameters:
+                    plc.disconnect()
+                    raise HTTPException(status_code=404, detail="该模板没有配置参数")
+        else:
+            print(f"模板 ID: {machine.template_id} 不存在")
+            # 模板不存在，使用机台自身的参数
+            parameters = db.query(ProcessParameter).filter(
+                ProcessParameter.machine_id == machine_id,
+                ProcessParameter.is_active == True
+            ).all()
+            
+            if not parameters:
+                plc.disconnect()
+                raise HTTPException(status_code=404, detail="该机台没有配置工艺参数，请先添加工艺参数")
+    else:
+        # 机台没有关联模板，使用机台自身的参数
+        parameters = db.query(ProcessParameter).filter(
+            ProcessParameter.machine_id == machine_id,
+            ProcessParameter.is_active == True
+        ).all()
+        
+        if not parameters:
+            plc.disconnect()
+            raise HTTPException(status_code=404, detail="该机台没有配置工艺参数，请先添加工艺参数")
     
     results = {}
     success_count = 0
@@ -376,6 +422,15 @@ def delete_product(product_id: int, db: Session = Depends(get_db), request: Requ
     product = db.query(Product).filter(Product.id == product_id).first()
     if not product:
         raise HTTPException(status_code=404, detail="产品不存在")
+    
+    # 检查是否有相关的工艺参数
+    has_parameters = db.query(ProcessParameter).filter(ProcessParameter.product_id == product_id).first() is not None
+    # 检查是否有相关的生产记录
+    has_records = db.query(ProcessRecord).filter(ProcessRecord.product_id == product_id).first() is not None
+    
+    if has_parameters or has_records:
+        raise HTTPException(status_code=400, detail="该产品有相关的工艺参数或生产记录，不允许删除")
+    
     db.delete(product)
     db.commit()
     return {"message": "产品删除成功"}
@@ -816,6 +871,135 @@ def delete_template(template_id: int, db: Session = Depends(get_db), request: Re
     db.commit()
     
     return {"message": "模板删除成功"}
+
+# 模板参数管理API
+@app.post("/api/templates/{template_id}/parameters")
+def add_template_parameter(template_id: int, parameter: TemplateParameterBase, db: Session = Depends(get_db), request: Request = None):
+    verify_token(request)
+    
+    # 检查模板是否存在
+    template = db.query(Template).filter(Template.id == template_id).first()
+    if not template:
+        raise HTTPException(status_code=404, detail="模板不存在")
+    
+    # 创建模板参数
+    db_param = TemplateParameter(
+        template_id=template_id,
+        parameter_name=parameter.parameter_name,
+        parameter_address=parameter.parameter_address,
+        parameter_value=parameter.parameter_value,
+        parameter_unit=parameter.parameter_unit,
+        parameter_type=parameter.parameter_type
+    )
+    db.add(db_param)
+    db.commit()
+    db.refresh(db_param)
+    
+    # 构建响应
+    response = {
+        "id": db_param.id,
+        "template_id": db_param.template_id,
+        "parameter_name": db_param.parameter_name,
+        "parameter_address": db_param.parameter_address,
+        "parameter_value": db_param.parameter_value,
+        "parameter_unit": db_param.parameter_unit,
+        "parameter_type": db_param.parameter_type
+    }
+    
+    return response
+
+@app.put("/api/templates/{template_id}/parameters/{parameter_id}")
+def update_template_parameter(template_id: int, parameter_id: int, parameter: TemplateParameterBase, db: Session = Depends(get_db), request: Request = None):
+    verify_token(request)
+    
+    # 检查模板是否存在
+    template = db.query(Template).filter(Template.id == template_id).first()
+    if not template:
+        raise HTTPException(status_code=404, detail="模板不存在")
+    
+    # 检查参数是否存在且属于该模板
+    db_param = db.query(TemplateParameter).filter(
+        TemplateParameter.id == parameter_id,
+        TemplateParameter.template_id == template_id
+    ).first()
+    if not db_param:
+        raise HTTPException(status_code=404, detail="模板参数不存在")
+    
+    # 更新参数信息
+    db_param.parameter_name = parameter.parameter_name
+    db_param.parameter_address = parameter.parameter_address
+    db_param.parameter_value = parameter.parameter_value
+    db_param.parameter_unit = parameter.parameter_unit
+    db_param.parameter_type = parameter.parameter_type
+    
+    db.commit()
+    db.refresh(db_param)
+    
+    # 构建响应
+    response = {
+        "id": db_param.id,
+        "template_id": db_param.template_id,
+        "parameter_name": db_param.parameter_name,
+        "parameter_address": db_param.parameter_address,
+        "parameter_value": db_param.parameter_value,
+        "parameter_unit": db_param.parameter_unit,
+        "parameter_type": db_param.parameter_type
+    }
+    
+    return response
+
+@app.delete("/api/templates/{template_id}/parameters/{parameter_id}")
+def delete_template_parameter(template_id: int, parameter_id: int, db: Session = Depends(get_db), request: Request = None):
+    verify_token(request)
+    
+    # 检查模板是否存在
+    template = db.query(Template).filter(Template.id == template_id).first()
+    if not template:
+        raise HTTPException(status_code=404, detail="模板不存在")
+    
+    # 检查参数是否存在且属于该模板
+    db_param = db.query(TemplateParameter).filter(
+        TemplateParameter.id == parameter_id,
+        TemplateParameter.template_id == template_id
+    ).first()
+    if not db_param:
+        raise HTTPException(status_code=404, detail="模板参数不存在")
+    
+    # 删除参数
+    db.delete(db_param)
+    db.commit()
+    
+    return {"message": "模板参数删除成功"}
+
+@app.get("/api/templates/{template_id}/parameters/{parameter_id}")
+def get_template_parameter(template_id: int, parameter_id: int, db: Session = Depends(get_db), request: Request = None):
+    verify_token(request)
+    
+    # 检查模板是否存在
+    template = db.query(Template).filter(Template.id == template_id).first()
+    if not template:
+        raise HTTPException(status_code=404, detail="模板不存在")
+    
+    # 检查参数是否存在且属于该模板
+    db_param = db.query(TemplateParameter).filter(
+        TemplateParameter.id == parameter_id,
+        TemplateParameter.template_id == template_id
+    ).first()
+    if not db_param:
+        raise HTTPException(status_code=404, detail="模板参数不存在")
+    
+    # 构建响应
+    response = {
+        "id": db_param.id,
+        "template_id": db_param.template_id,
+        "parameter_name": db_param.parameter_name,
+        "parameter_address": db_param.parameter_address,
+        "parameter_value": db_param.parameter_value,
+        "parameter_unit": db_param.parameter_unit,
+        "parameter_type": db_param.parameter_type
+    }
+    
+    return response
 
 # 机台绑定模板API
 @app.post("/api/machines/{machine_id}/bind-template")

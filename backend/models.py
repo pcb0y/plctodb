@@ -29,7 +29,7 @@ class Machine(Base):
     ip_address = Column(String(50))
     rack = Column(Integer, default=0)
     slot = Column(Integer, default=1)
-    status = Column(String(20), default="offline")
+    status = Column(String(20), default="")
     template_id = Column(Integer, ForeignKey("templates.id", ondelete="SET NULL"), nullable=True)
     created_at = Column(DateTime(timezone=True), server_default=func.now())
     updated_at = Column(DateTime(timezone=True), onupdate=func.now())
