@@ -239,6 +239,26 @@
                                 </tr>
                             </tbody>
                         </table>
+                        <!-- 分页组件 -->
+                        <div style="margin-top: 20px; display: flex; justify-content: flex-end; align-items: center; gap: 15px; padding: 10px 0; border-top: 1px solid #e8e8e8;">
+                            <div style="display: flex; align-items: center; gap: 8px;">
+                                <span style="font-size: 14px; color: #666;">每页显示：</span>
+                                <select v-model="pageSize" @change="() => handleSizeChange(pageSize)" style="padding: 6px 10px; border: 1px solid #d9d9d9; border-radius: 4px; font-size: 14px;">
+                                    <option value="10">10</option>
+                                    <option value="20">20</option>
+                                    <option value="50">50</option>
+                                    <option value="100">100</option>
+                                </select>
+                                <span style="font-size: 14px; color: #666;">共 {{ total }} 条记录</span>
+                            </div>
+                            <div style="display: flex; align-items: center; gap: 8px;">
+                                <button class="btn" @click="() => handlePageChange(1)" :disabled="currentPage === 1" style="padding: 6px 12px; font-size: 14px;">首页</button>
+                                <button class="btn" @click="() => handlePageChange(currentPage - 1)" :disabled="currentPage === 1" style="padding: 6px 12px; font-size: 14px;">上一页</button>
+                                <span style="padding: 6px 12px; font-size: 14px; font-weight: bold; color: #1890ff; border: 1px solid #1890ff; border-radius: 4px;">{{ currentPage }}</span>
+                                <button class="btn" @click="() => handlePageChange(currentPage + 1)" :disabled="currentPage * pageSize >= total" style="padding: 6px 12px; font-size: 14px;">下一页</button>
+                                <button class="btn" @click="() => handlePageChange(Math.ceil(total / pageSize))" :disabled="currentPage === Math.ceil(total / pageSize)" style="padding: 6px 12px; font-size: 14px;">末页</button>
+                            </div>
+                        </div>
                     </div>
                     
                     <div v-if="currentView === 'products'" class="card">
@@ -266,6 +286,26 @@
                                 </tr>
                             </tbody>
                         </table>
+                        <!-- 分页组件 -->
+                        <div style="margin-top: 20px; display: flex; justify-content: flex-end; align-items: center; gap: 15px; padding: 10px 0; border-top: 1px solid #e8e8e8;">
+                            <div style="display: flex; align-items: center; gap: 8px;">
+                                <span style="font-size: 14px; color: #666;">每页显示：</span>
+                                <select v-model="pageSize" @change="() => handleSizeChange(pageSize)" style="padding: 6px 10px; border: 1px solid #d9d9d9; border-radius: 4px; font-size: 14px;">
+                                    <option value="10">10</option>
+                                    <option value="20">20</option>
+                                    <option value="50">50</option>
+                                    <option value="100">100</option>
+                                </select>
+                                <span style="font-size: 14px; color: #666;">共 {{ total }} 条记录</span>
+                            </div>
+                            <div style="display: flex; align-items: center; gap: 8px;">
+                                <button class="btn" @click="() => handlePageChange(1)" :disabled="currentPage === 1" style="padding: 6px 12px; font-size: 14px;">首页</button>
+                                <button class="btn" @click="() => handlePageChange(currentPage - 1)" :disabled="currentPage === 1" style="padding: 6px 12px; font-size: 14px;">上一页</button>
+                                <span style="padding: 6px 12px; font-size: 14px; font-weight: bold; color: #1890ff; border: 1px solid #1890ff; border-radius: 4px;">{{ currentPage }}</span>
+                                <button class="btn" @click="() => handlePageChange(currentPage + 1)" :disabled="currentPage * pageSize >= total" style="padding: 6px 12px; font-size: 14px;">下一页</button>
+                                <button class="btn" @click="() => handlePageChange(Math.ceil(total / pageSize))" :disabled="currentPage === Math.ceil(total / pageSize)" style="padding: 6px 12px; font-size: 14px;">末页</button>
+                            </div>
+                        </div>
                     </div>
                     
                     <div v-if="currentView === 'parameters'" class="card">
@@ -331,7 +371,7 @@
                                 <option value="">所有产品</option>
                                 <option v-for="p in products" :key="p.id" :value="p.id">{{ p.product_name }}</option>
                             </select>
-                            <button class="btn btn-primary" @click="loadProcessRecords">查询记录</button>
+                            <button class="btn btn-primary" @click="() => loadProcessRecords(1, pageSize)">查询记录</button>
                         </div>
                         <table>
                             <thead>
@@ -360,6 +400,26 @@
                                 </tr>
                             </tbody>
                         </table>
+                        <!-- 分页组件 -->
+                        <div style="margin-top: 20px; display: flex; justify-content: flex-end; align-items: center; gap: 15px; padding: 10px 0; border-top: 1px solid #e8e8e8;">
+                            <div style="display: flex; align-items: center; gap: 8px;">
+                                <span style="font-size: 14px; color: #666;">每页显示：</span>
+                                <select v-model="pageSize" @change="() => handleSizeChange(pageSize)" style="padding: 6px 10px; border: 1px solid #d9d9d9; border-radius: 4px; font-size: 14px;">
+                                    <option value="10">10</option>
+                                    <option value="20">20</option>
+                                    <option value="50">50</option>
+                                    <option value="100">100</option>
+                                </select>
+                                <span style="font-size: 14px; color: #666;">共 {{ total }} 条记录</span>
+                            </div>
+                            <div style="display: flex; align-items: center; gap: 8px;">
+                                <button class="btn" @click="() => handlePageChange(1)" :disabled="currentPage === 1" style="padding: 6px 12px; font-size: 14px;">首页</button>
+                                <button class="btn" @click="() => handlePageChange(currentPage - 1)" :disabled="currentPage === 1" style="padding: 6px 12px; font-size: 14px;">上一页</button>
+                                <span style="padding: 6px 12px; font-size: 14px; font-weight: bold; color: #1890ff; border: 1px solid #1890ff; border-radius: 4px;">{{ currentPage }}</span>
+                                <button class="btn" @click="() => handlePageChange(currentPage + 1)" :disabled="currentPage * pageSize >= total" style="padding: 6px 12px; font-size: 14px;">下一页</button>
+                                <button class="btn" @click="() => handlePageChange(Math.ceil(total / pageSize))" :disabled="currentPage === Math.ceil(total / pageSize)" style="padding: 6px 12px; font-size: 14px;">末页</button>
+                            </div>
+                        </div>
                     </div>
                     
                     <div v-if="currentView === 'templates'" class="card">
@@ -391,6 +451,26 @@
                                 </tr>
                             </tbody>
                         </table>
+                        <!-- 分页组件 -->
+                        <div style="margin-top: 20px; display: flex; justify-content: flex-end; align-items: center; gap: 15px; padding: 10px 0; border-top: 1px solid #e8e8e8;">
+                            <div style="display: flex; align-items: center; gap: 8px;">
+                                <span style="font-size: 14px; color: #666;">每页显示：</span>
+                                <select v-model="pageSize" @change="() => handleSizeChange(pageSize)" style="padding: 6px 10px; border: 1px solid #d9d9d9; border-radius: 4px; font-size: 14px;">
+                                    <option value="10">10</option>
+                                    <option value="20">20</option>
+                                    <option value="50">50</option>
+                                    <option value="100">100</option>
+                                </select>
+                                <span style="font-size: 14px; color: #666;">共 {{ total }} 条记录</span>
+                            </div>
+                            <div style="display: flex; align-items: center; gap: 8px;">
+                                <button class="btn" @click="() => handlePageChange(1)" :disabled="currentPage === 1" style="padding: 6px 12px; font-size: 14px;">首页</button>
+                                <button class="btn" @click="() => handlePageChange(currentPage - 1)" :disabled="currentPage === 1" style="padding: 6px 12px; font-size: 14px;">上一页</button>
+                                <span style="padding: 6px 12px; font-size: 14px; font-weight: bold; color: #1890ff; border: 1px solid #1890ff; border-radius: 4px;">{{ currentPage }}</span>
+                                <button class="btn" @click="() => handlePageChange(currentPage + 1)" :disabled="currentPage * pageSize >= total" style="padding: 6px 12px; font-size: 14px;">下一页</button>
+                                <button class="btn" @click="() => handlePageChange(Math.ceil(total / pageSize))" :disabled="currentPage === Math.ceil(total / pageSize)" style="padding: 6px 12px; font-size: 14px;">末页</button>
+                            </div>
+                        </div>
                     </div>
                     
                     <div v-if="currentView === 'template-parameters'" class="card">
@@ -468,6 +548,26 @@
                                 </tr>
                             </tbody>
                         </table>
+                        <!-- 分页组件 -->
+                        <div style="margin-top: 20px; display: flex; justify-content: flex-end; align-items: center; gap: 15px; padding: 10px 0; border-top: 1px solid #e8e8e8;">
+                            <div style="display: flex; align-items: center; gap: 8px;">
+                                <span style="font-size: 14px; color: #666;">每页显示：</span>
+                                <select v-model="pageSize" @change="() => handleSizeChange(pageSize)" style="padding: 6px 10px; border: 1px solid #d9d9d9; border-radius: 4px; font-size: 14px;">
+                                    <option value="10">10</option>
+                                    <option value="20">20</option>
+                                    <option value="50">50</option>
+                                    <option value="100">100</option>
+                                </select>
+                                <span style="font-size: 14px; color: #666;">共 {{ total }} 条记录</span>
+                            </div>
+                            <div style="display: flex; align-items: center; gap: 8px;">
+                                <button class="btn" @click="() => handlePageChange(1)" :disabled="currentPage === 1" style="padding: 6px 12px; font-size: 14px;">首页</button>
+                                <button class="btn" @click="() => handlePageChange(currentPage - 1)" :disabled="currentPage === 1" style="padding: 6px 12px; font-size: 14px;">上一页</button>
+                                <span style="padding: 6px 12px; font-size: 14px; font-weight: bold; color: #1890ff; border: 1px solid #1890ff; border-radius: 4px;">{{ currentPage }}</span>
+                                <button class="btn" @click="() => handlePageChange(currentPage + 1)" :disabled="currentPage * pageSize >= total" style="padding: 6px 12px; font-size: 14px;">下一页</button>
+                                <button class="btn" @click="() => handlePageChange(Math.ceil(total / pageSize))" :disabled="currentPage === Math.ceil(total / pageSize)" style="padding: 6px 12px; font-size: 14px;">末页</button>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -738,6 +838,11 @@
                 const statusCheckProgress = ref(0);
                 const isCheckingStatus = ref(false);
                 
+                // 分页相关状态
+                const currentPage = ref(1);
+                const pageSize = ref(10);
+                const total = ref(0);
+                
                 // 模板参数管理
                 const currentTemplate = ref({});
                 const templateParameters = ref([]);
@@ -797,7 +902,7 @@
                     isLoggedIn.value = false;
                 };
                 
-                const loadMachines = async () => {
+                const loadMachines = async (page = 1, limit = 10) => {
                     try {
                         const startTime = Date.now();
                         console.log('开始加载机台数据...', startTime);
@@ -808,7 +913,7 @@
                         const controller = new AbortController();
                         const timeoutId = setTimeout(() => controller.abort(), 10000); // 10秒超时
                         
-                        const res = await fetch(`${API_BASE}/machines`, { 
+                        const res = await fetch(`${API_BASE}/machines?page=${page}&limit=${limit}`, { 
                             headers: headers(),
                             signal: controller.signal
                         });
@@ -820,8 +925,11 @@
                         }
                         const data = await res.json();
                         console.log('机台数据:', data, '总耗时:', Date.now() - startTime, 'ms');
-                        machines.value = data;
-                        console.log('机台数据加载完成，共', data.length, '台', '总耗时:', Date.now() - startTime, 'ms');
+                        machines.value = data.items;
+                        total.value = data.total;
+                        currentPage.value = data.page;
+                        pageSize.value = data.limit;
+                        console.log('机台数据加载完成，共', data.total, '台，当前页', data.page, '总耗时:', Date.now() - startTime, 'ms');
                     } catch (e) {
                         console.error('加载机台数据失败:', e);
                         console.error('错误堆栈:', e.stack);
@@ -829,32 +937,41 @@
                     }
                 };
                 
-                const loadProducts = async () => {
+                const loadProducts = async (page = 1, limit = 10) => {
                     try {
-                        const res = await fetch(`${API_BASE}/products`, { headers: headers() });
+                        const res = await fetch(`${API_BASE}/products?page=${page}&limit=${limit}`, { headers: headers() });
                         const data = await res.json();
-                        products.value = data;
+                        products.value = data.items;
+                        total.value = data.total;
+                        currentPage.value = data.page;
+                        pageSize.value = data.limit;
                     } catch (e) {
                         console.error(e);
                     }
                 };
                 
-                const loadUsers = async () => {
+                const loadUsers = async (page = 1, limit = 10) => {
                     try {
-                        const res = await fetch(`${API_BASE}/users`, { headers: headers() });
+                        const res = await fetch(`${API_BASE}/users?page=${page}&limit=${limit}`, { headers: headers() });
                         const data = await res.json();
-                        users.value = data;
+                        users.value = data.items;
+                        total.value = data.total;
+                        currentPage.value = data.page;
+                        pageSize.value = data.limit;
                     } catch (e) {
                         console.error(e);
                     }
                 };
                 
-                const loadTemplates = async () => {
+                const loadTemplates = async (page = 1, limit = 10) => {
                     try {
-                        const res = await fetch(`${API_BASE}/templates`, { headers: headers() });
+                        const res = await fetch(`${API_BASE}/templates?page=${page}&limit=${limit}`, { headers: headers() });
                         const data = await res.json();
                         console.log('模板列表数据:', data);
-                        templates.value = data;
+                        templates.value = data.items;
+                        total.value = data.total;
+                        currentPage.value = data.page;
+                        pageSize.value = data.limit;
                         // 检查模板参数是否有id字段
                         templates.value.forEach((template, index) => {
                             console.log(`模板${index}`, template);
@@ -1295,11 +1412,13 @@
                     }
                 };
                 
-                const loadProcessRecords = async () => {
+                const loadProcessRecords = async (page = 1, limit = 10) => {
                     let url = `${API_BASE}/process-records`;
                     let params = [];
                     if (recordMachineId.value) params.push(`machine_id=${recordMachineId.value}`);
                     if (recordProductId.value) params.push(`product_id=${recordProductId.value}`);
+                    params.push(`page=${page}`);
+                    params.push(`limit=${limit}`);
                     if (params.length > 0) {
                         url += '?' + params.join('&');
                     }
@@ -1309,7 +1428,10 @@
                         console.log('加载生产记录，响应状态:', res.status);
                         const data = await res.json();
                         console.log('加载生产记录，响应数据:', data);
-                        processRecords.value = data;
+                        processRecords.value = data.items;
+                        total.value = data.total;
+                        currentPage.value = data.page;
+                        pageSize.value = data.limit;
                     } catch (e) {
                         console.error('加载生产记录失败:', e);
                     }
@@ -1324,7 +1446,7 @@
                     console.log('设置recordMachineId:', recordMachineId.value);
                     currentView.value = 'records';
                     console.log('切换到records视图');
-                    loadProcessRecords();
+                    loadProcessRecords(1, pageSize.value);
                 };
                 
                 const viewRecordDetail = (record) => {
@@ -1609,6 +1731,38 @@
                     return new Date(dateStr).toLocaleString('zh-CN');
                 };
                 
+                // 分页相关方法
+                const handlePageChange = (page) => {
+                    currentPage.value = page;
+                    if (currentView.value === 'machines') {
+                        loadMachines(page, pageSize.value);
+                    } else if (currentView.value === 'products') {
+                        loadProducts(page, pageSize.value);
+                    } else if (currentView.value === 'users') {
+                        loadUsers(page, pageSize.value);
+                    } else if (currentView.value === 'templates') {
+                        loadTemplates(page, pageSize.value);
+                    } else if (currentView.value === 'records') {
+                        loadProcessRecords(page, pageSize.value);
+                    }
+                };
+                
+                const handleSizeChange = (size) => {
+                    pageSize.value = size;
+                    currentPage.value = 1;
+                    if (currentView.value === 'machines') {
+                        loadMachines(1, size);
+                    } else if (currentView.value === 'products') {
+                        loadProducts(1, size);
+                    } else if (currentView.value === 'users') {
+                        loadUsers(1, size);
+                    } else if (currentView.value === 'templates') {
+                        loadTemplates(1, size);
+                    } else if (currentView.value === 'records') {
+                        loadProcessRecords(1, size);
+                    }
+                };
+                
                 return {
                     isLoggedIn, currentUser, currentView,
                     loginForm, machines, products, users, processParameters, processRecords, templates,
@@ -1616,6 +1770,7 @@
                     machineForm, productForm, userForm, templateForm, processNotes, changePasswordForm,
                     selectedMachineId, selectedProductId, recordMachineId, recordProductId, selectedTemplateId,
                     currentRecordParams, currentMachine, currentUserToChange, currentTemplate, templateParameters, statusCheckProgress, isCheckingStatus,
+                    currentPage, pageSize, total,
                     handleLogin, handleLogout,
                     loadMachines, loadProducts, loadUsers, loadTemplates,
                     createMachine, deleteMachine, addParametersForMachine,
@@ -1627,6 +1782,7 @@
                     loadProcessRecords, viewRecordDetail, writeRecordToPLC, viewProductHistory, writeToPlcRecord, writeToPlcParameters, confirmWriteToPlc,
                     showBindTemplateModal, bindTemplate, unbindTemplate,
                     viewTemplateParameters, addTemplateParameter, saveTemplateParameter, deleteTemplateParameter,
+                    handlePageChange, handleSizeChange,
                     formatDate
                 };
             }

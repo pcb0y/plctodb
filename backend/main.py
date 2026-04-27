@@ -132,11 +132,13 @@ def login(request: LoginRequest, db: Session = Depends(get_db)):
         user=UserResponse(id=user.id, username=user.username, role=user.role, created_at=user.created_at)
     )
 
-@app.get("/api/users", response_model=List[UserResponse])
-def get_users(db: Session = Depends(get_db), request: Request = None):
+@app.get("/api/users")
+def get_users(page: int = 1, limit: int = 10, db: Session = Depends(get_db), request: Request = None):
     verify_token(request)
-    users = db.query(User).all()
-    return users
+    total = db.query(User).count()
+    offset = (page - 1) * limit
+    users = db.query(User).offset(offset).limit(limit).all()
+    return {"items": users, "total": total, "page": page, "limit": limit}
 
 @app.post("/api/users", response_model=UserResponse)
 def create_user(user: UserCreate, db: Session = Depends(get_db), request: Request = None):
@@ -184,8 +186,8 @@ def change_user_password(user_id: int, new_password: dict, db: Session = Depends
     db.refresh(user)
     return {"message": "密码修改成功"}
 
-@app.get("/api/machines", response_model=List[MachineResponse])
-def get_machines(db: Session = Depends(get_db), request: Request = None):
+@app.get("/api/machines")
+def get_machines(page: int = 1, limit: int = 10, db: Session = Depends(get_db), request: Request = None):
     import time
     start_time = time.time()
     print(f"GET /api/machines 开始处理: {start_time}")
@@ -195,7 +197,9 @@ def get_machines(db: Session = Depends(get_db), request: Request = None):
     print(f"GET /api/machines verify_token 耗时: {time.time() - verify_token_time:.4f} 秒")
     
     db_query_time = time.time()
-    machines = db.query(Machine).all()
+    total = db.query(Machine).count()
+    offset = (page - 1) * limit
+    machines = db.query(Machine).offset(offset).limit(limit).all()
     print(f"GET /api/machines 数据库查询耗时: {time.time() - db_query_time:.4f} 秒")
     
     # 不再动态检查状态，只返回基本信息
@@ -211,7 +215,7 @@ def get_machines(db: Session = Depends(get_db), request: Request = None):
     
     end_time = time.time()
     print(f"GET /api/machines 总处理时间: {end_time - start_time:.4f} 秒")
-    return machines
+    return {"items": machines, "total": total, "page": page, "limit": limit}
 
 @app.post("/api/machines", response_model=MachineResponse)
 def create_machine(machine: MachineCreate, db: Session = Depends(get_db), request: Request = None):
@@ -404,10 +408,13 @@ def write_machine_parameters(
     plc.disconnect()
     return {"success": True, "results": results}
 
-@app.get("/api/products", response_model=List[ProductResponse])
-def get_products(db: Session = Depends(get_db), request: Request = None):
+@app.get("/api/products")
+def get_products(page: int = 1, limit: int = 10, db: Session = Depends(get_db), request: Request = None):
     verify_token(request)
-    return db.query(Product).all()
+    total = db.query(Product).count()
+    offset = (page - 1) * limit
+    products = db.query(Product).offset(offset).limit(limit).all()
+    return {"items": products, "total": total, "page": page, "limit": limit}
 
 @app.post("/api/products", response_model=ProductResponse)
 def create_product(product: ProductCreate, db: Session = Depends(get_db), request: Request = None):
@@ -600,7 +607,8 @@ def bind_product_machine(request: ParameterBindRequest, db: Session = Depends(ge
 def get_process_records(
     machine_id: Optional[int] = None,
     product_id: Optional[int] = None,
-    limit: int = 100,
+    page: int = 1,
+    limit: int = 10,
     db: Session = Depends(get_db),
     request: Request = None
 ):
@@ -612,8 +620,10 @@ def get_process_records(
     if product_id:
         query = query.filter(ProcessRecord.product_id == product_id)
     
-    records = query.order_by(ProcessRecord.record_time.desc()).limit(limit).all()
-    return [
+    total = query.count()
+    offset = (page - 1) * limit
+    records = query.order_by(ProcessRecord.record_time.desc()).offset(offset).limit(limit).all()
+    record_list = [
         {
             "id": r.id,
             "machine_id": r.machine_id,
@@ -637,6 +647,7 @@ def get_process_records(
         }
         for r in records
     ]
+    return {"items": record_list, "total": total, "page": page, "limit": limit}
 
 @app.post("/api/process-records")
 def create_process_record(request: ProcessRecordCreate, db: Session = Depends(get_db), req: Request = None):
@@ -756,10 +767,12 @@ def get_parameter_template(machine_id: int, db: Session = Depends(get_db), reque
     raise HTTPException(status_code=404, detail="机台未绑定模板，请先绑定模板")
 
 # 模板管理API
-@app.get("/api/templates", response_model=List[TemplateResponse])
-def get_templates(db: Session = Depends(get_db), request: Request = None):
+@app.get("/api/templates")
+def get_templates(page: int = 1, limit: int = 10, db: Session = Depends(get_db), request: Request = None):
     verify_token(request)
-    templates = db.query(Template).all()
+    total = db.query(Template).count()
+    offset = (page - 1) * limit
+    templates = db.query(Template).offset(offset).limit(limit).all()
     
     # 转换为响应格式
     template_responses = []
@@ -775,7 +788,7 @@ def get_templates(db: Session = Depends(get_db), request: Request = None):
         )
         template_responses.append(template_response)
     
-    return template_responses
+    return {"items": template_responses, "total": total, "page": page, "limit": limit}
 
 @app.post("/api/templates", response_model=TemplateResponse)
 def create_template(template: TemplateCreate, db: Session = Depends(get_db), request: Request = None):
