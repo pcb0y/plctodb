@@ -462,6 +462,7 @@
                                     <td>{{ user.role === 'admin' ? '管理员' : '操作员' }}</td>
                                     <td>{{ formatDate(user.created_at) }}</td>
                                     <td>
+                                        <button class="btn btn-primary" @click="showChangePasswordModal(user)">修改密码</button>
                                         <button class="btn btn-danger" @click="deleteUser(user.id)" v-if="user.username !== 'admin'">删除</button>
                                     </td>
                                 </tr>
@@ -664,6 +665,25 @@
                 </div>
             </div>
         </div>
+        
+        <!-- 修改密码模态框 -->
+        <div class="modal" :class="{ active: showChangePasswordModalFlag }">
+            <div class="modal-content">
+                <div class="modal-header">修改密码 - {{ currentUserToChange.username || '' }}</div>
+                <div class="form-group">
+                    <label>新密码：</label>
+                    <input type="password" v-model="changePasswordForm.new_password" placeholder="请输入新密码">
+                </div>
+                <div class="form-group">
+                    <label>确认密码：</label>
+                    <input type="password" v-model="changePasswordForm.confirm_password" placeholder="请确认新密码">
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-primary" @click="changePassword">保存</button>
+                    <button class="btn" @click="showChangePasswordModalFlag = false">取消</button>
+                </div>
+            </div>
+        </div>
     </div>
     
     <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
@@ -695,9 +715,12 @@
                 const writeToPlcRecord = ref({});
                 const writeToPlcParameters = ref([]);
                 const showBindTemplateModalFlag = ref(false);
+                const showChangePasswordModalFlag = ref(false);
                 
                 const currentMachine = ref({});
+                const currentUserToChange = ref({});
                 const selectedTemplateId = ref('');
+                const changePasswordForm = ref({ new_password: '', confirm_password: '' });
                 
                 const machineForm = ref({ machine_code: '', machine_name: '', machine_type: '', ip_address: '', rack: 0, slot: 1 });
                 const productForm = ref({ product_code: '', product_name: '', product_spec: '' });
@@ -998,6 +1021,39 @@
                         }
                     } catch (e) {
                         alert(e.message);
+                    }
+                };
+                
+                const showChangePasswordModal = (user) => {
+                    currentUserToChange.value = user;
+                    changePasswordForm.value = { new_password: '', confirm_password: '' };
+                    showChangePasswordModalFlag.value = true;
+                };
+                
+                const changePassword = async () => {
+                    if (changePasswordForm.value.new_password !== changePasswordForm.value.confirm_password) {
+                        alert('两次输入的密码不一致');
+                        return;
+                    }
+                    if (changePasswordForm.value.new_password.length < 6) {
+                        alert('密码长度至少为6位');
+                        return;
+                    }
+                    try {
+                        const res = await fetch(`${API_BASE}/users/${currentUserToChange.value.id}/change-password`, {
+                            method: 'POST',
+                            headers: { ...headers(), 'Content-Type': 'application/json' },
+                            body: JSON.stringify({ new_password: changePasswordForm.value.new_password })
+                        });
+                        if (res.ok) {
+                            showChangePasswordModalFlag.value = false;
+                            alert('密码修改成功');
+                        } else {
+                            const error = await res.json();
+                            alert('修改失败: ' + error.detail);
+                        }
+                    } catch (e) {
+                        alert('修改失败: ' + e.message);
                     }
                 };
                 
@@ -1556,15 +1612,15 @@
                 return {
                     isLoggedIn, currentUser, currentView,
                     loginForm, machines, products, users, processParameters, processRecords, templates,
-                    showMachineModal, showProductModal, showUserModal, showTemplateModal, showRecordDetailModal, showWriteToPlcModal, showBindTemplateModalFlag,
-                    machineForm, productForm, userForm, templateForm, processNotes,
+                    showMachineModal, showProductModal, showUserModal, showTemplateModal, showRecordDetailModal, showWriteToPlcModal, showBindTemplateModalFlag, showChangePasswordModalFlag,
+                    machineForm, productForm, userForm, templateForm, processNotes, changePasswordForm,
                     selectedMachineId, selectedProductId, recordMachineId, recordProductId, selectedTemplateId,
-                    currentRecordParams, currentMachine, currentTemplate, templateParameters, statusCheckProgress, isCheckingStatus,
+                    currentRecordParams, currentMachine, currentUserToChange, currentTemplate, templateParameters, statusCheckProgress, isCheckingStatus,
                     handleLogin, handleLogout,
                     loadMachines, loadProducts, loadUsers, loadTemplates,
                     createMachine, deleteMachine, addParametersForMachine,
                     createProduct, deleteProduct,
-                    createUser, deleteUser,
+                    createUser, deleteUser, showChangePasswordModal, changePassword,
                     createTemplate, editTemplate, deleteTemplate,
                     readMachine, readAllMachines, checkMachineStatus,
                     loadProcessParameters, saveProcessParameters, bindProductMachine, saveAsNewRecord, addNewParameter, viewMachineParameters,

@@ -164,6 +164,26 @@ def delete_user(user_id: int, db: Session = Depends(get_db), request: Request = 
     db.commit()
     return {"message": "用户删除成功"}
 
+@app.post("/api/users/{user_id}/change-password")
+def change_user_password(user_id: int, new_password: dict, db: Session = Depends(get_db), request: Request = None):
+    verify_token(request)
+    user = db.query(User).filter(User.id == user_id).first()
+    if not user:
+        raise HTTPException(status_code=404, detail="用户不存在")
+    
+    # 验证新密码
+    if not new_password.get("new_password"):
+        raise HTTPException(status_code=400, detail="新密码不能为空")
+    if len(new_password.get("new_password")) < 6:
+        raise HTTPException(status_code=400, detail="密码长度至少为6位")
+    
+    # 更新密码
+    hashed_password = get_password_hash(new_password.get("new_password"))
+    user.hashed_password = hashed_password
+    db.commit()
+    db.refresh(user)
+    return {"message": "密码修改成功"}
+
 @app.get("/api/machines", response_model=List[MachineResponse])
 def get_machines(db: Session = Depends(get_db), request: Request = None):
     import time
