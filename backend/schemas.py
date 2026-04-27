@@ -53,6 +53,8 @@ class MachineUpdate(BaseModel):
 class MachineResponse(MachineBase):
     id: int
     status: str
+    template_id: Optional[int] = None
+    template_name: Optional[str] = None
     created_at: datetime
     updated_at: Optional[datetime] = None
     
@@ -98,6 +100,44 @@ class ParameterUpdate(BaseModel):
     parameter_unit: Optional[str] = None
     parameter_type: Optional[str] = None
     is_active: Optional[bool] = None
+
+class TemplateParameterBase(BaseModel):
+    parameter_name: str
+    parameter_address: str
+    parameter_value: Optional[Any] = None
+    parameter_unit: Optional[str] = ""
+    parameter_type: str = "Int"
+
+class TemplateBase(BaseModel):
+    name: str
+    parameters: List[TemplateParameterBase] = []
+
+class TemplateCreate(TemplateBase):
+    pass
+
+class TemplateUpdate(BaseModel):
+    name: Optional[str] = None
+    machine_id: Optional[int] = None
+    parameters: Optional[List[TemplateParameterBase]] = None
+
+class TemplateParameterResponse(TemplateParameterBase):
+    id: int
+    template_id: int
+    
+    class Config:
+        from_attributes = True
+
+class TemplateResponse(BaseModel):
+    id: int
+    name: str
+    param_count: int
+    machine_count: int = 0
+    created_at: datetime
+    updated_at: Optional[datetime] = None
+    parameters: List[TemplateParameterResponse] = []
+    
+    class Config:
+        from_attributes = True
 
 class ParameterResponse(ParameterBase):
     id: int

@@ -11,7 +11,7 @@ import sys
 from pathlib import Path
 sys.path.insert(0, str(Path(__file__).parent.parent))
 from backend.database import engine, get_db, Base
-from backend.models import User, Machine, Product, ProcessParameter, ProcessRecord, ProcessParameterValue, OperationLog
+from backend.models import User, Machine, Product, ProcessParameter, ProcessRecord, ProcessParameterValue, OperationLog, Template, TemplateParameter
 from backend.schemas import *
 from backend.plc_client import PLCClient
 from backend.config import settings
@@ -179,6 +179,16 @@ def get_machines(db: Session = Depends(get_db), request: Request = None):
     print(f"GET /api/machines 数据库查询耗时: {time.time() - db_query_time:.4f} 秒")
     
     # 不再动态检查状态，只返回基本信息
+    # 为每个机台添加template_id和template_name
+    for machine in machines:
+        machine.status = "离线"  # 默认状态
+        if hasattr(machine, 'template') and machine.template:
+            machine.template_id = machine.template.id
+            machine.template_name = machine.template.name
+        else:
+            machine.template_id = None
+            machine.template_name = None
+    
     end_time = time.time()
     print(f"GET /api/machines 总处理时间: {end_time - start_time:.4f} 秒")
     return machines
@@ -635,34 +645,219 @@ def write_record_to_plc(record_id: int, db: Session = Depends(get_db), request: 
     plc.disconnect()
     return {"success": True, "results": results}
 
-@app.get("/api/process-parameters/template")
-def get_parameter_template(db: Session = Depends(get_db), request: Request = None):
+@app.get("/api/process-parameters/template/{machine_id}")
+def get_parameter_template(machine_id: int, db: Session = Depends(get_db), request: Request = None):
     verify_token(request)
-    # 获取默认机台的工艺参数作为模板
-    default_machine = db.query(Machine).filter(Machine.machine_code == 'DEFAULT').first()
-    if not default_machine:
-        raise HTTPException(status_code=404, detail="默认机台不存在")
+    # 获取指定机台
+    machine = db.query(Machine).filter(Machine.id == machine_id).first()
+    if not machine:
+        raise HTTPException(status_code=404, detail="机台不存在")
     
-    parameters = db.query(ProcessParameter).filter(
-        ProcessParameter.machine_id == default_machine.id,
-        ProcessParameter.is_active == True
-    ).all()
-    
-    if not parameters:
-        raise HTTPException(status_code=404, detail="默认机台没有工艺参数模板")
-    
-    # 转换为前端需要的格式
     template = []
-    for param in parameters:
-        template.append({
-            "parameter_name": param.parameter_name,
-            "parameter_address": param.parameter_address,
-            "parameter_value": param.parameter_value,
-            "parameter_unit": param.parameter_unit,
-            "parameter_type": param.parameter_type
-        })
     
-    return {"template": template}
+    # 优先使用机台绑定的模板的参数
+    if machine.template_id:
+        # 直接通过 template_id 查询模板
+        template_obj = db.query(Template).filter(Template.id == machine.template_id).first()
+        if template_obj:
+            # 确保 template_parameters 被加载
+            template_parameters = db.query(TemplateParameter).filter(TemplateParameter.template_id == template_obj.id).all()
+            if template_parameters:
+                for param in template_parameters:
+                    template.append({
+                        "parameter_name": param.parameter_name,
+                        "parameter_address": param.parameter_address,
+                        "parameter_value": param.parameter_value,
+                        "parameter_unit": param.parameter_unit,
+                        "parameter_type": param.parameter_type
+                    })
+                return {"template": template}
+            else:
+                raise HTTPException(status_code=404, detail="模板中没有工艺参数")
+        else:
+            raise HTTPException(status_code=404, detail="绑定的模板不存在")
+    
+    # 如果机台没有绑定模板，提示用户绑定模板
+    raise HTTPException(status_code=404, detail="机台未绑定模板，请先绑定模板")
+
+# 模板管理API
+@app.get("/api/templates", response_model=List[TemplateResponse])
+def get_templates(db: Session = Depends(get_db), request: Request = None):
+    verify_token(request)
+    templates = db.query(Template).all()
+    
+    # 转换为响应格式
+    template_responses = []
+    for template in templates:
+        template_response = TemplateResponse(
+            id=template.id,
+            name=template.name,
+            param_count=len(template.template_parameters),
+            machine_count=len(template.machines) if hasattr(template, 'machines') else 0,
+            created_at=template.created_at,
+            updated_at=template.updated_at,
+            parameters=template.template_parameters
+        )
+        template_responses.append(template_response)
+    
+    return template_responses
+
+@app.post("/api/templates", response_model=TemplateResponse)
+def create_template(template: TemplateCreate, db: Session = Depends(get_db), request: Request = None):
+    verify_token(request)
+    
+    # 创建模板
+    db_template = Template(
+        name=template.name
+    )
+    db.add(db_template)
+    db.commit()
+    db.refresh(db_template)
+    
+    # 创建模板参数
+    for param in template.parameters:
+        db_param = TemplateParameter(
+            template_id=db_template.id,
+            parameter_name=param.parameter_name,
+            parameter_address=param.parameter_address,
+            parameter_value=param.parameter_value,
+            parameter_unit=param.parameter_unit,
+            parameter_type=param.parameter_type
+        )
+        db.add(db_param)
+    
+    db.commit()
+    db.refresh(db_template)
+    
+    # 构建响应
+    response = TemplateResponse(
+        id=db_template.id,
+        name=db_template.name,
+        param_count=len(db_template.template_parameters),
+        machine_count=len(db_template.machines) if hasattr(db_template, 'machines') else 0,
+        created_at=db_template.created_at,
+        updated_at=db_template.updated_at,
+        parameters=db_template.template_parameters
+    )
+    
+    return response
+
+@app.get("/api/templates/{template_id}", response_model=TemplateResponse)
+def get_template(template_id: int, db: Session = Depends(get_db), request: Request = None):
+    verify_token(request)
+    template = db.query(Template).filter(Template.id == template_id).first()
+    if not template:
+        raise HTTPException(status_code=404, detail="模板不存在")
+    
+    # 构建响应
+    response = TemplateResponse(
+        id=template.id,
+        name=template.name,
+        param_count=len(template.template_parameters),
+        machine_count=len(template.machines) if hasattr(template, 'machines') else 0,
+        created_at=template.created_at,
+        updated_at=template.updated_at,
+        parameters=template.template_parameters
+    )
+    
+    return response
+
+@app.put("/api/templates/{template_id}", response_model=TemplateResponse)
+def update_template(template_id: int, template: TemplateUpdate, db: Session = Depends(get_db), request: Request = None):
+    verify_token(request)
+    db_template = db.query(Template).filter(Template.id == template_id).first()
+    if not db_template:
+        raise HTTPException(status_code=404, detail="模板不存在")
+    
+    # 更新模板信息
+    if template.name is not None:
+        db_template.name = template.name
+    
+    # 更新模板参数
+    if template.parameters is not None:
+        # 删除旧参数
+        db.query(TemplateParameter).filter(TemplateParameter.template_id == template_id).delete()
+        # 添加新参数
+        for param in template.parameters:
+            db_param = TemplateParameter(
+                template_id=template_id,
+                parameter_name=param.parameter_name,
+                parameter_address=param.parameter_address,
+                parameter_value=param.parameter_value,
+                parameter_unit=param.parameter_unit,
+                parameter_type=param.parameter_type
+            )
+            db.add(db_param)
+    
+    db.commit()
+    db.refresh(db_template)
+    
+    # 构建响应
+    response = TemplateResponse(
+        id=db_template.id,
+        name=db_template.name,
+        param_count=len(db_template.template_parameters),
+        machine_count=len(db_template.machines) if hasattr(db_template, 'machines') else 0,
+        created_at=db_template.created_at,
+        updated_at=db_template.updated_at,
+        parameters=db_template.template_parameters
+    )
+    
+    return response
+
+@app.delete("/api/templates/{template_id}")
+def delete_template(template_id: int, db: Session = Depends(get_db), request: Request = None):
+    verify_token(request)
+    template = db.query(Template).filter(Template.id == template_id).first()
+    if not template:
+        raise HTTPException(status_code=404, detail="模板不存在")
+    
+    db.delete(template)
+    db.commit()
+    
+    return {"message": "模板删除成功"}
+
+# 机台绑定模板API
+@app.post("/api/machines/{machine_id}/bind-template")
+def bind_template_to_machine(machine_id: int, request_data: dict, db: Session = Depends(get_db), request: Request = None):
+    verify_token(request)
+    
+    # 从请求体中获取template_id
+    template_id = request_data.get("template_id")
+    if not template_id:
+        raise HTTPException(status_code=400, detail="请提供template_id")
+    
+    # 检查机台是否存在
+    machine = db.query(Machine).filter(Machine.id == machine_id).first()
+    if not machine:
+        raise HTTPException(status_code=404, detail="机台不存在")
+    
+    # 检查模板是否存在
+    template = db.query(Template).filter(Template.id == template_id).first()
+    if not template:
+        raise HTTPException(status_code=404, detail="模板不存在")
+    
+    # 绑定模板
+    machine.template_id = template_id
+    db.commit()
+    
+    return {"message": "模板绑定成功"}
+
+# 机台解绑模板API
+@app.post("/api/machines/{machine_id}/unbind-template")
+def unbind_template_from_machine(machine_id: int, db: Session = Depends(get_db), request: Request = None):
+    verify_token(request)
+    
+    # 检查机台是否存在
+    machine = db.query(Machine).filter(Machine.id == machine_id).first()
+    if not machine:
+        raise HTTPException(status_code=404, detail="机台不存在")
+    
+    # 解绑模板
+    machine.template_id = None
+    db.commit()
+    
+    return {"message": "模板解绑成功"}
 
 if __name__ == "__main__":
     import uvicorn
