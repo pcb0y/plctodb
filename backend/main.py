@@ -311,18 +311,19 @@ def read_machine_parameters(machine_id: int, db: Session = Depends(get_db), requ
                 parameters = []
                 if template.template_parameters:
                     for param in template.template_parameters:
-                        print(f"模板参数: {param.parameter_name}, 地址: {param.parameter_address}")
-                        # 创建临时ProcessParameter对象
-                        temp_param = ProcessParameter(
-                            machine_id=machine_id,
-                            product_id=None,
-                            parameter_name=param.parameter_name,
-                            parameter_address=param.parameter_address,
-                            parameter_value=param.parameter_value,
-                            parameter_unit=param.parameter_unit,
-                            parameter_type=param.parameter_type,
-                            is_active=True
-                        )
+                        print(f"模板参数: {param.parameter_name}, 地址: {param.parameter_address}, 只读: {param.is_readonly}")
+                        # 创建包含所有字段的临时对象
+                        temp_param = type('TempParam', (), {
+                            'machine_id': machine_id,
+                            'product_id': None,
+                            'parameter_name': param.parameter_name,
+                            'parameter_address': param.parameter_address,
+                            'parameter_value': param.parameter_value,
+                            'parameter_unit': param.parameter_unit,
+                            'parameter_type': param.parameter_type,
+                            'is_active': True,
+                            'is_readonly': param.is_readonly
+                        })()
                         parameters.append(temp_param)
                 
                 if not parameters:
@@ -362,7 +363,8 @@ def read_machine_parameters(machine_id: int, db: Session = Depends(get_db), requ
                     "address": param.parameter_address,
                     "value": value,
                     "unit": param.parameter_unit,
-                    "type": param.parameter_type
+                    "type": param.parameter_type,
+                    "is_readonly": getattr(param, 'is_readonly', False)
                 }
                 success_count += 1
             else:
@@ -684,7 +686,8 @@ def create_process_record(request: ProcessRecordCreate, db: Session = Depends(ge
                     parameter_address=param_info.get("address", ""),
                     parameter_value=str(param_info.get("value", "")),
                     parameter_unit=param_info.get("unit", ""),
-                    parameter_type=param_info.get("type", "Int")
+                    parameter_type=param_info.get("type", "Int"),
+                    is_readonly=param_info.get("readonly", False)
                 )
                 db.add(param_value)
     
@@ -712,10 +715,20 @@ def write_record_to_plc(record_id: int, db: Session = Depends(get_db), request: 
         raise HTTPException(status_code=500, detail="PLC连接失败")
     
     results = {}
+    print(f"开始写入PLC，记录ID: {record_id}")
     for param in record.parameter_values:
+        print(f"处理参数: {param.parameter_name}, 地址: {param.parameter_address}, 类型: {param.parameter_type}, 只读: {param.is_readonly}")
+        
+        # 跳过只读参数
+        if param.is_readonly:
+            print(f"  -> 跳过只读参数")
+            results[param.parameter_name] = "只读参数，跳过写入"
+            continue
+            
         try:
             # 尝试将字符串值转换为适当的类型
             value = param.parameter_value
+            print(f"  -> 原始值: {value}")
             if param.parameter_type == "Real":
                 value = float(value)
             elif param.parameter_type == "Int":
@@ -723,9 +736,12 @@ def write_record_to_plc(record_id: int, db: Session = Depends(get_db), request: 
             elif param.parameter_type == "Bool":
                 value = value.lower() == "true"
             
+            print(f"  -> 转换后值: {value}")
             success = plc.write_parameter(param.parameter_address, value, param.parameter_type)
+            print(f"  -> 写入结果: {success}")
             results[param.parameter_name] = success
         except Exception as e:
+            print(f"  -> 写入异常: {e}")
             results[param.parameter_name] = False
     
     plc.disconnect()
@@ -755,7 +771,8 @@ def get_parameter_template(machine_id: int, db: Session = Depends(get_db), reque
                         "parameter_address": param.parameter_address,
                         "parameter_value": param.parameter_value,
                         "parameter_unit": param.parameter_unit,
-                        "parameter_type": param.parameter_type
+                        "parameter_type": param.parameter_type,
+                        "is_readonly": param.is_readonly
                     })
                 return {"template": template}
             else:
@@ -922,7 +939,8 @@ def add_template_parameter(template_id: int, parameter: TemplateParameterBase, d
         parameter_address=parameter.parameter_address,
         parameter_value=parameter.parameter_value,
         parameter_unit=parameter.parameter_unit,
-        parameter_type=parameter.parameter_type
+        parameter_type=parameter.parameter_type,
+        is_readonly=getattr(parameter, 'is_readonly', False)
     )
     db.add(db_param)
     db.commit()
@@ -936,7 +954,8 @@ def add_template_parameter(template_id: int, parameter: TemplateParameterBase, d
         "parameter_address": db_param.parameter_address,
         "parameter_value": db_param.parameter_value,
         "parameter_unit": db_param.parameter_unit,
-        "parameter_type": db_param.parameter_type
+        "parameter_type": db_param.parameter_type,
+        "is_readonly": db_param.is_readonly
     }
     
     return response
@@ -964,6 +983,7 @@ def update_template_parameter(template_id: int, parameter_id: int, parameter: Te
     db_param.parameter_value = parameter.parameter_value
     db_param.parameter_unit = parameter.parameter_unit
     db_param.parameter_type = parameter.parameter_type
+    db_param.is_readonly = getattr(parameter, 'is_readonly', False)
     
     db.commit()
     db.refresh(db_param)
@@ -976,7 +996,8 @@ def update_template_parameter(template_id: int, parameter_id: int, parameter: Te
         "parameter_address": db_param.parameter_address,
         "parameter_value": db_param.parameter_value,
         "parameter_unit": db_param.parameter_unit,
-        "parameter_type": db_param.parameter_type
+        "parameter_type": db_param.parameter_type,
+        "is_readonly": db_param.is_readonly
     }
     
     return response
@@ -1029,7 +1050,8 @@ def get_template_parameter(template_id: int, parameter_id: int, db: Session = De
         "parameter_address": db_param.parameter_address,
         "parameter_value": db_param.parameter_value,
         "parameter_unit": db_param.parameter_unit,
-        "parameter_type": db_param.parameter_type
+        "parameter_type": db_param.parameter_type,
+        "is_readonly": db_param.is_readonly
     }
     
     return response

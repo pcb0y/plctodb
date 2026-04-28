@@ -107,6 +107,7 @@ class TemplateParameterBase(BaseModel):
     parameter_value: Optional[Any] = None
     parameter_unit: Optional[str] = ""
     parameter_type: str = "Int"
+    is_readonly: bool = False
 
 class TemplateBase(BaseModel):
     name: str

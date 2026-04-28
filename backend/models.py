@@ -95,6 +95,7 @@ class ProcessParameterValue(Base):
     parameter_value = Column(String(50), nullable=False)
     parameter_unit = Column(String(20))
     parameter_type = Column(String(20), nullable=False)
+    is_readonly = Column(Boolean, default=False)
     
     process_record = relationship("ProcessRecord", back_populates="parameter_values")
 
@@ -118,6 +119,7 @@ class TemplateParameter(Base):
     parameter_value = Column(String(100))
     parameter_unit = Column(String(20))
     parameter_type = Column(String(20), default="Int")
+    is_readonly = Column(Boolean, default=False)
     
     template = relationship("Template", back_populates="template_parameters")
 
