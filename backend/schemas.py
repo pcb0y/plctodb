@@ -65,6 +65,7 @@ class ProductBase(BaseModel):
     product_code: str
     product_name: str
     product_spec: Optional[str] = None
+    version: int = 1
 
 class ProductCreate(ProductBase):
     pass

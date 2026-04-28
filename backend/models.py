@@ -45,6 +45,7 @@ class Product(Base):
     product_code = Column(String(50), unique=True, nullable=False, index=True)
     product_name = Column(String(100), nullable=False)
     product_spec = Column(String(100))
+    version = Column(Integer, default=1)
     created_at = Column(DateTime(timezone=True), server_default=func.now())
     updated_at = Column(DateTime(timezone=True), onupdate=func.now())
     

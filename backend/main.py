@@ -441,6 +441,7 @@ def update_product(product_id: int, product: ProductUpdate, db: Session = Depend
     for key, value in product.model_dump(exclude_unset=True).items():
         setattr(db_product, key, value)
     
+    db_product.version = db_product.version + 1
     db.commit()
     db.refresh(db_product)
     return db_product
@@ -632,6 +633,7 @@ def get_process_records(
             "product_id": r.product_id,
             "operator_id": r.operator_id,
             "record_time": r.record_time,
+            "created_at": r.record_time,  # 兼容前端显示
             "notes": r.notes,
             "version": r.version,  # 添加版本号
             "parameters_snapshot": {  # 转换为前端需要的格式
@@ -1024,6 +1026,31 @@ def delete_template_parameter(template_id: int, parameter_id: int, db: Session =
     db.commit()
     
     return {"message": "模板参数删除成功"}
+
+@app.get("/api/templates/{template_id}/parameters")
+def get_template_parameters(template_id: int, db: Session = Depends(get_db), request: Request = None):
+    verify_token(request)
+    
+    template = db.query(Template).filter(Template.id == template_id).first()
+    if not template:
+        raise HTTPException(status_code=404, detail="模板不存在")
+    
+    parameters = db.query(TemplateParameter).filter(TemplateParameter.template_id == template_id).all()
+    
+    response = []
+    for param in parameters:
+        response.append({
+            "id": param.id,
+            "template_id": param.template_id,
+            "parameter_name": param.parameter_name,
+            "parameter_address": param.parameter_address,
+            "parameter_value": param.parameter_value,
+            "parameter_unit": param.parameter_unit,
+            "parameter_type": param.parameter_type,
+            "is_readonly": param.is_readonly
+        })
+    
+    return response
 
 @app.get("/api/templates/{template_id}/parameters/{parameter_id}")
 def get_template_parameter(template_id: int, parameter_id: int, db: Session = Depends(get_db), request: Request = None):

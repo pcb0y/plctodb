@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>挤出机工艺参数管理系统</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚙️</text></svg>" type="image/svg+xml">
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #f5f5f5; }
@@ -169,7 +170,11 @@
         
         <div v-else>
             <div class="header">
-                <h1>挤出机工艺参数管理系统</h1>
+                <div style="display: flex; align-items: center; gap: 10px;">
+                    <img src="logo.png" alt="YARDCOM" style="height: 40px; width: auto; margin-right: 10px; filter: brightness(0) invert(1);"/>
+                    <span style="font-family: Arial, sans-serif; font-size: 22px; font-weight: bold; color: white;">YARDCOM</span>
+                    <h1 style="margin: 0;">挤出机工艺参数管理系统 v1.0.0</h1>
+                </div>
                 <div class="user-info">
                     <span>{{ currentUser.username }} ({{ currentUser.role === 'admin' ? '管理员' : '操作员' }})</span>
                     <button @click="handleLogout">退出</button>
@@ -183,7 +188,7 @@
                         <li :class="{ active: currentView === 'products' }" @click="currentView = 'products'">产品管理</li>
                         <li :class="{ active: currentView === 'parameters' }" @click="currentView = 'parameters'">工艺参数</li>
                         <li :class="{ active: currentView === 'templates' }" @click="currentView = 'templates'">模板管理</li>
-                        <li :class="{ active: currentView === 'records' }" @click="currentView = 'records'">历史记录</li>
+                        <li :class="{ active: currentView === 'records' }" @click="currentView = 'records'">存档参数</li>
                         <li :class="{ active: currentView === 'users' }" @click="currentView = 'users'" v-if="currentUser.role === 'admin'">用户管理</li>
                     </ul>
                 </div>
@@ -230,7 +235,7 @@
                                     <td>{{ machine.status === 'offline' || machine.status === '离线' ? '' : (machine.status || '') }}</td>
                                     <td>{{ machine.template_name || '未绑定' }}</td>
                                     <td>
-                                        <button class="btn btn-primary" @click="readMachine(machine)">读取</button>
+                                        <button class="btn btn-primary" @click="readMachine(machine)" :disabled="readingMachineId === machine.id">{{ readingMachineId === machine.id ? '读取中...' : '读取' }}</button>
 
                                         <button class="btn btn-warning" @click="showBindTemplateModal(machine)">绑定模板</button>
                                         <button class="btn btn-danger" @click="unbindTemplate(machine)" v-if="machine.template_id">解绑模板</button>
@@ -272,6 +277,7 @@
                                     <th>产品编号</th>
                                     <th>产品名称</th>
                                     <th>规格</th>
+                                    <th>版本号</th>
                                     <th>操作</th>
                                 </tr>
                             </thead>
@@ -280,7 +286,9 @@
                                     <td>{{ product.product_code }}</td>
                                     <td><span style="cursor: pointer; color: #1890ff; text-decoration: underline;" @click="viewProductHistory(product)">{{ product.product_name }}</span></td>
                                     <td>{{ product.product_spec }}</td>
+                                    <td>V{{ product.version || 1 }}</td>
                                     <td>
+                                        <button class="btn btn-primary" @click="editProduct(product)" v-if="currentUser.role === 'admin'">编辑</button>
                                         <button class="btn btn-danger" @click="deleteProduct(product.id)" v-if="currentUser.role === 'admin'">删除</button>
                                     </td>
                                 </tr>
@@ -341,11 +349,15 @@
                                     <select v-model="param.parameter_type" style="padding: 8px 12px; border: 1px solid #d9d9d9; border-radius: 4px; flex: 1;">
                                         <option value="Int">整数</option>
                                         <option value="Real">实数</option>
-                                        <option value="Bool">布尔值</option>
+                                        <option value="Bool">布尔</option>
                                     </select>
+                                    <div style="display: flex; align-items: center; gap: 5px;">
+                                        <input type="checkbox" v-model="param.is_readonly" id="readonly-param-{{ param.id || param.parameter_name }}" style="width: 18px; height: 18px;">
+                                        <label for="readonly-param-{{ param.id || param.parameter_name }}" style="font-size: 14px; color: #666;">只读</label>
+                                    </div>
                                     <button class="btn btn-danger" @click="removeParameter(param)" v-if="param.id">删除</button>
                                 </div>
-                                <div class="type" v-if="param.parameter_type" style="margin-top: 6px;">类型: {{ param.parameter_type === 'Int' ? '整数' : param.parameter_type === 'Real' ? '实数' : '布尔值' }}</div>
+                                <div class="type" v-if="param.parameter_type" style="margin-top: 6px;">类型: {{ param.parameter_type === 'Int' ? '整数' : param.parameter_type === 'Real' ? '实数' : '布尔' }} <span v-if="param.is_readonly" style="color: #ff4d4f; margin-left: 10px;">(只读)</span></div>
                             </div>
                         </div>
                         <div v-if="processParameters.length > 0" style="margin-top: 20px; padding: 20px; background: #e6f7ff; border-radius: 8px; border: 1px solid #1890ff; box-shadow: 0 2px 4px rgba(24, 144, 255, 0.1);">
@@ -503,15 +515,19 @@
                                         <select v-model="param.parameter_type" style="width: 100px; padding: 0 12px; border: 1px solid #d9d9d9; border-radius: 4px; height: 36px; box-sizing: border-box; line-height: 36px; margin: 0; font-size: 14px; appearance: none; background: white;">
                                             <option value="Int">整数</option>
                                             <option value="Real">实数</option>
-                                            <option value="Bool">布尔值</option>
+                                            <option value="Bool">布尔</option>
                                         </select>
+                                    </div>
+                                    <div style="display: flex; align-items: center; gap: 5px;">
+                                        <input type="checkbox" v-model="param.is_readonly" id="readonly-{{ param.id || param.parameter_name }}" style="width: 18px; height: 18px;">
+                                        <label for="readonly-{{ param.id || param.parameter_name }}" style="font-size: 14px; color: #666;">只读</label>
                                     </div>
                                 </div>
                                 <div style="display: flex; justify-content: space-between; margin-top: 10px; width: 100%;">
                                     <button class="btn btn-primary" @click="saveTemplateParameter(param)">保存</button>
                                     <button class="btn btn-danger" @click="deleteTemplateParameter(param)" v-if="param.id || param.is_new">删除</button>
                                 </div>
-                                <div class="type" v-if="param.parameter_type" style="margin-top: 6px;">类型: {{ param.parameter_type === 'Int' ? '整数' : param.parameter_type === 'Real' ? '实数' : '布尔值' }}</div>
+                                <div class="type" v-if="param.parameter_type" style="margin-top: 6px;">类型: {{ param.parameter_type === 'Int' ? '整数' : param.parameter_type === 'Real' ? '实数' : '布尔' }} <span v-if="param.is_readonly" style="color: #ff4d4f; margin-left: 10px;">(只读)</span></div>
                             </div>
                         </div>
                         <div v-else class="loading-state">
@@ -609,7 +625,7 @@
         
         <div class="modal" :class="{ active: showProductModal }">
             <div class="modal-content">
-                <div class="modal-header">添加产品</div>
+                <div class="modal-header">{{ editingProductId ? '编辑产品' : '添加产品' }}</div>
                 <div class="form-group">
                     <label>产品编号：</label>
                     <input type="text" v-model="productForm.product_code">
@@ -621,6 +637,10 @@
                 <div class="form-group">
                     <label>产品规格：</label>
                     <input type="text" v-model="productForm.product_spec">
+                </div>
+                <div class="form-group">
+                    <label>版本号：</label>
+                    <input type="text" :value="'V' + (productForm.version || 1)" disabled style="background: #f5f5f5;">
                 </div>
                 <div class="modal-footer">
                     <button class="btn btn-primary" @click="createProduct">保存</button>
@@ -685,11 +705,16 @@
                                     <select v-model="param.parameter_type">
                                         <option value="Int">整数</option>
                                         <option value="Real">实数</option>
+                                        <option value="Bool">布尔</option>
                                     </select>
+                                </div>
+                                <div class="form-group">
+                                    <label>只读：</label>
+                                    <input type="checkbox" v-model="param.is_readonly">
                                 </div>
                                 <button class="btn btn-danger" @click="templateForm.parameters.splice(index, 1)">删除</button>
                             </div>
-                            <button class="btn btn-primary" @click="templateForm.parameters.push({ parameter_name: '', parameter_address: '', parameter_value: 0, parameter_unit: '', parameter_type: 'Int' })">添加参数</button>
+                            <button class="btn btn-primary" @click="templateForm.parameters.push({ parameter_name: '', parameter_address: '', parameter_value: 0, parameter_unit: '', parameter_type: 'Int', is_readonly: false })">添加参数</button>
                         </div>
                         <div class="modal-footer">
                             <button class="btn btn-primary" @click="createTemplate">保存</button>
@@ -724,7 +749,7 @@
                     <div><strong>记录ID:</strong> {{ writeToPlcRecord.id }}</div>
                     <div><strong>产品:</strong> {{ writeToPlcRecord.product_name || '未知' }}</div>
                     <div><strong>机台:</strong> {{ writeToPlcRecord.machine_name || '未知' }}</div>
-                    <div><strong>创建时间:</strong> {{ writeToPlcRecord.created_at || '未知' }}</div>
+                    <div><strong>创建时间:</strong> {{ formatDate(writeToPlcRecord.created_at) || '未知' }}</div>
                 </div>
                 <div class="param-grid" style="margin-top: 20px;">
                     <div class="param-item" v-for="(param, index) in writeToPlcParameters" :key="index">
@@ -739,8 +764,8 @@
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button class="btn btn-danger" @click="showWriteToPlcModal = false">取消</button>
-                    <button class="btn btn-success" @click="confirmWriteToPlc">确认写入</button>
+                    <button class="btn btn-danger" @click="showWriteToPlcModal = false" :disabled="isWriting">取消</button>
+                    <button class="btn btn-success" @click="confirmWriteToPlc" :disabled="isWriting">{{ isWriting ? '写入中...' : '确认写入' }}</button>
                 </div>
             </div>
         </div>
@@ -823,7 +848,8 @@
                 const changePasswordForm = ref({ new_password: '', confirm_password: '' });
                 
                 const machineForm = ref({ machine_code: '', machine_name: '', machine_type: '', ip_address: '', rack: 0, slot: 1 });
-                const productForm = ref({ product_code: '', product_name: '', product_spec: '' });
+                const productForm = ref({ product_code: '', product_name: '', product_spec: '', version: 1 });
+                const editingProductId = ref(null);
                 const userForm = ref({ username: '', password: '', role: 'operator' });
                 const templateForm = ref({ name: '', parameters: [] });
                 const processNotes = ref('');
@@ -837,6 +863,8 @@
                 const currentRecordParams = ref({});
                 const statusCheckProgress = ref(0);
                 const isCheckingStatus = ref(false);
+                const readingMachineId = ref(null);
+                const isWriting = ref(false);
                 
                 // 分页相关状态
                 const currentPage = ref(1);
@@ -1094,19 +1122,33 @@
                 
                 const createProduct = async () => {
                     try {
-                        const res = await fetch(`${API_BASE}/products`, {
-                            method: 'POST',
+                        const url = editingProductId.value ? `${API_BASE}/products/${editingProductId.value}` : `${API_BASE}/products`;
+                        const method = editingProductId.value ? 'PUT' : 'POST';
+                        const res = await fetch(url, {
+                            method: method,
                             headers: { ...headers(), 'Content-Type': 'application/json' },
                             body: JSON.stringify(productForm.value)
                         });
                         if (res.ok) {
                             showProductModal.value = false;
                             productForm.value = { product_code: '', product_name: '', product_spec: '' };
+                            editingProductId.value = null;
                             loadProducts();
                         }
                     } catch (e) {
                         alert(e.message);
                     }
+                };
+                
+                const editProduct = (product) => {
+                    editingProductId.value = product.id;
+                    productForm.value = {
+                        product_code: product.product_code,
+                        product_name: product.product_name,
+                        product_spec: product.product_spec,
+                        version: product.version
+                    };
+                    showProductModal.value = true;
                 };
                 
                 const deleteProduct = async (id) => {
@@ -1187,6 +1229,7 @@
                 const readMachine = async (machine) => {
                     try {
                         console.log('开始读取机台数据:', machine);
+                        readingMachineId.value = machine.id;
                         
                         // 无论是否关联模板，都调用读取API从PLC获取数据
                         console.log('调用读取API从PLC获取数据');
@@ -1207,7 +1250,8 @@
                                 parameter_address: info.address,
                                 parameter_value: info.value,
                                 parameter_unit: info.unit,
-                                parameter_type: info.type
+                                parameter_type: info.type,
+                                is_readonly: info.is_readonly || false
                             }));
                             selectedMachineId.value = machine.id;
                             // 自动切换到工艺参数视图
@@ -1219,6 +1263,8 @@
                     } catch (e) {
                         console.error('读取失败:', e);
                         alert('读取失败: ' + e.message);
+                    } finally {
+                        readingMachineId.value = null;
                     }
                 };
                 
@@ -1319,7 +1365,8 @@
                                     parameter_address: p.parameter_address,
                                     parameter_value: p.parameter_value,
                                     parameter_unit: p.parameter_unit,
-                                    parameter_type: p.parameter_type
+                                    parameter_type: p.parameter_type,
+                                    is_readonly: p.is_readonly || false
                                 })),
                                 notes: processNotes.value
                             })
@@ -1389,7 +1436,8 @@
                             address: p.parameter_address,
                             value: p.parameter_value,
                             unit: p.parameter_unit,
-                            type: p.parameter_type
+                            type: p.parameter_type,
+                            readonly: p.is_readonly || false
                         };
                     });
                     try {
@@ -1491,6 +1539,7 @@
                 
                 const confirmWriteToPlc = async () => {
                     try {
+                        isWriting.value = true;
                         const recordId = writeToPlcRecord.value.id;
                         const res = await fetch(`${API_BASE}/process-records/${recordId}/write-to-plc`, {
                             method: 'POST',
@@ -1506,6 +1555,8 @@
                     } catch (e) {
                         showWriteToPlcModal.value = false;
                         alert(e.message);
+                    } finally {
+                        isWriting.value = false;
                     }
                 };
                 
@@ -1640,7 +1691,8 @@
                                     parameter_address: param.parameter_address,
                                     parameter_value: param.parameter_value,
                                     parameter_unit: param.parameter_unit,
-                                    parameter_type: param.parameter_type
+                                    parameter_type: param.parameter_type,
+                                    is_readonly: param.is_readonly || false
                                 })
                             });
                             console.log('更新API响应:', res.status, res.statusText);
@@ -1673,7 +1725,8 @@
                                     parameter_address: param.parameter_address,
                                     parameter_value: param.parameter_value,
                                     parameter_unit: param.parameter_unit,
-                                    parameter_type: param.parameter_type
+                                    parameter_type: param.parameter_type,
+                                    is_readonly: param.is_readonly || false
                                 })
                             });
                             console.log('添加API响应:', res.status, res.statusText);
@@ -1728,7 +1781,14 @@
                 
                 const formatDate = (dateStr) => {
                     if (!dateStr) return '-';
-                    return new Date(dateStr).toLocaleString('zh-CN');
+                    const date = new Date(dateStr);
+                    const year = date.getFullYear();
+                    const month = String(date.getMonth() + 1).padStart(2, '0');
+                    const day = String(date.getDate()).padStart(2, '0');
+                    const hours = String(date.getHours()).padStart(2, '0');
+                    const minutes = String(date.getMinutes()).padStart(2, '0');
+                    const seconds = String(date.getSeconds()).padStart(2, '0');
+                    return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
                 };
                 
                 // 分页相关方法
@@ -1769,12 +1829,12 @@
                     showMachineModal, showProductModal, showUserModal, showTemplateModal, showRecordDetailModal, showWriteToPlcModal, showBindTemplateModalFlag, showChangePasswordModalFlag,
                     machineForm, productForm, userForm, templateForm, processNotes, changePasswordForm,
                     selectedMachineId, selectedProductId, recordMachineId, recordProductId, selectedTemplateId,
-                    currentRecordParams, currentMachine, currentUserToChange, currentTemplate, templateParameters, statusCheckProgress, isCheckingStatus,
+                    currentRecordParams, currentMachine, currentUserToChange, currentTemplate, templateParameters, statusCheckProgress, isCheckingStatus, readingMachineId, isWriting,
                     currentPage, pageSize, total,
                     handleLogin, handleLogout,
                     loadMachines, loadProducts, loadUsers, loadTemplates,
                     createMachine, deleteMachine, addParametersForMachine,
-                    createProduct, deleteProduct,
+                    createProduct, editProduct, deleteProduct,
                     createUser, deleteUser, showChangePasswordModal, changePassword,
                     createTemplate, editTemplate, deleteTemplate,
                     readMachine, readAllMachines, checkMachineStatus,
