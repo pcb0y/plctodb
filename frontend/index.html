@@ -7,23 +7,28 @@
     <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚙️</text></svg>" type="image/svg+xml">
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #f5f5f5; }
-        .header { background: #1890ff; color: white; padding: 15px 20px; display: flex; justify-content: space-between; align-items: center; }
-        .header h1 { font-size: 20px; }
+        body { font-family: 'Courier New', monospace; background: #0a0a0f; color: #00ffff; min-height: 100vh; }
+        body::before { content: ''; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background-image: linear-gradient(rgba(0,255,255,0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(0,255,255,0.03) 1px, transparent 1px); background-size: 40px 40px; pointer-events: none; z-index: 0; }
+        .header { background: #0d0d12; color: #00ffff; padding: 15px 20px; display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid #00ffff; box-shadow: 0 0 20px rgba(0,255,255,0.3); position: relative; z-index: 1; }
+        .header h1 { font-size: 18px; text-shadow: 0 0 10px rgba(0,255,255,0.8); }
         .header .user-info { display: flex; align-items: center; gap: 15px; }
-        .header button { background: rgba(255,255,255,0.2); border: none; color: white; padding: 8px 16px; border-radius: 4px; cursor: pointer; }
-        .header button:hover { background: rgba(255,255,255,0.3); }
-        .container { display: flex; height: calc(100vh - 60px); }
-        .sidebar { width: 200px; background: white; border-right: 1px solid #e8e8e8; }
+        .header button { background: transparent; border: 1px solid #00ffff; color: #00ffff; padding: 8px 16px; border-radius: 2px; cursor: pointer; transition: all 0.3s; }
+        .header button:hover { background: rgba(0,255,255,0.2); box-shadow: 0 0 10px rgba(0,255,255,0.5); }
+        .container { display: flex; height: calc(100vh - 60px); position: relative; z-index: 1; }
+        .sidebar { width: 200px; background: #0d0d12; border-right: 2px solid #00ffff; }
         .sidebar ul { list-style: none; }
-        .sidebar li { padding: 15px 20px; cursor: pointer; border-bottom: 1px solid #f0f0f0; }
-        .sidebar li:hover, .sidebar li.active { background: #e6f7ff; color: #1890ff; }
+        .sidebar li { padding: 15px 20px; cursor: pointer; border-bottom: 1px solid rgba(0,255,255,0.2); transition: all 0.3s; }
+        .sidebar li:hover, .sidebar li.active { background: rgba(0,255,255,0.1); color: #00ffff; box-shadow: inset 0 0 15px rgba(0,255,255,0.2); }
         .content { flex: 1; padding: 20px; overflow-y: auto; }
-        .card { background: white; border-radius: 8px; padding: 20px; margin-bottom: 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
-        .card h2 { font-size: 18px; margin-bottom: 15px; padding-bottom: 10px; border-bottom: 1px solid #e8e8e8; }
+        .card { background: rgba(13,13,18,0.9); border: 1px solid #00ffff; border-radius: 4px; padding: 20px; margin-bottom: 20px; box-shadow: 0 0 15px rgba(0,255,255,0.2); }
+        .card h2 { font-size: 18px; margin-bottom: 15px; padding-bottom: 10px; border-bottom: 1px solid rgba(0,255,255,0.3); text-shadow: 0 0 8px rgba(0,255,255,0.6); }
         .form-group { margin-bottom: 15px; }
-        .form-group label { display: inline-block; width: 120px; text-align: right; margin-right: 10px; }
-        .form-group input, .form-group select { padding: 8px 12px; border: 1px solid #d9d9d9; border-radius: 4px; width: 120px; }
+        .form-group label { display: inline-block; width: 120px; text-align: right; margin-right: 10px; color: #00ffff; }
+        .form-group input, .form-group select { padding: 8px 12px; border: 1px solid #00ffff; border-radius: 2px; width: 120px; background: #1a1a24; color: #00ffff; transition: all 0.3s; }
+        .form-group input:focus, .form-group select:focus { outline: none; box-shadow: 0 0 10px rgba(0,255,255,0.5); }
+        select { padding: 8px 12px; border: 1px solid rgba(0,255,255,0.3); border-radius: 2px; width: 120px; background: #1a1a24; color: #00ffff; transition: all 0.3s; cursor: pointer; }
+        select:focus { outline: none; box-shadow: 0 0 10px rgba(0,255,255,0.5); }
+        select option { background: #1a1a24; color: #00ffff; }
         
         /* 参数列表输入框样式 */
         .param-item {
@@ -32,11 +37,11 @@
             align-items: flex-start;
             gap: 10px;
             padding: 15px;
-            border: 1px solid #e8e8e8;
-            border-radius: 8px;
+            border: 1px solid rgba(0,255,255,0.3);
+            border-radius: 4px;
             margin-bottom: 15px;
-            background: #fafafa;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+            background: rgba(13,13,18,0.9);
+            box-shadow: 0 0 10px rgba(0,255,255,0.1);
         }
         
         .param-item .form-group {
@@ -53,7 +58,7 @@
             width: 100%;
             font-size: 12px;
             font-weight: 500;
-            color: #333;
+            color: #00ffff;
         }
         
         .param-item .form-group input, .param-item .form-group select {
@@ -63,27 +68,33 @@
             vertical-align: middle;
             height: 30px;
             box-sizing: border-box;
-            border: 1px solid #d9d9d9;
-            border-radius: 4px;
+            border: 1px solid rgba(0,255,255,0.3);
+            border-radius: 2px;
+            background: #1a1a24;
+            color: #00ffff;
         }
         
         .param-item .btn {
             align-self: flex-start;
             margin-top: 18px;
         }
-        .form-group textarea { padding: 8px 12px; border: 1px solid #d9d9d9; border-radius: 4px; width: 100%; min-height: 100px; resize: vertical; font-family: inherit; }
-        .notes-section { margin-top: 20px; padding: 20px; background: #e6f7ff; border-radius: 8px; border: 1px solid #1890ff; box-shadow: 0 2px 4px rgba(24, 144, 255, 0.1); }
-        .btn { padding: 8px 16px; border: none; border-radius: 4px; cursor: pointer; margin-right: 10px; }
-        .btn-primary { background: #1890ff; color: white; }
-        .btn-danger { background: #ff4d4f; color: white; }
-        .btn-success { background: #52c41a; color: white; }
+        .form-group textarea { padding: 8px 12px; border: 1px solid rgba(0,255,255,0.3); border-radius: 2px; width: 100%; min-height: 100px; resize: vertical; font-family: inherit; background: #1a1a24; color: #00ffff; }
+        .notes-section { margin-top: 20px; padding: 20px; background: rgba(0,255,255,0.1); border-radius: 4px; border: 1px solid rgba(0,255,255,0.3); box-shadow: 0 0 10px rgba(0,255,255,0.1); }
+        .btn { padding: 8px 16px; border: 1px solid #00ffff; border-radius: 2px; cursor: pointer; margin-right: 10px; transition: all 0.3s; background: transparent; color: #00ffff; }
+        .btn:hover { background: rgba(0,255,255,0.2); box-shadow: 0 0 10px rgba(0,255,255,0.5); }
+        .btn-primary { background: rgba(0,255,255,0.2); border-color: #00ffff; color: #00ffff; }
+        .btn-danger { background: rgba(255,0,0,0.2); border-color: #ff0000; color: #ff0000; }
+        .btn-danger:hover { box-shadow: 0 0 10px rgba(255,0,0,0.5); }
+        .btn-success { background: rgba(0,255,0,0.2); border-color: #00ff00; color: #00ff00; }
+        .btn-success:hover { box-shadow: 0 0 10px rgba(0,255,0,0.5); }
         table { width: 100%; border-collapse: collapse; margin-top: 15px; }
-        th, td { padding: 12px; text-align: left; border-bottom: 1px solid #e8e8e8; }
-        th { background: #fafafa; font-weight: 500; }
-        .modal { display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.5); z-index: 1000; }
+        th, td { padding: 12px; text-align: left; border-bottom: 1px solid rgba(0,255,255,0.2); color: #00ffff; }
+        th { background: rgba(0,255,255,0.1); font-weight: 500; }
+        tr:hover { background: rgba(0,255,255,0.05); }
+        .modal { display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.8); z-index: 1000; }
         .modal.active { display: flex; align-items: center; justify-content: center; }
-        .modal-content { background: white; padding: 20px; border-radius: 8px; min-width: 400px; max-width: 90vw; width: 100%; box-sizing: border-box; overflow-x: hidden; max-height: 80vh; overflow-y: auto; }
-        .modal-header { font-size: 18px; margin-bottom: 15px; padding-bottom: 10px; border-bottom: 1px solid #e8e8e8; }
+        .modal-content { background: #0d0d12; border: 1px solid #00ffff; padding: 20px; border-radius: 4px; min-width: 400px; max-width: 90vw; width: 100%; box-sizing: border-box; overflow-x: hidden; max-height: 80vh; overflow-y: auto; box-shadow: 0 0 30px rgba(0,255,255,0.3); }
+        .modal-header { font-size: 18px; margin-bottom: 15px; padding-bottom: 10px; border-bottom: 1px solid rgba(0,255,255,0.3); color: #00ffff; }
         .modal-footer { margin-top: 20px; text-align: right; }
         .param-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; margin-top: 20px; }
         
@@ -98,13 +109,14 @@
         }
         
         .loading-spinner {
-            border: 4px solid rgba(0, 0, 0, 0.1);
+            border: 4px solid rgba(0,255,255,0.2);
             border-radius: 50%;
-            border-top: 4px solid #1890ff;
+            border-top: 4px solid #00ffff;
             width: 40px;
             height: 40px;
             animation: spin 1s linear infinite;
             margin-bottom: 16px;
+            box-shadow: 0 0 15px rgba(0,255,255,0.5);
         }
         
         @keyframes spin {
@@ -120,41 +132,45 @@
         .progress-bar {
             width: 100%;
             height: 8px;
-            background-color: #f0f0f0;
-            border-radius: 4px;
+            background-color: rgba(0,255,255,0.1);
+            border-radius: 2px;
             overflow: hidden;
             margin-bottom: 8px;
+            border: 1px solid rgba(0,255,255,0.3);
         }
         
         .progress-fill {
             height: 100%;
-            background-color: #1890ff;
-            border-radius: 4px;
+            background-color: #00ffff;
+            border-radius: 2px;
             transition: width 0.3s ease;
+            box-shadow: 0 0 10px rgba(0,255,255,0.8);
         }
         
         .progress-text {
             text-align: right;
             font-size: 12px;
-            color: #666;
+            color: #00ffff;
         }
-        .param-item { border: 1px solid #e8e8e8; padding: 16px; border-radius: 8px; background: white; box-shadow: 0 2px 4px rgba(0,0,0,0.05); transition: all 0.3s ease; }
-        .param-item:hover { box-shadow: 0 4px 12px rgba(0,0,0,0.1); border-color: #1890ff; }
-        .param-item label { display: block; font-size: 14px; font-weight: 500; color: #333; margin-bottom: 6px; }
-        .param-item .address { font-size: 10px; color: #999; margin-bottom: 6px; font-family: monospace; }
-        .param-item input { width: 100%; padding: 8px 12px; border: 1px solid #d9d9d9; border-radius: 4px; font-size: 14px; margin-bottom: 8px; }
-        .param-item input:focus { outline: none; border-color: #1890ff; box-shadow: 0 0 0 2px rgba(24, 144, 255, 0.2); }
-        .param-item .value { font-size: 24px; font-weight: bold; color: #52c41a; margin-bottom: 2px; }
-        .param-item .unit { font-size: 10px; color: #999; }
-        .param-item .type { font-size: 10px; color: #999; margin-top: 4px; }
-        .param-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; padding-bottom: 10px; border-bottom: 1px solid #e8e8e8; }
-        .param-header h2 { margin: 0; font-size: 18px; font-weight: 600; color: #333; }
+        .param-item { border: 1px solid rgba(0,255,255,0.3); padding: 16px; border-radius: 4px; background: rgba(13,13,18,0.9); box-shadow: 0 0 10px rgba(0,255,255,0.1); transition: all 0.3s ease; }
+        .param-item:hover { box-shadow: 0 0 20px rgba(0,255,255,0.3); border-color: #00ffff; }
+        .param-item label { display: block; font-size: 14px; font-weight: 500; color: #00ffff; margin-bottom: 6px; }
+        .param-item .address { font-size: 10px; color: rgba(0,255,255,0.7); margin-bottom: 6px; font-family: monospace; }
+        .param-item input { width: 100%; padding: 8px 12px; border: 1px solid rgba(0,255,255,0.3); border-radius: 2px; font-size: 14px; margin-bottom: 8px; background: #1a1a24; color: #00ffff; }
+        .param-item input:focus { outline: none; border-color: #00ffff; box-shadow: 0 0 10px rgba(0,255,255,0.5); }
+        .param-item .value { font-size: 24px; font-weight: bold; color: #00ffff; text-shadow: 0 0 10px rgba(0,255,255,0.8); margin-bottom: 2px; }
+        .param-item .unit { font-size: 10px; color: rgba(0,255,255,0.7); }
+        .param-item .type { font-size: 10px; color: rgba(0,255,255,0.7); margin-top: 4px; }
+        .param-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; padding-bottom: 10px; border-bottom: 1px solid rgba(0,255,255,0.3); }
+        .param-header h2 { margin: 0; font-size: 18px; font-weight: 600; color: #00ffff; text-shadow: 0 0 8px rgba(0,255,255,0.6); }
         .param-actions { display: flex; gap: 10px; }
         .login-container { display: flex; align-items: center; justify-content: center; height: 100vh; }
-        .login-box { background: white; padding: 40px; border-radius: 8px; box-shadow: 0 4px 16px rgba(0,0,0,0.1); width: 360px; }
-        .login-box h2 { text-align: center; margin-bottom: 30px; }
-        .login-box input { width: 100%; padding: 12px; margin-bottom: 15px; border: 1px solid #d9d9d9; border-radius: 4px; }
-        .login-box button { width: 100%; padding: 12px; background: #1890ff; color: white; border: none; border-radius: 4px; cursor: pointer; font-size: 16px; }
+        .login-box { background: #0d0d12; border: 1px solid #00ffff; padding: 40px; border-radius: 4px; box-shadow: 0 0 30px rgba(0,255,255,0.3); width: 360px; }
+        .login-box h2 { text-align: center; margin-bottom: 30px; color: #00ffff; text-shadow: 0 0 10px rgba(0,255,255,0.8); }
+        .login-box input { width: 100%; padding: 12px; margin-bottom: 15px; border: 1px solid rgba(0,255,255,0.3); border-radius: 2px; background: #1a1a24; color: #00ffff; }
+        .login-box input:focus { outline: none; box-shadow: 0 0 10px rgba(0,255,255,0.5); }
+        .login-box button { width: 100%; padding: 12px; background: rgba(0,255,255,0.2); border: 1px solid #00ffff; color: #00ffff; border-radius: 2px; cursor: pointer; font-size: 16px; transition: all 0.3s; }
+        .login-box button:hover { background: rgba(0,255,255,0.3); box-shadow: 0 0 15px rgba(0,255,255,0.5); }
     </style>
 </head>
 <body>
@@ -171,9 +187,9 @@
         <div v-else>
             <div class="header">
                 <div style="display: flex; align-items: center; gap: 10px;">
-                    <img src="logo.png" alt="YARDCOM" style="height: 40px; width: auto; margin-right: 10px; filter: brightness(0) invert(1);"/>
-                    <span style="font-family: Arial, sans-serif; font-size: 22px; font-weight: bold; color: white;">YARDCOM</span>
-                    <h1 style="margin: 0;">挤出机工艺参数管理系统 v1.0.0</h1>
+                    <img src="logo.png" alt="YARDCOM" style="height: 40px; width: auto; margin-right: 10px; filter: brightness(0) invert(1) drop-shadow(0 0 8px #00ffff);"/>
+                    <span style="font-family: Arial, sans-serif; font-size: 22px; font-weight: bold; color: #00ffff; text-shadow: 0 0 10px #00ffff;">YARDCOM</span>
+                    <h1 style="margin: 0; color: #00ffff; text-shadow: 0 0 8px #00ffff;">挤出机工艺参数管理系统 v1.0.0</h1>
                 </div>
                 <div class="user-info">
                     <span>{{ currentUser.username }} ({{ currentUser.role === 'admin' ? '管理员' : '操作员' }})</span>
@@ -351,7 +367,7 @@
                                         <option value="Real">实数</option>
                                         <option value="Bool">布尔</option>
                                     </select>
-                                    <div style="display: flex; align-items: center; gap: 5px;">
+                                    <div style="display: flex; align-items: cent[per; gap: 5px;">
                                         <input type="checkbox" v-model="param.is_readonly" id="readonly-param-{{ param.id || param.parameter_name }}" style="width: 18px; height: 18px;">
                                         <label for="readonly-param-{{ param.id || param.parameter_name }}" style="font-size: 14px; color: #666;">只读</label>
                                     </div>
@@ -360,10 +376,10 @@
                                 <div class="type" v-if="param.parameter_type" style="margin-top: 6px;">类型: {{ param.parameter_type === 'Int' ? '整数' : param.parameter_type === 'Real' ? '实数' : '布尔' }} <span v-if="param.is_readonly" style="color: #ff4d4f; margin-left: 10px;">(只读)</span></div>
                             </div>
                         </div>
-                        <div v-if="processParameters.length > 0" style="margin-top: 20px; padding: 20px; background: #e6f7ff; border-radius: 8px; border: 1px solid #1890ff; box-shadow: 0 2px 4px rgba(24, 144, 255, 0.1);">
-                            <h3 style="margin-bottom: 15px; font-size: 16px; color: #1890ff; font-weight: 500;">备注信息</h3>
+                        <div v-if="processParameters.length > 0" style="margin-top: 20px; padding: 20px; background: rgba(13,13,18,0.9); border-radius: 4px; border: 1px solid rgba(0,255,255,0.3); box-shadow: 0 0 10px rgba(0,255,255,0.1);">
+                            <h3 style="margin-bottom: 15px; font-size: 16px; color: #00ffff; font-weight: 500; text-shadow: 0 0 8px rgba(0,255,255,0.6);">备注信息</h3>
                             <div class="form-group">
-                                <textarea v-model="processNotes" placeholder="请输入备注信息，如参数调整原因、特殊说明等" style="width: 100%; min-height: 120px; padding: 12px; border: 1px solid #d9d9d9; border-radius: 4px; resize: vertical; font-family: inherit; font-size: 14px;"></textarea>
+                                <textarea v-model="processNotes" placeholder="请输入备注信息，如参数调整原因、特殊说明等" style="width: 100%; min-height: 120px; padding: 12px; border: 1px solid rgba(0,255,255,0.3); border-radius: 2px; resize: vertical; font-family: inherit; font-size: 14px; background: #1a1a24; color: #00ffff;"></textarea>
                             </div>
                             <div style="margin-top: 15px; display: flex; gap: 10px; justify-content: flex-start;">
                                 <button class="btn btn-success" @click="saveProcessParameters">保存工艺参数</button>
