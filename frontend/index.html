@@ -29,6 +29,35 @@
         select { padding: 8px 12px; border: 1px solid rgba(0,255,255,0.3); border-radius: 2px; width: 120px; background: #1a1a24; color: #00ffff; transition: all 0.3s; cursor: pointer; }
         select:focus { outline: none; box-shadow: 0 0 10px rgba(0,255,255,0.5); }
         select option { background: #1a1a24; color: #00ffff; }
+        input[type="checkbox"] {
+            width: 18px;
+            height: 18px;
+            accent-color: #00ffff;
+            background-color: #1a1a24;
+            border: 1px solid rgba(0,255,255,0.3);
+            border-radius: 2px;
+            cursor: pointer;
+            appearance: none;
+            -webkit-appearance: none;
+            position: relative;
+        }
+        input[type="checkbox"]:checked {
+            background-color: rgba(0,255,255,0.2);
+            border-color: #00ffff;
+        }
+        input[type="checkbox"]:checked::after {
+            content: '✓';
+            position: absolute;
+            color: #00ffff;
+            font-size: 14px;
+            font-weight: bold;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            text-shadow: 0 0 5px #00ffff;
+        }
+        a { color: #00ffff; text-decoration: none; transition: all 0.3s; text-shadow: 0 0 5px rgba(0,255,255,0.5); }
+        a:hover { color: #00ffff; text-shadow: 0 0 10px #00ffff; text-decoration: underline; }
         
         /* 参数列表输入框样式 */
         .param-item {
@@ -171,6 +200,16 @@
         .login-box input:focus { outline: none; box-shadow: 0 0 10px rgba(0,255,255,0.5); }
         .login-box button { width: 100%; padding: 12px; background: rgba(0,255,255,0.2); border: 1px solid #00ffff; color: #00ffff; border-radius: 2px; cursor: pointer; font-size: 16px; transition: all 0.3s; }
         .login-box button:hover { background: rgba(0,255,255,0.3); box-shadow: 0 0 15px rgba(0,255,255,0.5); }
+        input[type="checkbox"] {
+            width: 18px;
+            height: 18px;
+            accent-color: #00ffff;
+            background: #1a1a24;
+            border: 1px solid rgba(0,255,255,0.3);
+
+
+        }
+
     </style>
 </head>
 <body>
@@ -245,7 +284,7 @@
                             <tbody>
                                 <tr v-for="machine in machines" :key="machine.id">
                                     <td>{{ machine.machine_code }}</td>
-                                    <td><span style="cursor: pointer; color: #1890ff; text-decoration: underline;" @click="viewMachineParameters(machine)">{{ machine.machine_name }}</span></td>
+                                    <td><span style="cursor: pointer; color: #00ffff; text-decoration: none; text-shadow: 0 0 5px rgba(0,255,255,0.5);" @mouseenter="hoveringMachine = machine.id" @mouseleave="hoveringMachine = null" :style="hoveringMachine === machine.id ? 'text-decoration: underline; text-shadow: 0 0 10px #00ffff;' : ''" @click="viewMachineParameters(machine)">{{ machine.machine_name }}</span></td>
                                     <td>{{ machine.machine_type }}</td>
                                     <td>{{ machine.ip_address }}</td>
                                     <td>{{ machine.status === 'offline' || machine.status === '离线' ? '' : (machine.status || '') }}</td>
@@ -261,21 +300,21 @@
                             </tbody>
                         </table>
                         <!-- 分页组件 -->
-                        <div style="margin-top: 20px; display: flex; justify-content: flex-end; align-items: center; gap: 15px; padding: 10px 0; border-top: 1px solid #e8e8e8;">
+                        <div style="margin-top: 20px; display: flex; justify-content: flex-end; align-items: center; gap: 15px; padding: 10px 0; border-top: 1px solid rgba(0,255,255,0.2);">
                             <div style="display: flex; align-items: center; gap: 8px;">
-                                <span style="font-size: 14px; color: #666;">每页显示：</span>
-                                <select v-model="pageSize" @change="() => handleSizeChange(pageSize)" style="padding: 6px 10px; border: 1px solid #d9d9d9; border-radius: 4px; font-size: 14px;">
+                                <span style="font-size: 14px; color: #00ffff;">每页显示：</span>
+                                <select v-model="pageSize" @change="() => handleSizeChange(pageSize)" style="padding: 6px 10px; border: 1px solid rgba(0,255,255,0.3); border-radius: 2px; font-size: 14px; background: #1a1a24; color: #00ffff;">
                                     <option value="10">10</option>
                                     <option value="20">20</option>
                                     <option value="50">50</option>
                                     <option value="100">100</option>
                                 </select>
-                                <span style="font-size: 14px; color: #666;">共 {{ total }} 条记录</span>
+                                <span style="font-size: 14px; color: #00ffff;">共 {{ total }} 条记录</span>
                             </div>
                             <div style="display: flex; align-items: center; gap: 8px;">
                                 <button class="btn" @click="() => handlePageChange(1)" :disabled="currentPage === 1" style="padding: 6px 12px; font-size: 14px;">首页</button>
                                 <button class="btn" @click="() => handlePageChange(currentPage - 1)" :disabled="currentPage === 1" style="padding: 6px 12px; font-size: 14px;">上一页</button>
-                                <span style="padding: 6px 12px; font-size: 14px; font-weight: bold; color: #1890ff; border: 1px solid #1890ff; border-radius: 4px;">{{ currentPage }}</span>
+                                <span style="padding: 6px 12px; font-size: 14px; font-weight: bold; color: #00ffff; border: 1px solid #00ffff; border-radius: 2px; background: rgba(0,255,255,0.2); box-shadow: 0 0 10px rgba(0,255,255,0.3);">{{ currentPage }}</span>
                                 <button class="btn" @click="() => handlePageChange(currentPage + 1)" :disabled="currentPage * pageSize >= total" style="padding: 6px 12px; font-size: 14px;">下一页</button>
                                 <button class="btn" @click="() => handlePageChange(Math.ceil(total / pageSize))" :disabled="currentPage === Math.ceil(total / pageSize)" style="padding: 6px 12px; font-size: 14px;">末页</button>
                             </div>
@@ -300,7 +339,7 @@
                             <tbody>
                                 <tr v-for="product in products" :key="product.id">
                                     <td>{{ product.product_code }}</td>
-                                    <td><span style="cursor: pointer; color: #1890ff; text-decoration: underline;" @click="viewProductHistory(product)">{{ product.product_name }}</span></td>
+                                    <td><span style="cursor: pointer; color: #00ffff; text-decoration: none; text-shadow: 0 0 5px rgba(0,255,255,0.5);" @mouseenter="hoveringProduct = product.id" @mouseleave="hoveringProduct = null" :style="hoveringProduct === product.id ? 'text-decoration: underline; text-shadow: 0 0 10px #00ffff;' : ''" @click="viewProductHistory(product)">{{ product.product_name }}</span></td>
                                     <td>{{ product.product_spec }}</td>
                                     <td>V{{ product.version || 1 }}</td>
                                     <td>
@@ -311,21 +350,21 @@
                             </tbody>
                         </table>
                         <!-- 分页组件 -->
-                        <div style="margin-top: 20px; display: flex; justify-content: flex-end; align-items: center; gap: 15px; padding: 10px 0; border-top: 1px solid #e8e8e8;">
+                        <div style="margin-top: 20px; display: flex; justify-content: flex-end; align-items: center; gap: 15px; padding: 10px 0; border-top: 1px solid rgba(0,255,255,0.2);">
                             <div style="display: flex; align-items: center; gap: 8px;">
-                                <span style="font-size: 14px; color: #666;">每页显示：</span>
-                                <select v-model="pageSize" @change="() => handleSizeChange(pageSize)" style="padding: 6px 10px; border: 1px solid #d9d9d9; border-radius: 4px; font-size: 14px;">
+                                <span style="font-size: 14px; color: #00ffff;">每页显示：</span>
+                                <select v-model="pageSize" @change="() => handleSizeChange(pageSize)" style="padding: 6px 10px; border: 1px solid rgba(0,255,255,0.3); border-radius: 2px; font-size: 14px; background: #1a1a24; color: #00ffff;">
                                     <option value="10">10</option>
                                     <option value="20">20</option>
                                     <option value="50">50</option>
                                     <option value="100">100</option>
                                 </select>
-                                <span style="font-size: 14px; color: #666;">共 {{ total }} 条记录</span>
+                                <span style="font-size: 14px; color: #00ffff;">共 {{ total }} 条记录</span>
                             </div>
                             <div style="display: flex; align-items: center; gap: 8px;">
                                 <button class="btn" @click="() => handlePageChange(1)" :disabled="currentPage === 1" style="padding: 6px 12px; font-size: 14px;">首页</button>
                                 <button class="btn" @click="() => handlePageChange(currentPage - 1)" :disabled="currentPage === 1" style="padding: 6px 12px; font-size: 14px;">上一页</button>
-                                <span style="padding: 6px 12px; font-size: 14px; font-weight: bold; color: #1890ff; border: 1px solid #1890ff; border-radius: 4px;">{{ currentPage }}</span>
+                                <span style="padding: 6px 12px; font-size: 14px; font-weight: bold; color: #00ffff; border: 1px solid #00ffff; border-radius: 2px; background: rgba(0,255,255,0.2); box-shadow: 0 0 10px rgba(0,255,255,0.3);">{{ currentPage }}</span>
                                 <button class="btn" @click="() => handlePageChange(currentPage + 1)" :disabled="currentPage * pageSize >= total" style="padding: 6px 12px; font-size: 14px;">下一页</button>
                                 <button class="btn" @click="() => handlePageChange(Math.ceil(total / pageSize))" :disabled="currentPage === Math.ceil(total / pageSize)" style="padding: 6px 12px; font-size: 14px;">末页</button>
                             </div>
@@ -367,13 +406,13 @@
                                         <option value="Real">实数</option>
                                         <option value="Bool">布尔</option>
                                     </select>
-                                    <div style="display: flex; align-items: cent[per; gap: 5px;">
+                                    <div style="display: flex; align-items: center; gap: 5px;">
                                         <input type="checkbox" v-model="param.is_readonly" id="readonly-param-{{ param.id || param.parameter_name }}" style="width: 18px; height: 18px;">
-                                        <label for="readonly-param-{{ param.id || param.parameter_name }}" style="font-size: 14px; color: #666;">只读</label>
+                                        <label for="readonly-param-{{ param.id || param.parameter_name }}" style="font-size: 14px; color: #00ffff;">只读</label>
                                     </div>
                                     <button class="btn btn-danger" @click="removeParameter(param)" v-if="param.id">删除</button>
                                 </div>
-                                <div class="type" v-if="param.parameter_type" style="margin-top: 6px;">类型: {{ param.parameter_type === 'Int' ? '整数' : param.parameter_type === 'Real' ? '实数' : '布尔' }} <span v-if="param.is_readonly" style="color: #ff4d4f; margin-left: 10px;">(只读)</span></div>
+                                <div class="type" v-if="param.parameter_type" style="margin-top: 6px; color: rgba(0,255,255,0.7);">类型: {{ param.parameter_type === 'Int' ? '整数' : param.parameter_type === 'Real' ? '实数' : '布尔' }} <span v-if="param.is_readonly" style="color: #ff4d4f; text-shadow: 0 0 5px #ff4d4f; margin-left: 10px;">(只读)</span></div>
                             </div>
                         </div>
                         <div v-if="processParameters.length > 0" style="margin-top: 20px; padding: 20px; background: rgba(13,13,18,0.9); border-radius: 4px; border: 1px solid rgba(0,255,255,0.3); box-shadow: 0 0 10px rgba(0,255,255,0.1);">
@@ -429,21 +468,21 @@
                             </tbody>
                         </table>
                         <!-- 分页组件 -->
-                        <div style="margin-top: 20px; display: flex; justify-content: flex-end; align-items: center; gap: 15px; padding: 10px 0; border-top: 1px solid #e8e8e8;">
+                        <div style="margin-top: 20px; display: flex; justify-content: flex-end; align-items: center; gap: 15px; padding: 10px 0; border-top: 1px solid rgba(0,255,255,0.2);">
                             <div style="display: flex; align-items: center; gap: 8px;">
-                                <span style="font-size: 14px; color: #666;">每页显示：</span>
-                                <select v-model="pageSize" @change="() => handleSizeChange(pageSize)" style="padding: 6px 10px; border: 1px solid #d9d9d9; border-radius: 4px; font-size: 14px;">
+                                <span style="font-size: 14px; color: #00ffff;">每页显示：</span>
+                                <select v-model="pageSize" @change="() => handleSizeChange(pageSize)" style="padding: 6px 10px; border: 1px solid rgba(0,255,255,0.3); border-radius: 2px; font-size: 14px; background: #1a1a24; color: #00ffff;">
                                     <option value="10">10</option>
                                     <option value="20">20</option>
                                     <option value="50">50</option>
                                     <option value="100">100</option>
                                 </select>
-                                <span style="font-size: 14px; color: #666;">共 {{ total }} 条记录</span>
+                                <span style="font-size: 14px; color: #00ffff;">共 {{ total }} 条记录</span>
                             </div>
                             <div style="display: flex; align-items: center; gap: 8px;">
                                 <button class="btn" @click="() => handlePageChange(1)" :disabled="currentPage === 1" style="padding: 6px 12px; font-size: 14px;">首页</button>
                                 <button class="btn" @click="() => handlePageChange(currentPage - 1)" :disabled="currentPage === 1" style="padding: 6px 12px; font-size: 14px;">上一页</button>
-                                <span style="padding: 6px 12px; font-size: 14px; font-weight: bold; color: #1890ff; border: 1px solid #1890ff; border-radius: 4px;">{{ currentPage }}</span>
+                                <span style="padding: 6px 12px; font-size: 14px; font-weight: bold; color: #00ffff; border: 1px solid #00ffff; border-radius: 2px; background: rgba(0,255,255,0.2); box-shadow: 0 0 10px rgba(0,255,255,0.3);">{{ currentPage }}</span>
                                 <button class="btn" @click="() => handlePageChange(currentPage + 1)" :disabled="currentPage * pageSize >= total" style="padding: 6px 12px; font-size: 14px;">下一页</button>
                                 <button class="btn" @click="() => handlePageChange(Math.ceil(total / pageSize))" :disabled="currentPage === Math.ceil(total / pageSize)" style="padding: 6px 12px; font-size: 14px;">末页</button>
                             </div>
@@ -480,21 +519,21 @@
                             </tbody>
                         </table>
                         <!-- 分页组件 -->
-                        <div style="margin-top: 20px; display: flex; justify-content: flex-end; align-items: center; gap: 15px; padding: 10px 0; border-top: 1px solid #e8e8e8;">
+                        <div style="margin-top: 20px; display: flex; justify-content: flex-end; align-items: center; gap: 15px; padding: 10px 0; border-top: 1px solid rgba(0,255,255,0.2);">
                             <div style="display: flex; align-items: center; gap: 8px;">
-                                <span style="font-size: 14px; color: #666;">每页显示：</span>
-                                <select v-model="pageSize" @change="() => handleSizeChange(pageSize)" style="padding: 6px 10px; border: 1px solid #d9d9d9; border-radius: 4px; font-size: 14px;">
+                                <span style="font-size: 14px; color: #00ffff;">每页显示：</span>
+                                <select v-model="pageSize" @change="() => handleSizeChange(pageSize)" style="padding: 6px 10px; border: 1px solid rgba(0,255,255,0.3); border-radius: 2px; font-size: 14px; background: #1a1a24; color: #00ffff;">
                                     <option value="10">10</option>
                                     <option value="20">20</option>
                                     <option value="50">50</option>
                                     <option value="100">100</option>
                                 </select>
-                                <span style="font-size: 14px; color: #666;">共 {{ total }} 条记录</span>
+                                <span style="font-size: 14px; color: #00ffff;">共 {{ total }} 条记录</span>
                             </div>
                             <div style="display: flex; align-items: center; gap: 8px;">
                                 <button class="btn" @click="() => handlePageChange(1)" :disabled="currentPage === 1" style="padding: 6px 12px; font-size: 14px;">首页</button>
                                 <button class="btn" @click="() => handlePageChange(currentPage - 1)" :disabled="currentPage === 1" style="padding: 6px 12px; font-size: 14px;">上一页</button>
-                                <span style="padding: 6px 12px; font-size: 14px; font-weight: bold; color: #1890ff; border: 1px solid #1890ff; border-radius: 4px;">{{ currentPage }}</span>
+                                <span style="padding: 6px 12px; font-size: 14px; font-weight: bold; color: #00ffff; border: 1px solid #00ffff; border-radius: 2px; background: rgba(0,255,255,0.2); box-shadow: 0 0 10px rgba(0,255,255,0.3);">{{ currentPage }}</span>
                                 <button class="btn" @click="() => handlePageChange(currentPage + 1)" :disabled="currentPage * pageSize >= total" style="padding: 6px 12px; font-size: 14px;">下一页</button>
                                 <button class="btn" @click="() => handlePageChange(Math.ceil(total / pageSize))" :disabled="currentPage === Math.ceil(total / pageSize)" style="padding: 6px 12px; font-size: 14px;">末页</button>
                             </div>
@@ -543,7 +582,7 @@
                                     <button class="btn btn-primary" @click="saveTemplateParameter(param)">保存</button>
                                     <button class="btn btn-danger" @click="deleteTemplateParameter(param)" v-if="param.id || param.is_new">删除</button>
                                 </div>
-                                <div class="type" v-if="param.parameter_type" style="margin-top: 6px;">类型: {{ param.parameter_type === 'Int' ? '整数' : param.parameter_type === 'Real' ? '实数' : '布尔' }} <span v-if="param.is_readonly" style="color: #ff4d4f; margin-left: 10px;">(只读)</span></div>
+                                <div class="type" v-if="param.parameter_type" style="margin-top: 6px; color: rgba(0,255,255,0.7);">类型: {{ param.parameter_type === 'Int' ? '整数' : param.parameter_type === 'Real' ? '实数' : '布尔' }} <span v-if="param.is_readonly" style="color: #ff4d4f; text-shadow: 0 0 5px #ff4d4f; margin-left: 10px;">(只读)</span></div>
                             </div>
                         </div>
                         <div v-else class="loading-state">
@@ -581,21 +620,21 @@
                             </tbody>
                         </table>
                         <!-- 分页组件 -->
-                        <div style="margin-top: 20px; display: flex; justify-content: flex-end; align-items: center; gap: 15px; padding: 10px 0; border-top: 1px solid #e8e8e8;">
+                        <div style="margin-top: 20px; display: flex; justify-content: flex-end; align-items: center; gap: 15px; padding: 10px 0; border-top: 1px solid rgba(0,255,255,0.2);">
                             <div style="display: flex; align-items: center; gap: 8px;">
-                                <span style="font-size: 14px; color: #666;">每页显示：</span>
-                                <select v-model="pageSize" @change="() => handleSizeChange(pageSize)" style="padding: 6px 10px; border: 1px solid #d9d9d9; border-radius: 4px; font-size: 14px;">
+                                <span style="font-size: 14px; color: #00ffff;">每页显示：</span>
+                                <select v-model="pageSize" @change="() => handleSizeChange(pageSize)" style="padding: 6px 10px; border: 1px solid rgba(0,255,255,0.3); border-radius: 2px; font-size: 14px; background: #1a1a24; color: #00ffff;">
                                     <option value="10">10</option>
                                     <option value="20">20</option>
                                     <option value="50">50</option>
                                     <option value="100">100</option>
                                 </select>
-                                <span style="font-size: 14px; color: #666;">共 {{ total }} 条记录</span>
+                                <span style="font-size: 14px; color: #00ffff;">共 {{ total }} 条记录</span>
                             </div>
                             <div style="display: flex; align-items: center; gap: 8px;">
                                 <button class="btn" @click="() => handlePageChange(1)" :disabled="currentPage === 1" style="padding: 6px 12px; font-size: 14px;">首页</button>
                                 <button class="btn" @click="() => handlePageChange(currentPage - 1)" :disabled="currentPage === 1" style="padding: 6px 12px; font-size: 14px;">上一页</button>
-                                <span style="padding: 6px 12px; font-size: 14px; font-weight: bold; color: #1890ff; border: 1px solid #1890ff; border-radius: 4px;">{{ currentPage }}</span>
+                                <span style="padding: 6px 12px; font-size: 14px; font-weight: bold; color: #00ffff; border: 1px solid #00ffff; border-radius: 2px; background: rgba(0,255,255,0.2); box-shadow: 0 0 10px rgba(0,255,255,0.3);">{{ currentPage }}</span>
                                 <button class="btn" @click="() => handlePageChange(currentPage + 1)" :disabled="currentPage * pageSize >= total" style="padding: 6px 12px; font-size: 14px;">下一页</button>
                                 <button class="btn" @click="() => handlePageChange(Math.ceil(total / pageSize))" :disabled="currentPage === Math.ceil(total / pageSize)" style="padding: 6px 12px; font-size: 14px;">末页</button>
                             </div>
@@ -881,6 +920,8 @@
                 const isCheckingStatus = ref(false);
                 const readingMachineId = ref(null);
                 const isWriting = ref(false);
+                const hoveringMachine = ref(null);
+                const hoveringProduct = ref(null);
                 
                 // 分页相关状态
                 const currentPage = ref(1);
@@ -1845,7 +1886,7 @@
                     showMachineModal, showProductModal, showUserModal, showTemplateModal, showRecordDetailModal, showWriteToPlcModal, showBindTemplateModalFlag, showChangePasswordModalFlag,
                     machineForm, productForm, userForm, templateForm, processNotes, changePasswordForm,
                     selectedMachineId, selectedProductId, recordMachineId, recordProductId, selectedTemplateId,
-                    currentRecordParams, currentMachine, currentUserToChange, currentTemplate, templateParameters, statusCheckProgress, isCheckingStatus, readingMachineId, isWriting,
+                    currentRecordParams, currentMachine, currentUserToChange, currentTemplate, templateParameters, statusCheckProgress, isCheckingStatus, readingMachineId, isWriting, hoveringMachine, hoveringProduct,
                     currentPage, pageSize, total,
                     handleLogin, handleLogout,
                     loadMachines, loadProducts, loadUsers, loadTemplates,
