@@ -1,9 +1,6 @@
 import snap7
 from snap7.util import *
-import sys
-from pathlib import Path
-sys.path.insert(0, str(Path(__file__).parent.parent))
-from backend.config import PLC_CONFIG
+from config import PLC_CONFIG
 from typing import Optional, Dict, Any
 
 class PLCClient:

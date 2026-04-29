@@ -1,10 +1,7 @@
 from sqlalchemy import Column, Integer, String, Boolean, DateTime, ForeignKey, Text
 from sqlalchemy.orm import relationship
 from sqlalchemy.sql import func
-import sys
-from pathlib import Path
-sys.path.insert(0, str(Path(__file__).parent.parent))
-from backend.database import Base
+from database import Base
 
 class User(Base):
     __tablename__ = "users"
@@ -133,6 +130,8 @@ class OperationLog(Base):
     target_type = Column(String(50), index=True)
     target_id = Column(Integer)
     details = Column(Text)
+    request_params = Column(Text)
+    response_data = Column(Text)
     created_at = Column(DateTime(timezone=True), server_default=func.now(), index=True)
     
     user = relationship("User", back_populates="operation_logs")

@@ -2,11 +2,12 @@ from fastapi import APIRouter, Depends, HTTPException, Request
 from sqlalchemy.orm import Session, joinedload
 from typing import Optional
 
-from backend.database import get_db
-from backend.models import Machine, Template, ProcessParameter, TemplateParameter
-from backend.schemas import MachineCreate, MachineResponse, MachineUpdate, PLCWriteRequest
-from backend.plc_client import PLCClient
-from backend.dependencies import verify_token
+from database import get_db
+from models import Machine, Template, ProcessParameter, TemplateParameter
+from schemas import MachineCreate, MachineResponse, MachineUpdate, PLCWriteRequest
+from plc_client import PLCClient
+from dependencies import verify_token
+from utils.logger import log_plc_read, log_plc_write, log_machine_create, log_machine_update, log_machine_delete, log_template_bind, log_template_unbind
 
 router = APIRouter(prefix="/api")
 
@@ -30,7 +31,9 @@ def get_machines(page: int = 1, limit: int = 10, db: Session = Depends(get_db), 
 
 @router.post("/machines", response_model=MachineResponse)
 def create_machine(machine: MachineCreate, db: Session = Depends(get_db), request: Request = None):
-    verify_token(request)
+    token_payload = verify_token(request)
+    user_id = token_payload.get("user_id")
+    
     existing = db.query(Machine).filter(Machine.machine_code == machine.machine_code).first()
     if existing:
         raise HTTPException(status_code=400, detail="机台编号已存在")
@@ -39,11 +42,15 @@ def create_machine(machine: MachineCreate, db: Session = Depends(get_db), reques
     db.add(db_machine)
     db.commit()
     db.refresh(db_machine)
+    
+    log_machine_create(db, user_id, db_machine.id, db_machine.machine_name)
     return db_machine
 
 @router.put("/machines/{machine_id}", response_model=MachineResponse)
 def update_machine(machine_id: int, machine: MachineUpdate, db: Session = Depends(get_db), request: Request = None):
-    verify_token(request)
+    token_payload = verify_token(request)
+    user_id = token_payload.get("user_id")
+    
     db_machine = db.query(Machine).filter(Machine.id == machine_id).first()
     if not db_machine:
         raise HTTPException(status_code=404, detail="机台不存在")
@@ -53,16 +60,24 @@ def update_machine(machine_id: int, machine: MachineUpdate, db: Session = Depend
     
     db.commit()
     db.refresh(db_machine)
+    
+    log_machine_update(db, user_id, db_machine.id, db_machine.machine_name)
     return db_machine
 
 @router.delete("/machines/{machine_id}")
 def delete_machine(machine_id: int, db: Session = Depends(get_db), request: Request = None):
-    verify_token(request)
+    token_payload = verify_token(request)
+    user_id = token_payload.get("user_id")
+    
     machine = db.query(Machine).filter(Machine.id == machine_id).first()
     if not machine:
         raise HTTPException(status_code=404, detail="机台不存在")
+    
+    machine_name = machine.machine_name
     db.delete(machine)
     db.commit()
+    
+    log_machine_delete(db, user_id, machine_id, machine_name)
     return {"message": "机台删除成功"}
 
 @router.get("/machines/status")
@@ -91,7 +106,9 @@ def check_machines_status(db: Session = Depends(get_db), request: Request = None
 
 @router.get("/machines/{machine_id}/read")
 def read_machine_parameters(machine_id: int, db: Session = Depends(get_db), request: Request = None):
-    verify_token(request)
+    token_payload = verify_token(request)
+    user_id = token_payload.get("user_id")
+    
     machine = db.query(Machine).filter(Machine.id == machine_id).first()
     if not machine:
         raise HTTPException(status_code=404, detail="机台不存在")
@@ -162,7 +179,9 @@ def read_machine_parameters(machine_id: int, db: Session = Depends(get_db), requ
     if not results:
         raise HTTPException(status_code=500, detail="所有参数读取失败，请检查PLC连接和参数地址配置")
     
-    return {"machine": machine, "parameters": results}
+    response_data = {"machine": {"id": machine.id, "name": machine.machine_name}, "parameters": results}
+    log_plc_read(db, user_id, machine.id, machine.machine_name, results, response_data)
+    return response_data
 
 @router.post("/machines/{machine_id}/write")
 def write_machine_parameters(
@@ -171,7 +190,9 @@ def write_machine_parameters(
     db: Session = Depends(get_db), 
     req: Request = None
 ):
-    verify_token(req)
+    token_payload = verify_token(req)
+    user_id = token_payload.get("user_id")
+    
     machine = db.query(Machine).filter(Machine.id == machine_id).first()
     if not machine:
         raise HTTPException(status_code=404, detail="机台不存在")
@@ -189,11 +210,16 @@ def write_machine_parameters(
         results[param_name] = success
     
     plc.disconnect()
-    return {"success": True, "results": results}
+    
+    response_data = {"success": True, "results": results}
+    log_plc_write(db, user_id, machine.id, machine.machine_name, request.parameters.dict(), response_data)
+    return response_data
 
 @router.post("/machines/{machine_id}/bind-template")
 def bind_template_to_machine(machine_id: int, request_data: dict, db: Session = Depends(get_db), request: Request = None):
-    verify_token(request)
+    token_payload = verify_token(request)
+    user_id = token_payload.get("user_id")
+    
     template_id = request_data.get("template_id")
     if not template_id:
         raise HTTPException(status_code=400, detail="请提供template_id")
@@ -208,15 +234,21 @@ def bind_template_to_machine(machine_id: int, request_data: dict, db: Session = 
     
     machine.template_id = template_id
     db.commit()
+    
+    log_template_bind(db, user_id, machine_id, template_id)
     return {"message": "模板绑定成功"}
 
 @router.post("/machines/{machine_id}/unbind-template")
 def unbind_template_from_machine(machine_id: int, db: Session = Depends(get_db), request: Request = None):
-    verify_token(request)
+    token_payload = verify_token(request)
+    user_id = token_payload.get("user_id")
+    
     machine = db.query(Machine).filter(Machine.id == machine_id).first()
     if not machine:
         raise HTTPException(status_code=404, detail="机台不存在")
     
     machine.template_id = None
     db.commit()
+    
+    log_template_unbind(db, user_id, machine_id)
     return {"message": "模板解绑成功"}

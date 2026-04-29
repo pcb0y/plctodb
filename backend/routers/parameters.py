@@ -2,11 +2,12 @@ from fastapi import APIRouter, Depends, HTTPException, Request
 from sqlalchemy.orm import Session
 from typing import Optional
 
-from backend.database import get_db
-from backend.models import ProcessParameter, ProcessRecord, ProcessParameterValue, Machine, Product, Template, TemplateParameter
-from backend.schemas import ParameterSaveRequest, ParameterBindRequest, ProcessRecordCreate
-from backend.plc_client import PLCClient
-from backend.dependencies import verify_token
+from database import get_db
+from models import ProcessParameter, ProcessRecord, ProcessParameterValue, Machine, Product, Template, TemplateParameter
+from schemas import ParameterSaveRequest, ParameterBindRequest, ProcessRecordCreate
+from plc_client import PLCClient
+from dependencies import verify_token
+from utils.logger import log_parameter_save, log_record_write_to_plc
 
 router = APIRouter(prefix="/api")
 
@@ -100,6 +101,8 @@ def save_process_parameters(request: ParameterSaveRequest, db: Session = Depends
         db.add(param_value)
     
     db.commit()
+    
+    log_parameter_save(db, user_id, request.machine_id, request.product_id)
     return {"message": "工艺参数保存成功"}
 
 @router.post("/process-parameters/bind")
@@ -233,7 +236,8 @@ def create_process_record(request: ProcessRecordCreate, db: Session = Depends(ge
 
 @router.post("/process-records/{record_id}/write-to-plc")
 def write_record_to_plc(record_id: int, db: Session = Depends(get_db), request: Request = None):
-    verify_token(request)
+    token_payload = verify_token(request)
+    user_id = token_payload.get("user_id")
     
     record = db.query(ProcessRecord).filter(ProcessRecord.id == record_id).first()
     if not record:
@@ -271,7 +275,10 @@ def write_record_to_plc(record_id: int, db: Session = Depends(get_db), request: 
             results[param.parameter_name] = False
     
     plc.disconnect()
-    return {"success": True, "results": results}
+    
+    response_data = {"success": True, "results": results}
+    log_record_write_to_plc(db, user_id, record_id, record.machine_id, record.parameter_values, response_data)
+    return response_data
 
 @router.get("/process-parameters/template/{machine_id}")
 def get_parameter_template(machine_id: int, db: Session = Depends(get_db), request: Request = None):

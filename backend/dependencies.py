@@ -1,9 +1,9 @@
 from fastapi import Depends, HTTPException, status, Request
 from jose import JWTError, jwt
 from sqlalchemy.orm import Session
-from backend.config import settings
-from backend.database import get_db
-from backend.models import User
+from config import settings
+from database import get_db
+from models import User
 from typing import Optional
 
 def get_current_user(request: Request, db: Session = Depends(get_db)):

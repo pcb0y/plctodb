@@ -4,15 +4,16 @@ from fastapi.staticfiles import StaticFiles
 from fastapi.responses import RedirectResponse
 from pathlib import Path
 
-from backend.database import engine, Base
-from backend.config import settings
-from backend.routers import auth, machines, products, parameters, templates
+from database import engine, Base
+from config import settings
+from models import User
+from routers import auth, machines, products, parameters, templates, logs
 
 app = FastAPI(title="挤出机工艺参数管理系统", version="1.0.0")
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:8080", "http://localhost:3000", "http://127.0.0.1:8080", "http://127.0.0.1:3000"],
+    allow_origins=["*"],
     allow_credentials=True,
     allow_methods=["GET", "POST", "PUT", "DELETE", "OPTIONS"],
     allow_headers=["Authorization", "Content-Type", "Accept"],
@@ -27,6 +28,7 @@ app.include_router(machines.router)
 app.include_router(products.router)
 app.include_router(parameters.router)
 app.include_router(templates.router)
+app.include_router(logs.router)
 
 @app.get("/")
 async def root():
@@ -54,7 +56,6 @@ async def startup():
     print("✅ 数据库表结构创建成功")
     
     from sqlalchemy.orm import Session
-    from backend.models import User
     from passlib.context import CryptContext
     
     db = Session(bind=engine)
@@ -72,4 +73,4 @@ async def startup():
 
 if __name__ == "__main__":
     import uvicorn
-    uvicorn.run(app, host="0.0.0.0", port=8000)
+    uvicorn.run(app, host="0.0.0.0", port=9527)

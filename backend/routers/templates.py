@@ -1,10 +1,11 @@
 from fastapi import APIRouter, Depends, HTTPException, Request
 from sqlalchemy.orm import Session
 
-from backend.database import get_db
-from backend.models import Template, TemplateParameter
-from backend.schemas import TemplateCreate, TemplateResponse, TemplateUpdate, TemplateParameterBase
-from backend.dependencies import verify_token
+from database import get_db
+from models import Template, TemplateParameter
+from schemas import TemplateCreate, TemplateResponse, TemplateUpdate, TemplateParameterBase
+from dependencies import verify_token
+from utils.logger import log_template_create, log_template_update, log_template_delete
 
 router = APIRouter(prefix="/api")
 
@@ -32,7 +33,8 @@ def get_templates(page: int = 1, limit: int = 10, db: Session = Depends(get_db),
 
 @router.post("/templates", response_model=TemplateResponse)
 def create_template(template: TemplateCreate, db: Session = Depends(get_db), request: Request = None):
-    verify_token(request)
+    token_payload = verify_token(request)
+    user_id = token_payload.get("user_id")
     
     db_template = Template(name=template.name)
     db.add(db_template)
@@ -52,6 +54,8 @@ def create_template(template: TemplateCreate, db: Session = Depends(get_db), req
     
     db.commit()
     db.refresh(db_template)
+    
+    log_template_create(db, user_id, db_template.id, db_template.name)
     
     response = TemplateResponse(
         id=db_template.id,
@@ -86,7 +90,9 @@ def get_template(template_id: int, db: Session = Depends(get_db), request: Reque
 
 @router.put("/templates/{template_id}", response_model=TemplateResponse)
 def update_template(template_id: int, template: TemplateUpdate, db: Session = Depends(get_db), request: Request = None):
-    verify_token(request)
+    token_payload = verify_token(request)
+    user_id = token_payload.get("user_id")
+    
     db_template = db.query(Template).filter(Template.id == template_id).first()
     if not db_template:
         raise HTTPException(status_code=404, detail="模板不存在")
@@ -110,6 +116,8 @@ def update_template(template_id: int, template: TemplateUpdate, db: Session = De
     db.commit()
     db.refresh(db_template)
     
+    log_template_update(db, user_id, db_template.id, db_template.name)
+    
     response = TemplateResponse(
         id=db_template.id,
         name=db_template.name,
@@ -124,14 +132,18 @@ def update_template(template_id: int, template: TemplateUpdate, db: Session = De
 
 @router.delete("/templates/{template_id}")
 def delete_template(template_id: int, db: Session = Depends(get_db), request: Request = None):
-    verify_token(request)
+    token_payload = verify_token(request)
+    user_id = token_payload.get("user_id")
+    
     template = db.query(Template).filter(Template.id == template_id).first()
     if not template:
         raise HTTPException(status_code=404, detail="模板不存在")
     
+    template_name = template.name
     db.delete(template)
     db.commit()
     
+    log_template_delete(db, user_id, template_id, template_name)
     return {"message": "模板删除成功"}
 
 @router.post("/templates/{template_id}/parameters")

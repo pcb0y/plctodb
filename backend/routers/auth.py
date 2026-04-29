@@ -5,11 +5,12 @@ from jose import jwt
 from passlib.context import CryptContext
 import hashlib
 
-from backend.database import get_db
-from backend.models import User
-from backend.schemas import LoginRequest, LoginResponse, UserResponse, UserCreate
-from backend.config import settings
-from backend.dependencies import verify_token
+from database import get_db
+from models import User
+from schemas import LoginRequest, LoginResponse, UserResponse, UserCreate
+from config import settings
+from dependencies import verify_token
+from utils.logger import log_user_create, log_user_delete, log_password_change
 
 router = APIRouter(prefix="/api")
 
@@ -56,7 +57,9 @@ def get_users(page: int = 1, limit: int = 10, db: Session = Depends(get_db), req
 
 @router.post("/users", response_model=UserResponse)
 def create_user(user: UserCreate, db: Session = Depends(get_db), request: Request = None):
-    verify_token(request)
+    token_payload = verify_token(request)
+    user_id = token_payload.get("user_id")
+    
     existing = db.query(User).filter(User.username == user.username).first()
     if existing:
         raise HTTPException(status_code=400, detail="用户名已存在")
@@ -66,23 +69,33 @@ def create_user(user: UserCreate, db: Session = Depends(get_db), request: Reques
     db.add(db_user)
     db.commit()
     db.refresh(db_user)
+    
+    log_user_create(db, user_id, db_user.id, db_user.username)
     return db_user
 
 @router.delete("/users/{user_id}")
 def delete_user(user_id: int, db: Session = Depends(get_db), request: Request = None):
-    verify_token(request)
+    token_payload = verify_token(request)
+    current_user_id = token_payload.get("user_id")
+    
     user = db.query(User).filter(User.id == user_id).first()
     if not user:
         raise HTTPException(status_code=404, detail="用户不存在")
     if user.username == "admin":
         raise HTTPException(status_code=400, detail="不能删除管理员账号")
+    
+    username = user.username
     db.delete(user)
     db.commit()
+    
+    log_user_delete(db, current_user_id, user_id, username)
     return {"message": "用户删除成功"}
 
 @router.post("/users/{user_id}/change-password")
 def change_user_password(user_id: int, new_password: dict, db: Session = Depends(get_db), request: Request = None):
-    verify_token(request)
+    token_payload = verify_token(request)
+    current_user_id = token_payload.get("user_id")
+    
     user = db.query(User).filter(User.id == user_id).first()
     if not user:
         raise HTTPException(status_code=404, detail="用户不存在")
@@ -96,4 +109,6 @@ def change_user_password(user_id: int, new_password: dict, db: Session = Depends
     user.hashed_password = hashed_password
     db.commit()
     db.refresh(user)
+    
+    log_password_change(db, current_user_id, user_id)
     return {"message": "密码修改成功"}
