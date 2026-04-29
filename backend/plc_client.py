@@ -15,6 +15,15 @@ class PLCClient:
         self.db_number = PLC_CONFIG['db_number']
         self.client: Optional[snap7.client.Client] = None
     
+    def __enter__(self):
+        if self.connect():
+            return self
+        raise ConnectionError(f"无法连接到 PLC {self.ip}")
+    
+    def __exit__(self, exc_type, exc_val, exc_tb):
+        self.disconnect()
+        return False
+    
     def connect(self) -> bool:
         try:
             self.client = snap7.client.Client()
@@ -28,8 +37,10 @@ class PLCClient:
         if self.client:
             try:
                 self.client.disconnect()
-            except:
-                pass
+            except Exception as e:
+                print(f"PLC断开连接异常: {e}")
+            finally:
+                self.client = None
     
     def read_parameter(self, address: str, data_type: str = "Int") -> Optional[Any]:
         try:
