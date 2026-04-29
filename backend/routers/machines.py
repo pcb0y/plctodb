@@ -123,35 +123,36 @@ def read_machine_parameters(machine_id: int, db: Session = Depends(get_db), requ
     parameters = []
     
     if machine.template_id:
-        template = db.query(Template).options(joinedload(Template.template_parameters)).filter(Template.id == machine.template_id).first()
-        if template and template.template_parameters:
-            for param in template.template_parameters:
-                temp_param = type('TempParam', (), {
-                    'machine_id': machine_id,
-                    'product_id': None,
-                    'parameter_name': param.parameter_name,
-                    'parameter_address': param.parameter_address,
-                    'parameter_value': param.parameter_value,
-                    'parameter_unit': param.parameter_unit,
-                    'parameter_type': param.parameter_type,
-                    'is_active': True,
-                    'is_readonly': param.is_readonly
-                })()
-                parameters.append(temp_param)
+        template = db.query(Template).filter(Template.id == machine.template_id).first()
+        if template:
+            template_parameters = db.query(TemplateParameter).filter(TemplateParameter.template_id == template.id).all()
+            if template_parameters:
+                for param in template_parameters:
+                    temp_param = type('TempParam', (), {
+                        'machine_id': machine_id,
+                        'product_id': None,
+                        'parameter_name': param.parameter_name,
+                        'parameter_address': param.parameter_address,
+                        'parameter_value': param.parameter_value,
+                        'parameter_unit': param.parameter_unit,
+                        'parameter_type': param.parameter_type,
+                        'is_active': True,
+                        'is_readonly': param.is_readonly
+                    })()
+                    parameters.append(temp_param)
+            else:
+                plc.disconnect()
+                raise HTTPException(status_code=404, detail="绑定的模板中没有配置工艺参数")
         else:
-            parameters = db.query(ProcessParameter).filter(
-                ProcessParameter.machine_id == machine_id,
-                ProcessParameter.is_active == True
-            ).all()
+            plc.disconnect()
+            raise HTTPException(status_code=404, detail="绑定的模板不存在")
     else:
-        parameters = db.query(ProcessParameter).filter(
-            ProcessParameter.machine_id == machine_id,
-            ProcessParameter.is_active == True
-        ).all()
-    
-    if not parameters:
         plc.disconnect()
-        raise HTTPException(status_code=404, detail="该机台没有配置工艺参数，请先添加工艺参数")
+        raise HTTPException(status_code=404, detail="机台未绑定模板，请先绑定模板")
+    # 打印参数的详细信息
+    print("参数列表：")
+    for param in parameters:
+        print(f"参数名称: {param.parameter_name}, 地址: {param.parameter_address}, 类型: {param.parameter_type}")
     
     results = {}
     success_count = 0

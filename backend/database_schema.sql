@@ -29,8 +29,9 @@ CREATE TABLE IF NOT EXISTS template_parameters (
     template_id INT NOT NULL,
     parameter_name VARCHAR(100) NOT NULL,
     parameter_address VARCHAR(50) NOT NULL,
-    data_type VARCHAR(20) DEFAULT 'Int',
-    unit VARCHAR(20),
+    parameter_value VARCHAR(100),
+    parameter_unit VARCHAR(20),
+    parameter_type VARCHAR(20) DEFAULT 'Int',
     is_readonly BOOLEAN DEFAULT FALSE,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
@@ -121,3 +122,13 @@ INSERT INTO templates (template_name, description) VALUES
 ('ZJ19-163,ZJ20-79', 'ZJ系列挤出机模板'),
 ('ZJ19-48', 'ZJ19系列挤出机模板'),
 ('ZJ21-29', 'ZJ21系列挤出机模板');
+
+-- 插入ZJ21-29模板参数
+INSERT INTO template_parameters (template_id, parameter_name, parameter_address, parameter_value, parameter_unit, parameter_type, is_readonly) VALUES
+((SELECT id FROM templates WHERE template_name = 'ZJ21-29'), '保温时长', 'DB1.DBD0', '60', '分钟', 'Int', FALSE),
+((SELECT id FROM templates WHERE template_name = 'ZJ21-29'), '温度设定', 'DB1.DBD4', '180.0', '℃', 'Real', FALSE),
+((SELECT id FROM templates WHERE template_name = 'ZJ21-29'), '压力设定', 'DB1.DBD8', '2.5', 'MPa', 'Real', FALSE),
+((SELECT id FROM templates WHERE template_name = 'ZJ21-29'), '转速设定', 'DB1.DBD12', '120', 'rpm', 'Int', FALSE),
+((SELECT id FROM templates WHERE template_name = 'ZJ21-29'), '当前温度', 'DB2.DBD0', '0.0', '℃', 'Real', TRUE),
+((SELECT id FROM templates WHERE template_name = 'ZJ21-29'), '当前压力', 'DB2.DBD4', '0.0', 'MPa', 'Real', TRUE),
+((SELECT id FROM templates WHERE template_name = 'ZJ21-29'), '当前转速', 'DB2.DBD8', '0', 'rpm', 'Int', TRUE);
