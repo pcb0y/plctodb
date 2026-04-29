@@ -1121,6 +1121,16 @@
                     isLoggedIn.value = false;
                 };
                 
+                const handleAuthError = () => {
+                    console.log('检测到未授权，清除登录状态');
+                    token.value = '';
+                    currentUser.value = {};
+                    isLoggedIn.value = false;
+                    localStorage.removeItem('token');
+                    localStorage.removeItem('user');
+                    alert('登录已过期，请重新登录');
+                };
+                
                 const loadMachines = async (page = 1, limit = 10) => {
                     try {
                         const startTime = Date.now();
@@ -1139,6 +1149,12 @@
                         clearTimeout(timeoutId); // 清除超时定时器
                         
                         console.log('机台API响应状态:', res.status, '耗时:', Date.now() - startTime, 'ms');
+                        
+                        if (res.status === 401) {
+                            handleAuthError();
+                            return;
+                        }
+                        
                         if (!res.ok) {
                             throw new Error(`HTTP error! status: ${res.status}`);
                         }
@@ -1152,7 +1168,11 @@
                     } catch (e) {
                         console.error('加载机台数据失败:', e);
                         console.error('错误堆栈:', e.stack);
-                        alert('加载机台数据失败: ' + e.message);
+                        if (e.message && e.message.includes('401')) {
+                            handleAuthError();
+                        } else {
+                            alert('加载机台数据失败: ' + e.message);
+                        }
                     }
                 };
                 
@@ -1187,22 +1207,24 @@
                         const res = await fetch(`${API_BASE}/templates?page=${page}&limit=${limit}`, { headers: headers() });
                         const data = await res.json();
                         console.log('模板列表数据:', data);
-                        templates.value = data.items;
-                        total.value = data.total;
-                        currentPage.value = data.page;
-                        pageSize.value = data.limit;
+                        templates.value = data.items || [];
+                        total.value = data.total || 0;
+                        currentPage.value = data.page || 1;
+                        pageSize.value = data.limit || 10;
                         // 检查模板参数是否有id字段
-                        templates.value.forEach((template, index) => {
-                            console.log(`模板${index}`, template);
-                            if (template.parameters) {
-                                template.parameters.forEach((param, pIndex) => {
-                                    console.log(`模板${index}参数${pIndex}`, param);
-                                    if (!param.id) {
-                                        console.warn('模板参数缺少id字段:', param);
-                                    }
-                                });
-                            }
-                        });
+                        if (templates.value && Array.isArray(templates.value)) {
+                            templates.value.forEach((template, index) => {
+                                console.log(`模板${index}`, template);
+                                if (template.parameters) {
+                                    template.parameters.forEach((param, pIndex) => {
+                                        console.log(`模板${index}参数${pIndex}`, param);
+                                        if (!param.id) {
+                                            console.warn('模板参数缺少id字段:', param);
+                                        }
+                                    });
+                                }
+                            });
+                        }
                     } catch (e) {
                         console.error('加载模板数据失败:', e);
                         alert('加载模板数据失败: ' + e.message);
