@@ -150,10 +150,7 @@ def read_machine_parameters(machine_id: int, db: Session = Depends(get_db), requ
     else:
         plc.disconnect()
         raise HTTPException(status_code=404, detail="机台未绑定模板，请先绑定模板")
-    print("参数列表：")
-    for param in parameters:
-        print(f"参数名称: {param.parameter_name}, 地址: {param.parameter_address}, 类型: {param.parameter_type}, Slot: {param.slot}")
-    
+
     results = {}
     success_count = 0
     error_count = 0
