@@ -11,16 +11,16 @@ class PLCClient:
         self.port = PLC_CONFIG['port']
         self.db_number = PLC_CONFIG['db_number']
         self.client: Optional[snap7.client.Client] = None
-    
+
     def __enter__(self):
         if self.connect():
             return self
         raise ConnectionError(f"无法连接到 PLC {self.ip}")
-    
+
     def __exit__(self, exc_type, exc_val, exc_tb):
         self.disconnect()
         return False
-    
+
     def connect(self) -> bool:
         try:
             self.client = snap7.client.Client()
@@ -29,7 +29,7 @@ class PLCClient:
         except Exception as e:
             print(f"PLC连接异常: {e}")
             return False
-    
+
     def disconnect(self):
         if self.client:
             try:
@@ -38,12 +38,24 @@ class PLCClient:
                 print(f"PLC断开连接异常: {e}")
             finally:
                 self.client = None
+
+    def _ensure_connection(self, slot: int) -> bool:
+        if self.slot != slot:
+            self.slot = slot
+            self.disconnect()
+            return self.connect()
+        if not self.client or not self.client.get_connected():
+            return self.connect()
+        return True
     
-    def read_parameter(self, address: str, data_type: str = "Int") -> Optional[Any]:
+    def read_parameter(self, address: str, data_type: str = "Int", slot: int = None) -> Optional[Any]:
         try:
-            if not self.client or not self.client.get_connected():
+            if slot is not None:
+                if not self._ensure_connection(slot):
+                    return None
+            elif not self.client or not self.client.get_connected():
                 return None
-            
+
             address = address.strip().upper()
             size = 2
             
@@ -100,9 +112,12 @@ class PLCClient:
             print(f"读取参数失败 {address}: {e}")
             return None
     
-    def write_parameter(self, address: str, value: Any, data_type: str = "Int") -> bool:
+    def write_parameter(self, address: str, value: Any, data_type: str = "Int", slot: int = None) -> bool:
         try:
-            if not self.client or not self.client.get_connected():
+            if slot is not None:
+                if not self._ensure_connection(slot):
+                    return False
+            elif not self.client or not self.client.get_connected():
                 return False
             
             address = address.strip().upper()

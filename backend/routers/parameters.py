@@ -3,8 +3,8 @@ from sqlalchemy.orm import Session
 from typing import Optional
 
 from database import get_db
-from models import ProcessParameter, ProcessRecord, ProcessParameterValue, Machine, Product, Template, TemplateParameter
-from schemas import ParameterSaveRequest, ParameterBindRequest, ProcessRecordCreate
+from models import ProcessRecord, ProcessParameterValue, Machine, Product, Template, TemplateParameter
+from schemas import ParameterSaveRequest, ProcessRecordCreate
 from plc_client import PLCClient
 from dependencies import verify_token
 from utils.logger import log_parameter_save, log_record_write_to_plc
@@ -19,56 +19,39 @@ def get_process_parameters(
     request: Request = None
 ):
     verify_token(request)
-    query = db.query(ProcessParameter)
     
     if machine_id:
-        query = query.filter(ProcessParameter.machine_id == machine_id)
-    if product_id:
-        query = query.filter(ProcessParameter.product_id == product_id)
+        machine = db.query(Machine).filter(Machine.id == machine_id).first()
+        if machine and machine.template_id:
+            params = db.query(TemplateParameter).filter(
+                TemplateParameter.template_id == machine.template_id
+            ).all()
+            return [
+                {
+                    "id": p.id,
+                    "machine_id": machine_id,
+                    "product_id": product_id,
+                    "parameter_name": p.parameter_name,
+                    "parameter_address": p.parameter_address,
+                    "parameter_value": p.parameter_value,
+                    "parameter_unit": p.parameter_unit,
+                    "parameter_type": p.parameter_type,
+                    "is_active": True,
+                    "is_readonly": p.is_readonly,
+                    "slot": p.slot,
+                    "machine_name": machine.machine_name,
+                    "product_name": None
+                }
+                for p in params
+            ]
     
-    params = query.all()
-    return [
-        {
-            "id": p.id,
-            "machine_id": p.machine_id,
-            "product_id": p.product_id,
-            "parameter_name": p.parameter_name,
-            "parameter_address": p.parameter_address,
-            "parameter_value": p.parameter_value,
-            "parameter_unit": p.parameter_unit,
-            "parameter_type": p.parameter_type,
-            "is_active": p.is_active,
-            "machine_name": p.machine.machine_name if p.machine else None,
-            "product_name": p.product.product_name if p.product else None
-        }
-        for p in params
-    ]
+    return []
 
 @router.post("/process-parameters")
 def save_process_parameters(request: ParameterSaveRequest, db: Session = Depends(get_db), req: Request = None):
     verify_token(req)
     token_payload = verify_token(req)
     user_id = token_payload.get("user_id")
-    
-    for param in request.parameters:
-        existing = db.query(ProcessParameter).filter(
-            ProcessParameter.machine_id == request.machine_id,
-            ProcessParameter.product_id == request.product_id,
-            ProcessParameter.parameter_name == param.parameter_name
-        ).first()
-        
-        if existing:
-            existing.parameter_address = param.parameter_address
-            existing.parameter_value = param.parameter_value
-            existing.parameter_unit = param.parameter_unit
-            existing.parameter_type = param.parameter_type
-        else:
-            db_param = ProcessParameter(
-                machine_id=request.machine_id,
-                product_id=request.product_id,
-                **param.model_dump()
-            )
-            db.add(db_param)
     
     last_record = db.query(ProcessRecord).filter(
         ProcessRecord.machine_id == request.machine_id,
@@ -89,14 +72,27 @@ def save_process_parameters(request: ParameterSaveRequest, db: Session = Depends
     db.add(record)
     db.flush()
     
+    template_params = {}
+    machine = db.query(Machine).filter(Machine.id == request.machine_id).first()
+    if machine and machine.template_id:
+        template_parameters = db.query(TemplateParameter).filter(TemplateParameter.template_id == machine.template_id).all()
+        for tp in template_parameters:
+            template_params[tp.parameter_name] = tp.slot if tp.slot is not None else 1
+    
     for param in request.parameters:
+        is_readonly_val = param.is_readonly
+        if isinstance(is_readonly_val, str):
+            is_readonly_val = is_readonly_val.lower() == "true"
+        
         param_value = ProcessParameterValue(
             process_record_id=record.id,
             parameter_name=param.parameter_name,
             parameter_address=param.parameter_address,
             parameter_value=str(param.parameter_value),
             parameter_unit=param.parameter_unit,
-            parameter_type=param.parameter_type
+            parameter_type=param.parameter_type,
+            is_readonly=is_readonly_val,
+            slot=template_params.get(param.parameter_name, 1)
         )
         db.add(param_value)
     
@@ -104,47 +100,6 @@ def save_process_parameters(request: ParameterSaveRequest, db: Session = Depends
     
     log_parameter_save(db, user_id, request.machine_id, request.product_id)
     return {"message": "工艺参数保存成功"}
-
-@router.post("/process-parameters/bind")
-def bind_product_machine(request: ParameterBindRequest, db: Session = Depends(get_db), req: Request = None):
-    verify_token(req)
-    
-    if request.source_machine_code and request.source_product_code:
-        source_machine = db.query(Machine).filter(Machine.machine_code == request.source_machine_code).first()
-        source_product = db.query(Product).filter(Product.product_code == request.source_product_code).first()
-        
-        if not source_machine or not source_product:
-            raise HTTPException(status_code=404, detail="源机台或源产品不存在")
-        
-        source_params = db.query(ProcessParameter).filter(
-            ProcessParameter.machine_id == source_machine.id,
-            ProcessParameter.product_id == source_product.id
-        ).all()
-        
-        for sp in source_params:
-            existing = db.query(ProcessParameter).filter(
-                ProcessParameter.machine_id == request.machine_id,
-                ProcessParameter.product_id == request.product_id,
-                ProcessParameter.parameter_name == sp.parameter_name
-            ).first()
-            
-            if existing:
-                existing.parameter_value = sp.parameter_value
-            else:
-                db_param = ProcessParameter(
-                    machine_id=request.machine_id,
-                    product_id=request.product_id,
-                    parameter_name=sp.parameter_name,
-                    parameter_address=sp.parameter_address,
-                    parameter_value=sp.parameter_value,
-                    parameter_unit=sp.parameter_unit,
-                    parameter_type=sp.parameter_type
-                )
-                db.add(db_param)
-        
-        db.commit()
-    
-    return {"message": "产品与机台绑定成功"}
 
 @router.get("/process-records")
 def get_process_records(
@@ -216,6 +171,14 @@ def create_process_record(request: ProcessRecordCreate, db: Session = Depends(ge
     db.add(record)
     db.flush()
     
+    template_params = {}
+    if request.machine_id:
+        machine = db.query(Machine).filter(Machine.id == request.machine_id).first()
+        if machine and machine.template_id:
+            template_parameters = db.query(TemplateParameter).filter(TemplateParameter.template_id == machine.template_id).all()
+            for tp in template_parameters:
+                template_params[tp.parameter_name] = tp.slot if tp.slot is not None else 1
+    
     if request.parameters_snapshot:
         for param_name, param_info in request.parameters_snapshot.items():
             if isinstance(param_info, dict):
@@ -226,7 +189,8 @@ def create_process_record(request: ProcessRecordCreate, db: Session = Depends(ge
                     parameter_value=str(param_info.get("value", "")),
                     parameter_unit=param_info.get("unit", ""),
                     parameter_type=param_info.get("type", "Int"),
-                    is_readonly=param_info.get("readonly", False)
+                    is_readonly=param_info.get("readonly", False),
+                    slot=template_params.get(param_name, 1)
                 )
                 db.add(param_value)
     
@@ -269,7 +233,8 @@ def write_record_to_plc(record_id: int, db: Session = Depends(get_db), request: 
             elif param.parameter_type == "Bool":
                 value = value.lower() == "true"
             
-            success = plc.write_parameter(param.parameter_address, value, param.parameter_type)
+            slot = param.slot if param.slot is not None else machine.slot
+            success = plc.write_parameter(param.parameter_address, value, param.parameter_type, slot)
             results[param.parameter_name] = success
         except Exception:
             results[param.parameter_name] = False
@@ -301,7 +266,8 @@ def get_parameter_template(machine_id: int, db: Session = Depends(get_db), reque
                         "parameter_value": param.parameter_value,
                         "parameter_unit": param.parameter_unit,
                         "parameter_type": param.parameter_type,
-                        "is_readonly": param.is_readonly
+                        "is_readonly": param.is_readonly,
+                        "slot": param.slot if param.slot is not None else 1
                     })
                 return {"template": template}
             else:

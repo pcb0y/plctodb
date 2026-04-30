@@ -2,7 +2,7 @@ from fastapi import APIRouter, Depends, HTTPException, Request
 from sqlalchemy.orm import Session
 
 from database import get_db
-from models import Product, ProcessParameter, ProcessRecord
+from models import Product, ProcessRecord
 from schemas import ProductCreate, ProductResponse, ProductUpdate
 from dependencies import verify_token
 from utils.logger import log_product_create, log_product_update, log_product_delete
@@ -62,11 +62,10 @@ def delete_product(product_id: int, db: Session = Depends(get_db), request: Requ
     if not product:
         raise HTTPException(status_code=404, detail="产品不存在")
     
-    has_parameters = db.query(ProcessParameter).filter(ProcessParameter.product_id == product_id).first() is not None
     has_records = db.query(ProcessRecord).filter(ProcessRecord.product_id == product_id).first() is not None
     
-    if has_parameters or has_records:
-        raise HTTPException(status_code=400, detail="该产品有相关的工艺参数或生产记录，不允许删除")
+    if has_records:
+        raise HTTPException(status_code=400, detail="该产品有相关的生产记录，不允许删除")
     
     product_name = product.product_name
     db.delete(product)

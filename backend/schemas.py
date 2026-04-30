@@ -1,5 +1,5 @@
 from pydantic import BaseModel
-from typing import Optional, List, Dict, Any
+from typing import Optional, List, Dict, Any, Union
 from datetime import datetime
 
 class UserBase(BaseModel):
@@ -86,9 +86,11 @@ class ProductResponse(ProductBase):
 class ParameterBase(BaseModel):
     parameter_name: str
     parameter_address: str
-    parameter_value: Optional[str] = None
+    parameter_value: Optional[Any] = None
     parameter_unit: Optional[str] = ""
     parameter_type: str = "Int"
+    is_readonly: Union[bool, str] = False
+    slot: Union[int, str] = 1
 
 class ParameterCreate(ParameterBase):
     machine_id: int
@@ -109,6 +111,7 @@ class TemplateParameterBase(BaseModel):
     parameter_unit: Optional[str] = ""
     parameter_type: str = "Int"
     is_readonly: bool = False
+    slot: int = 1
 
 class TemplateBase(BaseModel):
     name: str
@@ -157,12 +160,6 @@ class ParameterSaveRequest(BaseModel):
     product_id: int
     parameters: List[ParameterBase]
     notes: Optional[str] = ""
-
-class ParameterBindRequest(BaseModel):
-    machine_id: int
-    product_id: int
-    source_machine_code: Optional[str] = None
-    source_product_code: Optional[str] = None
 
 class ProcessRecordBase(BaseModel):
     machine_id: int

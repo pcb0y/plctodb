@@ -15,7 +15,7 @@ class Settings(BaseSettings):
     ACCESS_TOKEN_EXPIRE_MINUTES: int = 1440
     
     PLC_PORT: int = 102
-    PLC_DB_NUMBER: int = 1
+    PLC_DB_NUMBER: int = 3
 
 settings = Settings()
 

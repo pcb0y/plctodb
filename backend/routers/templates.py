@@ -48,7 +48,9 @@ def create_template(template: TemplateCreate, db: Session = Depends(get_db), req
             parameter_address=param.parameter_address,
             parameter_value=param.parameter_value,
             parameter_unit=param.parameter_unit,
-            parameter_type=param.parameter_type
+            parameter_type=param.parameter_type,
+            is_readonly=getattr(param, 'is_readonly', False),
+            slot=getattr(param, 'slot', 1)
         )
         db.add(db_param)
     
@@ -109,7 +111,9 @@ def update_template(template_id: int, template: TemplateUpdate, db: Session = De
                 parameter_address=param.parameter_address,
                 parameter_value=param.parameter_value,
                 parameter_unit=param.parameter_unit,
-                parameter_type=param.parameter_type
+                parameter_type=param.parameter_type,
+                is_readonly=getattr(param, 'is_readonly', False),
+                slot=getattr(param, 'slot', 1)
             )
             db.add(db_param)
     
@@ -149,11 +153,11 @@ def delete_template(template_id: int, db: Session = Depends(get_db), request: Re
 @router.post("/templates/{template_id}/parameters")
 def add_template_parameter(template_id: int, parameter: TemplateParameterBase, db: Session = Depends(get_db), request: Request = None):
     verify_token(request)
-    
+
     template = db.query(Template).filter(Template.id == template_id).first()
     if not template:
         raise HTTPException(status_code=404, detail="模板不存在")
-    
+
     db_param = TemplateParameter(
         template_id=template_id,
         parameter_name=parameter.parameter_name,
@@ -161,12 +165,13 @@ def add_template_parameter(template_id: int, parameter: TemplateParameterBase, d
         parameter_value=parameter.parameter_value,
         parameter_unit=parameter.parameter_unit,
         parameter_type=parameter.parameter_type,
-        is_readonly=getattr(parameter, 'is_readonly', False)
+        is_readonly=getattr(parameter, 'is_readonly', False),
+        slot=getattr(parameter, 'slot', 1)
     )
     db.add(db_param)
     db.commit()
     db.refresh(db_param)
-    
+
     response = {
         "id": db_param.id,
         "template_id": db_param.template_id,
@@ -175,36 +180,38 @@ def add_template_parameter(template_id: int, parameter: TemplateParameterBase, d
         "parameter_value": db_param.parameter_value,
         "parameter_unit": db_param.parameter_unit,
         "parameter_type": db_param.parameter_type,
-        "is_readonly": db_param.is_readonly
+        "is_readonly": db_param.is_readonly,
+        "slot": db_param.slot
     }
-    
+
     return response
 
 @router.put("/templates/{template_id}/parameters/{parameter_id}")
 def update_template_parameter(template_id: int, parameter_id: int, parameter: TemplateParameterBase, db: Session = Depends(get_db), request: Request = None):
     verify_token(request)
-    
+
     template = db.query(Template).filter(Template.id == template_id).first()
     if not template:
         raise HTTPException(status_code=404, detail="模板不存在")
-    
+
     db_param = db.query(TemplateParameter).filter(
         TemplateParameter.id == parameter_id,
         TemplateParameter.template_id == template_id
     ).first()
     if not db_param:
         raise HTTPException(status_code=404, detail="模板参数不存在")
-    
+
     db_param.parameter_name = parameter.parameter_name
     db_param.parameter_address = parameter.parameter_address
     db_param.parameter_value = parameter.parameter_value
     db_param.parameter_unit = parameter.parameter_unit
     db_param.parameter_type = parameter.parameter_type
     db_param.is_readonly = getattr(parameter, 'is_readonly', False)
-    
+    db_param.slot = getattr(parameter, 'slot', 1)
+
     db.commit()
     db.refresh(db_param)
-    
+
     response = {
         "id": db_param.id,
         "template_id": db_param.template_id,
@@ -213,9 +220,10 @@ def update_template_parameter(template_id: int, parameter_id: int, parameter: Te
         "parameter_value": db_param.parameter_value,
         "parameter_unit": db_param.parameter_unit,
         "parameter_type": db_param.parameter_type,
-        "is_readonly": db_param.is_readonly
+        "is_readonly": db_param.is_readonly,
+        "slot": db_param.slot
     }
-    
+
     return response
 
 @router.delete("/templates/{template_id}/parameters/{parameter_id}")

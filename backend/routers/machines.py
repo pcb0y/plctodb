@@ -3,7 +3,7 @@ from sqlalchemy.orm import Session, joinedload
 from typing import Optional
 
 from database import get_db
-from models import Machine, Template, ProcessParameter, TemplateParameter
+from models import Machine, Template, TemplateParameter
 from schemas import MachineCreate, MachineResponse, MachineUpdate, PLCWriteRequest
 from plc_client import PLCClient
 from dependencies import verify_token
@@ -121,7 +121,7 @@ def read_machine_parameters(machine_id: int, db: Session = Depends(get_db), requ
         raise HTTPException(status_code=500, detail="PLC连接失败，请检查IP地址、Rack和Slot配置")
     
     parameters = []
-    
+
     if machine.template_id:
         template = db.query(Template).filter(Template.id == machine.template_id).first()
         if template:
@@ -137,7 +137,8 @@ def read_machine_parameters(machine_id: int, db: Session = Depends(get_db), requ
                         'parameter_unit': param.parameter_unit,
                         'parameter_type': param.parameter_type,
                         'is_active': True,
-                        'is_readonly': param.is_readonly
+                        'is_readonly': param.is_readonly,
+                        'slot': param.slot if param.slot is not None else 1
                     })()
                     parameters.append(temp_param)
             else:
@@ -149,10 +150,9 @@ def read_machine_parameters(machine_id: int, db: Session = Depends(get_db), requ
     else:
         plc.disconnect()
         raise HTTPException(status_code=404, detail="机台未绑定模板，请先绑定模板")
-    # 打印参数的详细信息
     print("参数列表：")
     for param in parameters:
-        print(f"参数名称: {param.parameter_name}, 地址: {param.parameter_address}, 类型: {param.parameter_type}")
+        print(f"参数名称: {param.parameter_name}, 地址: {param.parameter_address}, 类型: {param.parameter_type}, Slot: {param.slot}")
     
     results = {}
     success_count = 0
@@ -160,14 +160,15 @@ def read_machine_parameters(machine_id: int, db: Session = Depends(get_db), requ
     
     for param in parameters:
         try:
-            value = plc.read_parameter(param.parameter_address, param.parameter_type)
+            value = plc.read_parameter(param.parameter_address, param.parameter_type, param.slot)
             if value is not None:
                 results[param.parameter_name] = {
                     "address": param.parameter_address,
                     "value": value,
                     "unit": param.parameter_unit,
                     "type": param.parameter_type,
-                    "is_readonly": getattr(param, 'is_readonly', False)
+                    "is_readonly": getattr(param, 'is_readonly', False),
+                    "slot": param.slot
                 }
                 success_count += 1
             else:
@@ -186,32 +187,39 @@ def read_machine_parameters(machine_id: int, db: Session = Depends(get_db), requ
 
 @router.post("/machines/{machine_id}/write")
 def write_machine_parameters(
-    machine_id: int, 
-    request: PLCWriteRequest, 
-    db: Session = Depends(get_db), 
+    machine_id: int,
+    request: PLCWriteRequest,
+    db: Session = Depends(get_db),
     req: Request = None
 ):
     token_payload = verify_token(req)
     user_id = token_payload.get("user_id")
-    
+
     machine = db.query(Machine).filter(Machine.id == machine_id).first()
     if not machine:
         raise HTTPException(status_code=404, detail="机台不存在")
-    
+
     if not machine.ip_address:
         raise HTTPException(status_code=400, detail="机台未配置IP地址")
-    
+
     plc = PLCClient(machine.ip_address, machine.rack, machine.slot)
     if not plc.connect():
         raise HTTPException(status_code=500, detail="PLC连接失败")
-    
+
+    template_params = {}
+    if machine.template_id:
+        template_parameters = db.query(TemplateParameter).filter(TemplateParameter.template_id == machine.template_id).all()
+        for tp in template_parameters:
+            template_params[tp.parameter_name] = tp.slot if tp.slot is not None else 1
+
     results = {}
     for param_name, param_data in request.parameters.items():
-        success = plc.write_parameter(param_data.address, param_data.value, param_data.type)
+        slot = template_params.get(param_name, machine.slot)
+        success = plc.write_parameter(param_data.address, param_data.value, param_data.type, slot)
         results[param_name] = success
-    
+
     plc.disconnect()
-    
+
     response_data = {"success": True, "results": results}
     log_plc_write(db, user_id, machine.id, machine.machine_name, request.parameters.dict(), response_data)
     return response_data
