@@ -916,29 +916,29 @@
         </div>
         
         <div class="modal" :class="{ active: showUserModal }">
-                    <div class="modal-content">
-                        <div class="modal-header">添加用户</div>
-                        <div class="form-group">
-                            <label>用户名：</label>
-                            <input type="text" v-model="userForm.username">
-                        </div>
-                        <div class="form-group">
-                            <label>密码：</label>
-                            <input type="password" v-model="userForm.password">
-                        </div>
-                        <div class="form-group">
-                            <label>角色：</label>
-                            <select v-model="userForm.role">
-                                <option value="operator">操作员</option>
-                                <option value="admin">管理员</option>
-                            </select>
-                        </div>
-                        <div class="modal-footer">
-                            <button class="btn btn-primary" @click="createUser">保存</button>
-                            <button class="btn" @click="showUserModal = false">取消</button>
-                        </div>
-                    </div>
+            <div class="modal-content">
+                <div class="modal-header">添加用户</div>
+                <div class="form-group">
+                    <label>用户名：</label>
+                    <input type="text" v-model="userForm.username" placeholder="请输入用户名" style="width: 220px; padding: 10px 14px; border: 1px solid #00ffff; border-radius: 4px; font-size: 14px; background: rgba(13, 13, 18, 0.9); color: #00ffff; font-family: 'Courier New', monospace; box-shadow: 0 0 15px rgba(0, 255, 255, 0.4), inset 0 0 10px rgba(0, 255, 255, 0.1);">
                 </div>
+                <div class="form-group">
+                    <label>密码：</label>
+                    <input type="password" v-model="userForm.password" placeholder="请输入密码" style="width: 220px; padding: 10px 14px; border: 1px solid #00ffff; border-radius: 4px; font-size: 14px; background: rgba(13, 13, 18, 0.9); color: #00ffff; font-family: 'Courier New', monospace; box-shadow: 0 0 15px rgba(0, 255, 255, 0.4), inset 0 0 10px rgba(0, 255, 255, 0.1);">
+                </div>
+                <div class="form-group">
+                    <label>角色：</label>
+                    <select v-model="userForm.role" style="width: 220px; padding: 10px 14px; border: 1px solid #00ffff; border-radius: 4px; font-size: 14px; background: rgba(13, 13, 18, 0.9); color: #00ffff; font-family: 'Courier New', monospace; box-shadow: 0 0 15px rgba(0, 255, 255, 0.4), inset 0 0 10px rgba(0, 255, 255, 0.1); appearance: none;">
+                        <option value="operator" style="background: #0d0d12; color: #00ffff;">操作员</option>
+                        <option value="admin" style="background: #0d0d12; color: #00ffff;">管理员</option>
+                    </select>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-primary" @click="createUser">保存</button>
+                    <button class="btn" @click="showUserModal = false">取消</button>
+                </div>
+            </div>
+        </div>
                 
                 <div class="modal" :class="{ active: showTemplateModal }">
                     <div class="modal-content">
