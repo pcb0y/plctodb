@@ -211,14 +211,29 @@ def write_machine_parameters(
 
     results = {}
     for param_name, param_data in request.parameters.items():
-        slot = template_params.get(param_name, machine.slot)
-        success = plc.write_parameter(param_data.address, param_data.value, param_data.type, slot)
-        results[param_name] = success
+        try:
+            slot = template_params.get(param_name, machine.slot)
+            # 转换值为合适类型
+            value = param_data.value
+            if param_data.type == "Int":
+                value = int(float(value))
+            elif param_data.type == "Real":
+                value = float(value)
+            elif param_data.type == "Bool":
+                value = bool(value) if isinstance(value, bool) else str(value).lower() in ("true", "1", "yes", "on")
+            success = plc.write_parameter(param_data.address, value, param_data.type, slot)
+            results[param_name] = success
+        except Exception as e:
+            results[param_name] = False
+            print(f"写入参数 {param_name} 失败: {e}")
 
     plc.disconnect()
 
     response_data = {"success": True, "results": results}
-    log_plc_write(db, user_id, machine.id, machine.machine_name, request.parameters.dict(), response_data)
+    try:
+        log_plc_write(db, user_id, machine.id, machine.machine_name, {k: v.dict() if hasattr(v, "dict") else v for k, v in request.parameters.items()}, response_data)
+    except Exception as e:
+        print(f"日志记录失败: {e}")
     return response_data
 
 @router.post("/machines/{machine_id}/bind-template")

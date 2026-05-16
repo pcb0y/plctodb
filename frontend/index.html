@@ -249,7 +249,7 @@
             background-color: rgba(76, 175, 80, 0.2) !important;
         }
         .modal-content-large { min-height: 400px; }
-        .param-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; margin-top: 20px; }
+        .param-grid { display: grid; grid-template-columns: repeat(6, 1fr); gap: 12px; margin-top: 20px; }
         .modal-content .param-item { display: flex; flex-direction: column; align-items: flex-start; }
         
         /* 加载状态样式 */
@@ -891,40 +891,71 @@
                                 
                             </div>
                         </div>
-                        <div class="param-grid" v-if="processParameters.length > 0">
-                            <div class="param-item" v-for="param in processParameters" :key="param.id || param.parameter_name">
-                                <input type="text" v-model="param.parameter_name" placeholder="参数名称" style="width: 100%; padding: 6px 10px; border: 1px solid #d9d9d9; border-radius: 4px; margin-bottom: 8px; font-weight: bold;">
-                                <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 8px;">
-                                    <div class="address" v-if="param.parameter_address">{{ param.parameter_address }}</div>
-                                    <div v-if="param.parameter_type === 'Bool'" :class="param.parameter_value === true || param.parameter_value === 'true' ? 'alarm-value' : 'normal-value'">
-                                        {{ param.parameter_value === true || param.parameter_value === 'true' ? '报警' : '正常' }}
+                        <div class="param-grid" v-if="groupedProcessParameters.length > 0">
+                            <div class="param-item" v-for="group in groupedProcessParameters" :key="group.key">
+                                <!-- 合并卡片：同时有设定值和实际值 -->
+                                <template v-if="group.setpoint && group.actual">
+                                    <div style="font-weight: bold; margin-bottom: 6px; font-size: 15px; color: #4CAF50; border-bottom: 1px solid rgba(76,175,80,0.2); padding-bottom: 4px; width: 100%;">
+                                        {{ group.baseName }}
                                     </div>
-                                    <div class="value" v-else-if="param.parameter_value !== undefined && param.parameter_value !== null">{{ !isNaN(parseFloat(param.parameter_value)) ? parseFloat(param.parameter_value).toFixed(2) : param.parameter_value }}</div>
-                                    <div class="value" v-else>0.00</div>
-                                    <div class="unit" v-if="param.parameter_unit && param.parameter_type !== 'Bool'">{{ param.parameter_unit }}</div>
-                                </div>
-                                <div style="display: flex; gap: 10px; align-items: center; margin-bottom: 8px;">
-                                    <input type="text" v-model="param.parameter_address" placeholder="地址（如 VW102）" style="flex: 1;">
-                                    <input type="text" v-model="param.parameter_value" placeholder="值" style="flex: 1;">
-                                    <input type="text" v-model="param.parameter_unit" placeholder="单位" style="flex: 1;">
-                                </div>
-                                <div style="display: flex; gap: 10px; align-items: center;">
-                                    <select v-model="param.parameter_type" style="padding: 8px 12px; border: 1px solid #d9d9d9; border-radius: 4px; flex: 1;">
-                                        <option value="Int">整数</option>
-                                        <option value="Real">实数</option>
-                                        <option value="Bool">布尔</option>
-                                    </select>
-                                    <div style="display: flex; align-items: center; gap: 5px;">
-                                        <input type="checkbox" v-model="param.is_readonly" id="readonly-param-{{ param.id || param.parameter_name }}" style="width: 18px; height: 18px;">
-                                        <label for="readonly-param-{{ param.id || param.parameter_name }}" style="font-size: 14px; color: #4CAF50;">只读</label>
+                                    <!-- 设定值显示 -->
+                                    <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 4px; width: 100%;">
+                                        <span style="font-size: 11px; color: rgba(76,175,80,0.6); width: 28px; text-align: right; flex-shrink: 0;">设定</span>
+                                        <div class="address" style="margin-bottom: 0; width: 48px; flex-shrink: 0;">{{ group.setpoint.parameter_address }}</div>
+                                        <div v-if="group.setpoint.parameter_type === 'Bool'" :class="group.setpoint.parameter_value === true || group.setpoint.parameter_value === 'true' ? 'alarm-value' : 'normal-value'" style="font-size: 18px; margin-bottom: 0; width: 64px; text-align: right; flex-shrink: 0;">
+                                            {{ group.setpoint.parameter_value === true || group.setpoint.parameter_value === 'true' ? '报警' : '正常' }}
+                                        </div>
+                                        <input type="text" v-model="group.setpoint.parameter_value" v-else style="font-size: 18px; font-weight: bold; color: #4CAF50; text-shadow: 0 0 10px rgba(76,175,80,0.8); background: transparent; border: none; border-bottom: 1px solid rgba(76,175,80,0.3); width: 64px; text-align: right; flex-shrink: 0; padding: 0; outline: none; font-family: inherit;">
+                                        <div class="unit" v-if="group.setpoint.parameter_unit && group.setpoint.parameter_type !== 'Bool'" style="margin-bottom: 0; width: 28px; flex-shrink: 0;">{{ group.setpoint.parameter_unit }}</div>
                                     </div>
-                                    <div style="display: flex; align-items: center; gap: 5px;">
-                                        <label style="font-size: 14px; color: #4CAF50;">Slot:</label>
-                                        <input type="number" v-model="param.slot" min="0" style="width: 60px; padding: 8px; border: 1px solid #d9d9d9; border-radius: 4px;">
+                                    <!-- 实际值显示 -->
+                                    <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 8px; width: 100%;">
+                                        <span style="font-size: 11px; color: rgba(76,175,80,0.6); width: 28px; text-align: right; flex-shrink: 0;">实际</span>
+                                        <div class="address" style="margin-bottom: 0; width: 48px; flex-shrink: 0;">{{ group.actual.parameter_address }}</div>
+                                        <div v-if="group.actual.parameter_type === 'Bool'" :class="group.actual.parameter_value === true || group.actual.parameter_value === 'true' ? 'alarm-value' : 'normal-value'" style="font-size: 18px; margin-bottom: 0; width: 64px; text-align: right; flex-shrink: 0;">
+                                            {{ group.actual.parameter_value === true || group.actual.parameter_value === 'true' ? '报警' : '正常' }}
+                                        </div>
+                                        <div class="value" v-else-if="group.actual.parameter_value !== undefined && group.actual.parameter_value !== null" style="font-size: 18px; margin-bottom: 0; width: 64px; text-align: right; flex-shrink: 0;">{{ !isNaN(parseFloat(group.actual.parameter_value)) ? parseFloat(group.actual.parameter_value).toFixed(2) : group.actual.parameter_value }}</div>
+                                        <div class="value" v-else style="font-size: 18px; margin-bottom: 0; width: 64px; text-align: right; flex-shrink: 0;">0.00</div>
+                                        <div class="unit" v-if="group.actual.parameter_unit && group.actual.parameter_type !== 'Bool'" style="margin-bottom: 0; width: 28px; flex-shrink: 0;">{{ group.actual.parameter_unit }}</div>
                                     </div>
-                                    <button class="btn btn-danger" @click="removeParameter(param)" v-if="param.id">删除</button>
-                                </div>
-                                <div class="type" v-if="param.parameter_type" style="margin-top: 6px; color: rgba(76,175,80,0.7);">类型: {{ param.parameter_type === 'Int' ? '整数' : param.parameter_type === 'Real' ? '实数' : '布尔' }} <span v-if="param.is_readonly" style="color: #ff4d4f; text-shadow: 0 0 5px #ff4d4f; margin-left: 10px;">(只读)</span></div>
+                                    <div style="display: flex; justify-content: flex-end; gap: 8px; width: 100%;">
+                                        <button class="btn btn-success" @click="writeSingleParameter(group.setpoint)" v-if="group.setpoint" style="padding: 2px 8px; font-size: 11px;">写入PLC</button>
+                                        <button class="btn btn-danger" @click="removeParameter(group.setpoint); if(group.actual) removeParameter(group.actual);" v-if="group.setpoint.id || group.actual.id" style="padding: 2px 8px; font-size: 11px;">删除</button>
+                                    </div>
+                                </template>
+                                <!-- 单个参数卡片 -->
+                                <template v-else>
+                                    <!-- 布尔类型：只读显示 -->
+                                    <template v-if="group.single.parameter_type === 'Bool'">
+                                        <div style="font-weight: bold; margin-bottom: 6px; font-size: 15px; color: #4CAF50; border-bottom: 1px solid rgba(76,175,80,0.2); padding-bottom: 4px; width: 100%;">
+                                            {{ group.single.parameter_name }}
+                                        </div>
+                                        <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 8px; width: 100%;">
+                                            <div class="address" style="margin-bottom: 0; width: 48px; flex-shrink: 0;">{{ group.single.parameter_address }}</div>
+                                            <div :class="group.single.parameter_value === true || group.single.parameter_value === 'true' ? 'alarm-value' : 'normal-value'" style="font-size: 18px; margin-bottom: 0; width: 64px; text-align: right; flex-shrink: 0;">
+                                                {{ group.single.parameter_value === true || group.single.parameter_value === 'true' ? '报警' : '正常' }}
+                                            </div>
+                                        </div>
+                                        <div style="display: flex; justify-content: flex-end; width: 100%;">
+                                            <button class="btn btn-danger" @click="removeParameter(group.single)" v-if="group.single.id" style="padding: 2px 8px; font-size: 11px;">删除</button>
+                                        </div>
+                                    </template>
+                                    <!-- 非布尔类型：可编辑 -->
+                                    <template v-else>
+                                        <div style="font-weight: bold; margin-bottom: 6px; font-size: 15px; color: #4CAF50; border-bottom: 1px solid rgba(76,175,80,0.2); padding-bottom: 4px; width: 100%;">
+                                            {{ group.single.parameter_name }}
+                                        </div>
+                                        <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 8px; width: 100%;">
+                                            <div class="address" style="margin-bottom: 0; width: 48px; flex-shrink: 0;">{{ group.single.parameter_address }}</div>
+                                            <input type="text" v-model="group.single.parameter_value" style="font-size: 18px; font-weight: bold; color: #4CAF50; text-shadow: 0 0 10px rgba(76,175,80,0.8); background: transparent; border: none; border-bottom: 1px solid rgba(76,175,80,0.3); width: 64px; text-align: right; flex-shrink: 0; padding: 0; outline: none; font-family: inherit;">
+                                            <div class="unit" v-if="group.single.parameter_unit" style="margin-bottom: 0; width: 28px; flex-shrink: 0;">{{ group.single.parameter_unit }}</div>
+                                        </div>
+                                        <div style="display: flex; justify-content: flex-end; width: 100%;">
+                                            <button class="btn btn-danger" @click="removeParameter(group.single)" v-if="group.single.id" style="padding: 2px 8px; font-size: 11px;">删除</button>
+                                        </div>
+                                    </template>
+                                </template>
                             </div>
                         </div>
                         <div v-if="processParameters.length > 0" style="margin-top: 20px; padding: 20px; background: rgba(13,13,18,0.9); border-radius: 4px; border: 1px solid rgba(76,175,80,0.3); box-shadow: 0 0 10px rgba(76,175,80,0.1);">
@@ -1535,7 +1566,7 @@
     
     <script src="js/vue.global.js"></script>
     <script>
-        const { createApp, ref, onMounted } = Vue;
+        const { createApp, ref, onMounted, computed } = Vue;
         
         createApp({
             setup() {
@@ -1553,6 +1584,49 @@
                 const products = ref([]);
                 const users = ref([]);
                 const processParameters = ref([]);
+                const groupedProcessParameters = computed(() => {
+                    const groups = new Map();
+                    const singles = [];
+                    processParameters.value.forEach(param => {
+                        const name = param.parameter_name || '';
+                        const setpointMatch = name.match(/^(.*?)设定值$/);
+                        const actualMatch = name.match(/^(.*?)实际值$/);
+                        if (setpointMatch) {
+                            const baseName = setpointMatch[1];
+                            if (!groups.has(baseName)) {
+                                groups.set(baseName, { baseName, setpoint: null, actual: null, key: baseName });
+                            }
+                            groups.get(baseName).setpoint = param;
+                        } else if (actualMatch) {
+                            const baseName = actualMatch[1];
+                            if (!groups.has(baseName)) {
+                                groups.set(baseName, { baseName, setpoint: null, actual: null, key: baseName });
+                            }
+                            groups.get(baseName).actual = param;
+                        } else {
+                            singles.push({ single: param, key: param.id || name });
+                        }
+                    });
+                    const result = [];
+                    groups.forEach(group => {
+                        if (group.setpoint && group.actual) {
+                            result.push(group);
+                        } else {
+                            if (group.setpoint) {
+                                singles.push({ single: group.setpoint, key: group.setpoint.id || group.setpoint.parameter_name });
+                            }
+                            if (group.actual) {
+                                singles.push({ single: group.actual, key: group.actual.id || group.actual.parameter_name });
+                            }
+                        }
+                    });
+                    singles.sort((a, b) => {
+                        const aIsBool = a.single.parameter_type === 'Bool' ? 1 : 0;
+                        const bIsBool = b.single.parameter_type === 'Bool' ? 1 : 0;
+                        return aIsBool - bIsBool;
+                    });
+                    return [...result, ...singles];
+                });
                 const processRecords = ref([]);
                 
                 const showMachineModal = ref(false);
@@ -2098,7 +2172,7 @@
                             processParameters.value = Object.entries(data.parameters).map(([name, info]) => ({
                                 parameter_name: name,
                                 parameter_address: info.address,
-                                parameter_value: info.value,
+                                parameter_value: (info.type === 'Real' || info.type === 'Int') && (typeof info.value === 'number' || !isNaN(parseFloat(info.value))) ? parseFloat(info.value).toFixed(2) : info.value,
                                 parameter_unit: info.unit,
                                 parameter_type: info.type,
                                 is_readonly: info.is_readonly || false,
@@ -2130,6 +2204,34 @@
                     });
                     try {
                         const res = await fetch(`${API_BASE}/machines/${machine.id}/write`, {
+                            method: 'POST',
+                            headers: { ...headers(), 'Content-Type': 'application/json' },
+                            body: JSON.stringify({ parameters: params, operator_id: currentUser.value.id })
+                        });
+                        const data = await res.json();
+                        if (data.success) {
+                            alert('写入成功');
+                        } else {
+                            alert('写入失败');
+                        }
+                    } catch (e) {
+                        alert('写入失败: ' + e.message);
+                    }
+                };
+                
+                const writeSingleParameter = async (param) => {
+                    if (!selectedMachineId.value) {
+                        alert('请先选择机台');
+                        return;
+                    }
+                    try {
+                        const params = {};
+                        params[param.parameter_name] = {
+                            address: param.parameter_address,
+                            value: param.parameter_value,
+                            type: param.parameter_type
+                        };
+                        const res = await fetch(`${API_BASE}/machines/${selectedMachineId.value}/write`, {
                             method: 'POST',
                             headers: { ...headers(), 'Content-Type': 'application/json' },
                             body: JSON.stringify({ parameters: params, operator_id: currentUser.value.id })
@@ -2733,7 +2835,7 @@
                 
                 return {
                     isLoggedIn, currentUser, currentView,
-                    loginForm, errorMessage, machines, products, users, processParameters, processRecords, templates,
+                    loginForm, errorMessage, machines, products, users, processParameters, groupedProcessParameters, processRecords, templates,
                     showMachineModal, showProductModal, showUserModal, showTemplateModal, showRecordDetailModal, showWriteToPlcModal, showBindTemplateModalFlag, showChangePasswordModalFlag,
                     machineForm, productForm, userForm, templateForm, processNotes, changePasswordForm, editingProductId,
                     selectedMachineId, selectedProductId, recordMachineId, recordProductId, selectedTemplateId,
@@ -2749,7 +2851,7 @@
                     createTemplate, editTemplate, deleteTemplate,
                     readMachine, readAllMachines, checkMachineStatus,
                     loadProcessParameters, saveAsNewRecord, addNewParameter, viewMachineParameters,
-                    loadProcessRecords, viewRecordDetail, writeRecordToPLC, viewProductHistory, writeToPlcRecord, writeToPlcParameters, confirmWriteToPlc,
+                    loadProcessRecords, viewRecordDetail, writeRecordToPLC, viewProductHistory, writeToPlcRecord, writeToPlcParameters, confirmWriteToPlc, writeSingleParameter,
                     showBindTemplateModal, bindTemplate, unbindTemplate, showTemplateDropdown, toggleTemplateDropdown, selectTemplate, closeTemplateDropdown,
                     viewTemplateParameters, addTemplateParameter, saveTemplateParameter, deleteTemplateParameter,
                     toggleMachineDropdown, toggleProductDropdown, selectMachine, selectProduct,
