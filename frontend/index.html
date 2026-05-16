@@ -317,10 +317,10 @@
         .param-item .address { font-size: 10px; color: rgba(76,175,80,0.7); margin-bottom: 6px; font-family: monospace; }
         .param-item input { width: 100%; padding: 8px 12px; border: 1px solid rgba(76,175,80,0.3); border-radius: 2px; font-size: 14px; margin-bottom: 8px; background: #1a2a1a; color: #4CAF50; }
         .param-item input:focus { outline: none; border-color: #4CAF50; box-shadow: 0 0 10px rgba(76,175,80,0.5); }
-        .param-item .value { font-size: 24px; font-weight: bold; color: #4CAF50; text-shadow: 0 0 10px rgba(76,175,80,0.8); margin-bottom: 2px; }
+        .param-item .value { font-size: 24px; font-weight: bold; color: #76FF03; text-shadow: 0 0 15px rgba(118,255,3,0.9); margin-bottom: 2px; }
         .param-item .unit { font-size: 10px; color: rgba(76,175,80,0.7); }
         .param-item .alarm-value { font-size: 24px; font-weight: bold; color: #ff4d4f; text-shadow: 0 0 15px rgba(255,77,79,0.8); margin-bottom: 2px; animation: alarm-blink 1s infinite; }
-        .param-item .normal-value { font-size: 24px; font-weight: bold; color: #4CAF50; text-shadow: 0 0 10px rgba(76,175,80,0.6); margin-bottom: 2px; }
+        .param-item .normal-value { font-size: 24px; font-weight: bold; color: #76FF03; text-shadow: 0 0 15px rgba(118,255,3,0.8); margin-bottom: 2px; }
         .param-item .type { font-size: 10px; color: rgba(76,175,80,0.7); margin-top: 4px; }
         .param-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; padding-bottom: 10px; border-bottom: 1px solid rgba(76,175,80,0.3); }
         .param-header h2 { margin: 0; font-size: 18px; font-weight: 600; color: #4CAF50; text-shadow: 0 0 8px rgba(76,175,80,0.6); }
@@ -726,7 +726,7 @@
                 <div style="display: flex; align-items: center; gap: 10px;">
                     <img src="logo.png" alt="YARDCOM" style="height: 40px; width: auto; margin-right: 10px; filter: brightness(0) invert(1) drop-shadow(0 0 8px #4CAF50);"/>
                     <span style="font-family: Arial, sans-serif; font-size: 22px; font-weight: bold; color: #4CAF50; text-shadow: 0 0 10px #4CAF50;">YARDCOM</span>
-                    <h1 style="margin: 0; color: #4CAF50; text-shadow: 0 0 8px #4CAF50;">挤出机工艺参数管理系统 v1.0.0</h1>
+                    <h1 style="margin: 0; color: #4CAF50; text-shadow: 0 0 8px #4CAF50;">挤出机工艺参数管理系统 v1.1.0</h1>
                 </div>
                 <div class="user-info">
                     <span>{{ currentUser.username }} ({{ currentUser.role === 'admin' ? '管理员' : '操作员' }})</span>
@@ -905,7 +905,7 @@
                                         <div v-if="group.setpoint.parameter_type === 'Bool'" :class="group.setpoint.parameter_value === true || group.setpoint.parameter_value === 'true' ? 'alarm-value' : 'normal-value'" style="font-size: 18px; margin-bottom: 0; width: 64px; text-align: right; flex-shrink: 0;">
                                             {{ group.setpoint.parameter_value === true || group.setpoint.parameter_value === 'true' ? '报警' : '正常' }}
                                         </div>
-                                        <input type="text" v-model="group.setpoint.parameter_value" v-else style="font-size: 18px; font-weight: bold; color: #4CAF50; text-shadow: 0 0 10px rgba(76,175,80,0.8); background: transparent; border: none; border-bottom: 1px solid rgba(76,175,80,0.3); width: 64px; text-align: right; flex-shrink: 0; padding: 0; outline: none; font-family: inherit;">
+                                        <input type="text" v-model="group.setpoint.parameter_value" v-else style="font-size: 18px; font-weight: bold; color: #76FF03; text-shadow: 0 0 12px rgba(118,255,3,0.9); background: transparent; border: none; border-bottom: 1px solid rgba(118,255,3,0.3); width: 64px; text-align: right; flex-shrink: 0; padding: 0; outline: none; font-family: inherit;">
                                         <div class="unit" v-if="group.setpoint.parameter_unit && group.setpoint.parameter_type !== 'Bool'" style="margin-bottom: 0; width: 28px; flex-shrink: 0;">{{ group.setpoint.parameter_unit }}</div>
                                     </div>
                                     <!-- 实际值显示 -->
@@ -948,7 +948,7 @@
                                         </div>
                                         <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 8px; width: 100%;">
                                             <div class="address" style="margin-bottom: 0; width: 48px; flex-shrink: 0;">{{ group.single.parameter_address }}</div>
-                                            <input type="text" v-model="group.single.parameter_value" style="font-size: 18px; font-weight: bold; color: #4CAF50; text-shadow: 0 0 10px rgba(76,175,80,0.8); background: transparent; border: none; border-bottom: 1px solid rgba(76,175,80,0.3); width: 64px; text-align: right; flex-shrink: 0; padding: 0; outline: none; font-family: inherit;">
+                                            <input type="text" v-model="group.single.parameter_value" style="font-size: 18px; font-weight: bold; color: #76FF03; text-shadow: 0 0 12px rgba(118,255,3,0.9); background: transparent; border: none; border-bottom: 1px solid rgba(118,255,3,0.3); width: 64px; text-align: right; flex-shrink: 0; padding: 0; outline: none; font-family: inherit;">
                                             <div class="unit" v-if="group.single.parameter_unit" style="margin-bottom: 0; width: 28px; flex-shrink: 0;">{{ group.single.parameter_unit }}</div>
                                         </div>
                                         <div style="display: flex; justify-content: flex-end; width: 100%;">
