@@ -1,6 +1,6 @@
 [project]
 name = "plc-process-management"
-version = "1.0.0"
+version = "1.1.0"
 description = "挤出机工艺参数管理系统"
 requires-python = ">=3.10"
 dependencies = [

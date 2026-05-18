@@ -825,29 +825,49 @@
                         <div class="form-group">
                             <button class="btn btn-primary" @click="showProductModal = true">添加产品</button>
                         </div>
-                        <table>
+                        <div style="overflow-x: auto;">
+                        <table style="min-width: 1100px;">
                             <thead>
                                 <tr>
-                                    <th>产品编号</th>
-                                    <th>产品名称</th>
-                                    <th>规格</th>
-                                    <th>版本号</th>
-                                    <th>操作</th>
+                                    <th style="white-space: nowrap;">编号</th>
+                                    <th style="white-space: nowrap;">名称</th>
+                                    <th style="white-space: nowrap; text-align: center;">截面图</th>
+                                    <th style="white-space: nowrap;">类别</th>
+                                    <th style="white-space: nowrap;">模具型号</th>
+                                    <th style="white-space: nowrap;">规格</th>
+                                    <th style="min-width: 160px;">处理后尺寸</th>
+                                    <th style="white-space: nowrap;">米重(kg/m)</th>
+                                    <th>可用配件</th>
+                                    <th style="white-space: nowrap;">打磨前米重</th>
+                                    <th style="white-space: nowrap;">打磨后米重</th>
+                                    <th>备注</th>
+                                    <th style="white-space: nowrap;">版本</th>
+                                    <th style="white-space: nowrap; text-align: center;">操作</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 <tr v-for="product in products" :key="product.id">
-                                    <td>{{ product.product_code }}</td>
-                                    <td><span style="cursor: pointer; color: #4CAF50; text-decoration: none; text-shadow: 0 0 5px rgba(76,175,80,0.5);" @mouseenter="hoveringProduct = product.id" @mouseleave="hoveringProduct = null" :style="hoveringProduct === product.id ? 'text-decoration: underline; text-shadow: 0 0 10px #4CAF50;' : ''" @click="viewProductHistory(product)">{{ product.product_name }}</span></td>
-                                    <td>{{ product.product_spec }}</td>
-                                    <td>V{{ product.version || 1 }}</td>
-                                    <td>
-                                        <button class="btn btn-primary" @click="editProduct(product)" v-if="currentUser.role === 'admin'">编辑</button>
-                                        <button class="btn btn-danger" @click="deleteProduct(product.id)" v-if="currentUser.role === 'admin'">删除</button>
+                                    <td style="white-space: nowrap;">{{ product.product_code }}</td>
+                                    <td style="white-space: nowrap;"><span style="cursor: pointer; color: #4CAF50; text-decoration: none; text-shadow: 0 0 5px rgba(76,175,80,0.5);" @mouseenter="hoveringProduct = product.id" @mouseleave="hoveringProduct = null" :style="hoveringProduct === product.id ? 'text-decoration: underline; text-shadow: 0 0 10px #4CAF50;' : ''" @click="viewProductHistory(product)">{{ product.product_name }}</span></td>
+                                    <td style="text-align: center;"><img v-if="product.cross_section_image" :src="product.cross_section_image" style="width: 36px; height: 36px; object-fit: cover; border-radius: 4px; border: 1px solid rgba(76,175,80,0.3); cursor: pointer;" @click="previewImage = product.cross_section_image"><span v-else style="color: #3a5a3a; font-size: 14px;">—</span></td>
+                                    <td>{{ product.category || '—' }}</td>
+                                    <td style="white-space: nowrap;">{{ product.mold_model || '—' }}</td>
+                                    <td>{{ product.product_spec || '—' }}</td>
+                                    <td style="word-break: break-all; font-size: 13px; line-height: 1.4;">{{ product.processed_size || '—' }}</td>
+                                    <td style="white-space: nowrap;">{{ product.weight_per_meter || '—' }}</td>
+                                    <td style="font-size: 13px;">{{ product.available_accessories || '—' }}</td>
+                                    <td style="white-space: nowrap;">{{ product.theoretical_weight_before_grinding || '—' }}</td>
+                                    <td style="white-space: nowrap;">{{ product.theoretical_weight_after_grinding || '—' }}</td>
+                                    <td style="font-size: 13px; max-width: 120px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;" :title="product.notes">{{ product.notes || '—' }}</td>
+                                    <td style="white-space: nowrap; text-align: center;">V{{ product.version || 1 }}</td>
+                                    <td style="white-space: nowrap; text-align: center;">
+                                        <button class="btn btn-primary" @click="editProduct(product)" v-if="currentUser.role === 'admin'" style="padding: 4px 10px; font-size: 12px; margin-right: 4px;">编辑</button>
+                                        <button class="btn btn-danger" @click="deleteProduct(product.id)" v-if="currentUser.role === 'admin'" style="padding: 4px 10px; font-size: 12px;">删除</button>
                                     </td>
                                 </tr>
                             </tbody>
                         </table>
+                        </div>
                         <!-- 分页组件 -->
                         <div style="margin-top: 20px; display: flex; justify-content: flex-end; align-items: center; gap: 15px; padding: 10px 0; border-top: 1px solid rgba(76,175,80,0.2);">
                             <div style="display: flex; align-items: center; gap: 8px;">
@@ -1316,28 +1336,82 @@
         </div>
         
         <div class="modal" :class="{ active: showProductModal }">
-            <div class="modal-content">
+            <div class="modal-content" style="max-width: 800px;">
                 <div class="modal-header">{{ editingProductId ? '编辑产品' : '添加产品' }}</div>
-                <div class="form-group">
-                    <label>产品编号：</label>
-                    <input type="text" v-model="productForm.product_code">
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+                    <div class="form-group" style="margin-bottom: 0; display: flex; align-items: center; gap: 8px;">
+                        <label style="width: 130px; flex-shrink: 0; margin-bottom: 0; text-align: right;">产品编号：</label>
+                        <input type="text" v-model="productForm.product_code" style="flex: 1; margin-bottom: 0;">
+                    </div>
+                    <div class="form-group" style="margin-bottom: 0; display: flex; align-items: center; gap: 8px;">
+                        <label style="width: 130px; flex-shrink: 0; margin-bottom: 0; text-align: right;">产品名称：</label>
+                        <input type="text" v-model="productForm.product_name" style="flex: 1; margin-bottom: 0;">
+                    </div>
+                    <div class="form-group" style="margin-bottom: 0; display: flex; align-items: center; gap: 8px;">
+                        <label style="width: 130px; flex-shrink: 0; margin-bottom: 0; text-align: right;">产品规格：</label>
+                        <input type="text" v-model="productForm.product_spec" style="flex: 1; margin-bottom: 0;">
+                    </div>
+                    <div class="form-group" style="margin-bottom: 0; display: flex; align-items: center; gap: 8px;">
+                        <label style="width: 130px; flex-shrink: 0; margin-bottom: 0; text-align: right;">类别：</label>
+                        <input type="text" v-model="productForm.category" style="flex: 1; margin-bottom: 0;">
+                    </div>
+                    <div class="form-group" style="margin-bottom: 0; display: flex; align-items: center; gap: 8px;">
+                        <label style="width: 130px; flex-shrink: 0; margin-bottom: 0; text-align: right;">模具型号：</label>
+                        <input type="text" v-model="productForm.mold_model" style="flex: 1; margin-bottom: 0;">
+                    </div>
+                    <div class="form-group" style="margin-bottom: 0; display: flex; align-items: center; gap: 8px;">
+                        <label style="width: 130px; flex-shrink: 0; margin-bottom: 0; text-align: right;">处理后尺寸：</label>
+                        <input type="text" v-model="productForm.processed_size" style="flex: 1; margin-bottom: 0;">
+                    </div>
+                    <div class="form-group" style="margin-bottom: 0; display: flex; align-items: center; gap: 8px;">
+                        <label style="width: 130px; flex-shrink: 0; margin-bottom: 0; text-align: right;">米重(kg/m)：</label>
+                        <input type="text" v-model="productForm.weight_per_meter" style="flex: 1; margin-bottom: 0;">
+                    </div>
+                    <div class="form-group" style="margin-bottom: 0; display: flex; align-items: center; gap: 8px;">
+                        <label style="width: 130px; flex-shrink: 0; margin-bottom: 0; text-align: right;">可用配件：</label>
+                        <input type="text" v-model="productForm.available_accessories" style="flex: 1; margin-bottom: 0;">
+                    </div>
+                    <div class="form-group" style="margin-bottom: 0; display: flex; align-items: center; gap: 8px;">
+                        <label style="width: 130px; flex-shrink: 0; margin-bottom: 0; text-align: right;">理论米重打磨前：</label>
+                        <input type="text" v-model="productForm.theoretical_weight_before_grinding" style="flex: 1; margin-bottom: 0;">
+                    </div>
+                    <div class="form-group" style="margin-bottom: 0; display: flex; align-items: center; gap: 8px;">
+                        <label style="width: 130px; flex-shrink: 0; margin-bottom: 0; text-align: right;">理论米重打磨后：</label>
+                        <input type="text" v-model="productForm.theoretical_weight_after_grinding" style="flex: 1; margin-bottom: 0;">
+                    </div>
+                    <div style="visibility: hidden;"></div>
+                    <div class="form-group" style="margin-bottom: 0; display: flex; align-items: center; gap: 8px;">
+                        <label style="width: 130px; flex-shrink: 0; margin-bottom: 0; text-align: right;">版本号：</label>
+                        <input type="text" :value="'V' + (productForm.version || 1)" disabled style="flex: 1; margin-bottom: 0; padding: 8px 12px; border: 1px solid rgba(76,175,80,0.3); border-radius: 4px; background: rgba(0,0,0,0.6); color: #4CAF50; font-size: 14px; cursor: not-allowed;">
+                    </div>
+                    <div class="form-group" style="margin-bottom: 0; grid-column: 1 / -1; display: flex; gap: 8px;">
+                        <label style="width: 130px; flex-shrink: 0; text-align: right; padding-top: 6px;">产品截面图：</label>
+                        <div style="flex: 1; display: flex; align-items: center; gap: 10px; flex-wrap: wrap;">
+                            <label style="display: inline-flex; align-items: center; gap: 6px; padding: 6px 16px; border: 1px solid #4CAF50; border-radius: 4px; background: rgba(76,175,80,0.1); color: #4CAF50; cursor: pointer; font-size: 13px; box-shadow: 0 0 10px rgba(76,175,80,0.2); transition: all 0.2s;" onmouseenter="this.style.background='rgba(76,175,80,0.2)'; this.style.boxShadow='0 0 15px rgba(76,175,80,0.4)'" onmouseleave="this.style.background='rgba(76,175,80,0.1)'; this.style.boxShadow='0 0 10px rgba(76,175,80,0.2)'">
+                                <span>📷</span><span>选择图片</span>
+                                <input type="file" @change="uploadImage($event, 'cross_section_image')" accept="image/*" style="display: none;">
+                            </label>
+                            <span v-if="!productForm.cross_section_image" style="color: #3a5a3a; font-size: 12px;">未选择文件</span>
+                            <img v-if="productForm.cross_section_image" :src="productForm.cross_section_image" style="width: 48px; height: 48px; object-fit: cover; border-radius: 4px; border: 1px solid rgba(76,175,80,0.3); cursor: pointer;" @click="previewImage = productForm.cross_section_image">
+                        </div>
+                    </div>
+                    <div class="form-group" style="margin-bottom: 0; grid-column: 1 / -1; display: flex; gap: 8px;">
+                        <label style="width: 130px; flex-shrink: 0; text-align: right; padding-top: 6px;">备注：</label>
+                        <textarea v-model="productForm.notes" placeholder="请输入备注" style="flex: 1; min-height: 60px; padding: 8px 12px; border: 1px solid rgba(76,175,80,0.3); border-radius: 4px; resize: vertical; font-family: inherit; font-size: 14px; background: #1a2a1a; color: #4CAF50;"></textarea>
+                    </div>
                 </div>
-                <div class="form-group">
-                    <label>产品名称：</label>
-                    <input type="text" v-model="productForm.product_name">
-                </div>
-                <div class="form-group">
-                    <label>产品规格：</label>
-                    <input type="text" v-model="productForm.product_spec">
-                </div>
-                <div class="form-group">
-                    <label>版本号：</label>
-                    <input type="text" :value="'V' + (productForm.version || 1)" disabled style="padding: 8px 12px; border: 1px solid rgba(76,175,80,0.3); border-radius: 4px; width: 120px; background: rgba(0,0,0,0.6); color: #4CAF50; font-size: 14px; cursor: not-allowed;">
-                </div>
-                <div class="modal-footer">
+                <div class="modal-footer" style="margin-top: 15px;">
                     <button class="btn btn-primary" @click="createProduct">保存</button>
                     <button class="btn" @click="showProductModal = false">取消</button>
                 </div>
+            </div>
+        </div>
+        
+        <!-- 图片预览弹窗 -->
+        <div class="modal" :class="{ active: previewImage }" @click="previewImage = null">
+            <div style="position: relative; max-width: 80vw; max-height: 80vh;" @click.stop>
+                <img :src="previewImage" style="max-width: 80vw; max-height: 80vh; object-fit: contain; border-radius: 8px; border: 2px solid rgba(76,175,80,0.5); box-shadow: 0 0 30px rgba(76,175,80,0.3);">
+                <button @click="previewImage = null" style="position: absolute; top: 8px; right: 8px; background: rgba(0,0,0,0.7); color: #4CAF50; border: 1px solid #4CAF50; border-radius: 50%; width: 30px; height: 30px; cursor: pointer; font-size: 16px; line-height: 30px; text-align: center;">✕</button>
             </div>
         </div>
         
@@ -1692,7 +1766,7 @@
                 const changePasswordForm = ref({ new_password: '', confirm_password: '' });
                 
                 const machineForm = ref({ machine_code: '', machine_name: '', machine_type: '', ip_address: '', rack: 0, slot: 1 });
-                const productForm = ref({ product_code: '', product_name: '', product_spec: '', version: 1 });
+                const productForm = ref({ product_code: '', product_name: '', product_spec: '', category: '', mold_model: '', cross_section_image: '', processed_size: '', weight_per_meter: '', available_accessories: '', notes: '', theoretical_weight_before_grinding: '', theoretical_weight_after_grinding: '', version: 1 });
                 const editingProductId = ref(null);
                 const userForm = ref({ username: '', password: '', role: 'operator' });
                 const templateForm = ref({ name: '', parameters: [] });
@@ -1715,6 +1789,7 @@
                 const isWriting = ref(false);
                 const hoveringMachine = ref(null);
                 const hoveringProduct = ref(null);
+                                const previewImage = ref(null);
                 
                 // 分页相关状态
                 const currentPage = ref(1);
@@ -2055,12 +2130,15 @@
                         });
                         if (res.ok) {
                             showProductModal.value = false;
-                            productForm.value = { product_code: '', product_name: '', product_spec: '' };
+                            productForm.value = { product_code: '', product_name: '', product_spec: '', category: '', mold_model: '', cross_section_image: '', processed_size: '', weight_per_meter: '', available_accessories: '', notes: '', theoretical_weight_before_grinding: '', theoretical_weight_after_grinding: '', version: 1 };
                             editingProductId.value = null;
                             loadProducts();
+                        } else {
+                            const errorData = await res.json();
+                            alert('操作失败: ' + (errorData.detail || '未知错误'));
                         }
                     } catch (e) {
-                        alert(e.message);
+                        alert('请求失败: ' + e.message);
                     }
                 };
                 
@@ -2070,6 +2148,15 @@
                         product_code: product.product_code,
                         product_name: product.product_name,
                         product_spec: product.product_spec,
+                        category: product.category || '',
+                        mold_model: product.mold_model || '',
+                        cross_section_image: product.cross_section_image || '',
+                        processed_size: product.processed_size || '',
+                        weight_per_meter: product.weight_per_meter || '',
+                        available_accessories: product.available_accessories || '',
+                        notes: product.notes || '',
+                        theoretical_weight_before_grinding: product.theoretical_weight_before_grinding || '',
+                        theoretical_weight_after_grinding: product.theoretical_weight_after_grinding || '',
                         version: product.version
                     };
                     showProductModal.value = true;
@@ -2087,6 +2174,30 @@
                         loadProducts();
                     } catch (e) {
                         alert('删除失败: ' + e.message);
+                    }
+                };
+                
+                const uploadImage = async (event, field) => {
+                    const file = event.target.files[0];
+                    if (!file) return;
+                    
+                    const formData = new FormData();
+                    formData.append('file', file);
+                    
+                    try {
+                        const res = await fetch(`${API_BASE}/upload`, {
+                            method: 'POST',
+                            headers: { 'Authorization': `Bearer ${token.value}` },
+                            body: formData
+                        });
+                        const data = await res.json();
+                        if (data.url) {
+                            productForm.value[field] = data.url;
+                        } else {
+                            alert('上传失败');
+                        }
+                    } catch (e) {
+                        alert('上传失败: ' + e.message);
                     }
                 };
                 
@@ -2837,6 +2948,7 @@
                     isLoggedIn, currentUser, currentView,
                     loginForm, errorMessage, machines, products, users, processParameters, groupedProcessParameters, processRecords, templates,
                     showMachineModal, showProductModal, showUserModal, showTemplateModal, showRecordDetailModal, showWriteToPlcModal, showBindTemplateModalFlag, showChangePasswordModalFlag,
+                                        previewImage,
                     machineForm, productForm, userForm, templateForm, processNotes, changePasswordForm, editingProductId,
                     selectedMachineId, selectedProductId, recordMachineId, recordProductId, selectedTemplateId,
                     showMachineDropdown, showProductDropdown, showSelectedMachineDropdown, showSelectedProductDropdown,
@@ -2846,7 +2958,7 @@
                     handleLogin, handleLogout,
                     loadMachines, loadProducts, loadUsers, loadTemplates, loadLogs, clearLogFilters, getOperationText, getOperationClass, getTargetText,
                     createMachine, deleteMachine, addParametersForMachine,
-                    createProduct, editProduct, deleteProduct,
+                    createProduct, editProduct, deleteProduct, uploadImage,
                     createUser, deleteUser, showChangePasswordModal, changePassword,
                     createTemplate, editTemplate, deleteTemplate,
                     readMachine, readAllMachines, checkMachineStatus,

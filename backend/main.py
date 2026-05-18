@@ -1,15 +1,17 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, File, UploadFile
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
 from fastapi.responses import RedirectResponse
 from pathlib import Path
+import shutil
+import uuid
 
 from database import engine, Base
 from config import settings
 from models import User
 from routers import auth, machines, products, parameters, templates, logs
 
-app = FastAPI(title="挤出机工艺参数管理系统", version="1.0.0")
+app = FastAPI(title="挤出机工艺参数管理系统", version="1.1.0")
 
 app.add_middleware(
     CORSMiddleware,
@@ -23,12 +25,30 @@ frontend_path = Path(__file__).parent.parent / "frontend"
 if frontend_path.exists():
     app.mount("/frontend", StaticFiles(directory=str(frontend_path)), name="frontend")
 
+uploads_path = frontend_path / "uploads"
+if uploads_path.exists():
+    app.mount("/uploads", StaticFiles(directory=str(uploads_path)), name="uploads")
+
 app.include_router(auth.router)
 app.include_router(machines.router)
 app.include_router(products.router)
 app.include_router(parameters.router)
 app.include_router(templates.router)
 app.include_router(logs.router)
+
+@app.post("/api/upload")
+async def upload_file(file: UploadFile = File(...)):
+    uploads_dir = Path(__file__).parent.parent / "frontend" / "uploads"
+    uploads_dir.mkdir(parents=True, exist_ok=True)
+    
+    ext = Path(file.filename).suffix
+    filename = f"{uuid.uuid4().hex}{ext}"
+    file_path = uploads_dir / filename
+    
+    with file_path.open("wb") as buffer:
+        shutil.copyfileobj(file.file, buffer)
+    
+    return {"url": f"/uploads/{filename}", "filename": filename}
 
 @app.get("/")
 async def root():

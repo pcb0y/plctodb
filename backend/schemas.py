@@ -65,6 +65,15 @@ class ProductBase(BaseModel):
     product_code: str
     product_name: str
     product_spec: Optional[str] = None
+    category: Optional[str] = None
+    mold_model: Optional[str] = None
+    cross_section_image: Optional[str] = None
+    processed_size: Optional[str] = None
+    weight_per_meter: Optional[str] = None
+    available_accessories: Optional[str] = None
+    notes: Optional[str] = None
+    theoretical_weight_before_grinding: Optional[str] = None
+    theoretical_weight_after_grinding: Optional[str] = None
     version: int = 1
 
 class ProductCreate(ProductBase):
@@ -74,6 +83,15 @@ class ProductUpdate(BaseModel):
     product_code: Optional[str] = None
     product_name: Optional[str] = None
     product_spec: Optional[str] = None
+    category: Optional[str] = None
+    mold_model: Optional[str] = None
+    cross_section_image: Optional[str] = None
+    processed_size: Optional[str] = None
+    weight_per_meter: Optional[str] = None
+    available_accessories: Optional[str] = None
+    notes: Optional[str] = None
+    theoretical_weight_before_grinding: Optional[str] = None
+    theoretical_weight_after_grinding: Optional[str] = None
 
 class ProductResponse(ProductBase):
     id: int

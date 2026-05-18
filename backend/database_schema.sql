@@ -64,6 +64,15 @@ CREATE TABLE IF NOT EXISTS products (
     product_code VARCHAR(50) NOT NULL UNIQUE,
     product_name VARCHAR(100) NOT NULL,
     product_spec VARCHAR(100),
+    category VARCHAR(50),
+    mold_model VARCHAR(100),
+    cross_section_image VARCHAR(255),
+    processed_size VARCHAR(200),
+    weight_per_meter VARCHAR(50),
+    available_accessories VARCHAR(200),
+    notes VARCHAR(500),
+    theoretical_weight_before_grinding VARCHAR(50),
+    theoretical_weight_after_grinding VARCHAR(50),
     version INT DEFAULT 1,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
@@ -160,3 +169,14 @@ INSERT INTO template_parameters (template_id, parameter_name, parameter_address,
 ((SELECT id FROM templates WHERE name = 'ZJ21-29'), '当前温度', 'DB2.DBD0', '0.0', '℃', 'Real', TRUE, 1),
 ((SELECT id FROM templates WHERE name = 'ZJ21-29'), '当前压力', 'DB2.DBD4', '0.0', 'MPa', 'Real', TRUE, 1),
 ((SELECT id FROM templates WHERE name = 'ZJ21-29'), '当前转速', 'DB2.DBD8', '0', 'rpm', 'Int', TRUE, 1);
+
+-- 迁移：为已存在的 products 表添加新字段（v1.1.0）
+ALTER TABLE products ADD COLUMN IF NOT EXISTS category VARCHAR(50) AFTER product_spec;
+ALTER TABLE products ADD COLUMN IF NOT EXISTS mold_model VARCHAR(100) AFTER category;
+ALTER TABLE products ADD COLUMN IF NOT EXISTS cross_section_image VARCHAR(255) AFTER mold_model;
+ALTER TABLE products ADD COLUMN IF NOT EXISTS processed_size VARCHAR(200) AFTER cross_section_image;
+ALTER TABLE products ADD COLUMN IF NOT EXISTS weight_per_meter VARCHAR(50) AFTER processed_size;
+ALTER TABLE products ADD COLUMN IF NOT EXISTS available_accessories VARCHAR(200) AFTER weight_per_meter;
+ALTER TABLE products ADD COLUMN IF NOT EXISTS notes VARCHAR(500) AFTER available_accessories;
+ALTER TABLE products ADD COLUMN IF NOT EXISTS theoretical_weight_before_grinding VARCHAR(50) AFTER notes;
+ALTER TABLE products ADD COLUMN IF NOT EXISTS theoretical_weight_after_grinding VARCHAR(50) AFTER theoretical_weight_before_grinding;
