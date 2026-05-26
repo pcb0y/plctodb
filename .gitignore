@@ -25,4 +25,4 @@ coverage/
 build/
 dist/
 *.egg-info/
-logs/
+logs/*.tar

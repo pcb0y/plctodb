@@ -1,0 +1,5136 @@
+2026-05-18 08:39:17 | 读取PLC | 机台 | 用户ID:1
+请求参数:
+{
+  "主机料温过低": {
+    "address": "V4551.2",
+    "value": false,
+    "unit": "",
+    "type": "Bool"
+  },
+  "主机料温过高": {
+    "address": "V4551.1",
+    "value": false,
+    "unit": "",
+    "type": "Bool"
+  },
+  "主机调速故障": {
+    "address": "V4551.4",
+    "value": false,
+    "unit": "",
+    "type": "Bool"
+  },
+  "主机过电流": {
+    "address": "V4551.7",
+    "value": false,
+    "unit": "",
+    "type": "Bool"
+  },
+  "主机料筒冷却风机故障": {
+    "address": "V4550.4",
+    "value": false,
+    "unit": "",
+    "type": "Bool"
+  },
+  "喂料调速器故障": {
+    "address": "V4553.0",
+    "value": false,
+    "unit": "",
+    "type": "Bool"
+  },
+  "喂料过电流": {
+    "address": "V4553.1",
+    "value": false,
+    "unit": "",
+    "type": "Bool"
+  },
+  "螺杆异位报警": {
+    "address": "V4551.3",
+    "value": false,
+    "unit": "",
+    "type": "Bool"
+  },
+  "主机急停未松开": {
+    "address": "V4551.0",
+    "value": false,
+    "unit": "",
+    "type": "Bool"
+  },
+  "35A调速故障": {
+    "address": "V4550.1",
+    "value": false,
+    "unit": "",
+    "type": "Bool"
+  },
+  "35A过电流": {
+    "address": "V4550.7",
+    "value": false,
+    "unit": "",
+    "type": "Bool"
+  },
+  "35A料筒冷却风机故障": {
+    "address": "V4550.6",
+    "value": false,
+    "unit": "",
+    "type": "Bool"
+  },
+  "35B调速故障": {
+    "address": "V4550.5",
+    "value": false,
+    "unit": "",
+    "type": "Bool"
+  },
+  "35B过电流": {
+    "address": "V4550.0",
+    "value": false,
+    "unit": "",
+    "type": "Bool"
+  },
+  "35B料筒冷却风机故障": {
+    "address": "V4553.2",
+    "value": false,
+    "unit": "",
+    "type": "Bool"
+  },
+  "主机转速设定值": {
+    "address": "VD208",
+    "value": 7.5,
+    "unit": "RPM",
+    "type": "Real"
+  },
+  "主机转速实际值": {
+    "address": "VD232",
+    "value": 7.517971992492676,
+    "unit": "RPM",
+    "type": "Real"
+  },
+  "主机电流负载占比": {
+    "address": "VD3300",
+    "value": 68.1656265258789,
+    "unit": "%",
+    "type": "Real"
+  },
+  "主机电流值": {
+    "address": "VD256",
+    "value": 43.625999450683594,
+    "unit": "A",
+    "type": "Real"
+  },
+  "喂料转速设定值": {
+    "address": "VD32",
+    "value": 15.000003814697266,
+    "unit": "RPM",
+    "type": "Real"
+  },
+  "喂料转速实际值": {
+    "address": "VD244",
+    "value": 15.196874618530273,
+    "unit": "RPM",
+    "type": "Real"
+  },
+  "喂料电流负载占比": {
+    "address": "VD3304",
+    "value": 67.03437805175781,
+    "unit": "%",
+    "type": "Real"
+  },
+  "喂料电流值": {
+    "address": "VD260",
+    "value": 1.8769625425338745,
+    "unit": "A",
+    "type": "Real"
+  },
+  "65机筒1区设定值": {
+    "address": "VW102",
+    "value": 180,
+    "unit": "℃",
+    "type": "Int"
+  },
+  "65机筒1区实际值": {
+    "address": "VW302",
+    "value": 175,
+    "unit": "℃",
+    "type": "Int"
+  },
+  "65机筒2区设定值": {
+    "address": "VW104",
+    "value": 185,
+    "unit": "℃",
+    "type": "Int"
+  },
+  "65机筒2区实际值": {
+    "address": "VW304",
+    "value": 181,
+    "unit": "℃",
+    "type": "Int"
+  },
+  "65机筒3区设定值": {
+    "address": "VW106",
+    "value": 140,
+    "unit": "℃",
+    "type": "Int"
+  },
+  "65机筒3区实际值": {
+    "address": "VW306",
+    "value": 142,
+    "unit": "℃",
+    "type": "Int"
+  },
+  "65机筒4区设定值": {
+    "address": "VW108",
+    "value": 140,
+    "unit": "℃",
+    "type": "Int"
+  },
+  "65机筒4区实际值": {
+    "address": "VW308",
+    "value": 142,
+    "unit": "℃",
+    "type": "Int"
+  },
+  "65机合流芯设定值": {
+    "address": "VW154",
+    "value": 140,
+    "unit": "℃",
+    "type": "Int"
+  },
+  "65机合流芯实际值": {
+    "address": "VW354",
+    "value": 139,
+    "unit": "℃",
+    "type": "Int"
+  },
+  "芯层模具上设定值": {
+    "address": "VW1130",
+    "value": 140,
+    "unit": "℃",
+    "type": "Int"
+  },
+  "芯层模具上实际值": {
+    "address": "VW330",
+    "value": 144,
+    "unit": "℃",
+    "type": "Int"
+  },
+  "芯层模具下设定值": {
+    "address": "VW1132",
+    "value": 140,
+    "unit": "℃",
+    "type": "Int"
+  },
+  "芯层模具下实际值": {
+    "address": "VW332",
+    "value": 148,
+    "unit": "℃",
+    "type": "Int"
+  },
+  "芯层模具左设定值": {
+    "address": "VW1134",
+    "value": 140,
+    "unit": "℃",
+    "type": "Int"
+  },
+  "芯层模具左实际值": {
+    "address": "VW334",
+    "value": 141,
+    "unit": "℃",
+    "type": "Int"
+  },
+  "芯层模具右设定值": {
+    "address": "VW1136",
+    "value": 145,
+    "unit": "℃",
+    "type": "Int"
+  },
+  "芯层模具右实际值": {
+    "address": "VW336",
+    "value": 143,
+    "unit": "℃",
+    "type": "Int"
+  },
+  "外层模具上设定值": {
+    "address": "VW1138",
+    "value": 180,
+    "unit": "℃",
+    "type": "Int"
+  },
+  "外层模具上实际值": {
+    "address": "VW338",
+    "value": 181,
+    "unit": "℃",
+    "type": "Int"
+  },
+  "外层模具下设定值": {
+    "address": "VW1140",
+    "value": 180,
+    "unit": "℃",
+    "type": "Int"
+  },
+  "外层模具下实际值": {
+    "address": "VW340",
+    "value": 178,
+    "unit": "℃",
+    "type": "Int"
+  },
+  "外层模具左设定值": {
+    "address": "VW1142",
+    "value": 180,
+    "unit": "℃",
+    "type": "Int"
+  },
+  "外层模具左实际值": {
+    "address": "VW342",
+    "value": 178,
+    "unit": "",
+    "type": "Int"
+  },
+  "外层模具石设定值": {
+    "address": "VW344",
+    "value": 178,
+    "unit": "℃",
+    "type": "Int"
+  },
+  "外层模具石实际值": {
+    "address": "VW344",
+    "value": 178,
+    "unit": "℃",
+    "type": "Int"
+  },
+  "A组合流芯设定值": {
+    "address": "VW146",
+    "value": 160,
+    "unit": "℃",
+    "type": "Int"
+  },
+  "A组合流芯实际值": {
+    "address": "VW346",
+    "value": 159,
+    "unit": "℃",
+    "type": "Int"
+  },
+  "A组转接模设定值": {
+    "address": "VW148",
+    "value": 165,
+    "unit": "℃",
+    "type": "Int"
+  },
+  "A组转接模实际值": {
+    "address": "VW348",
+    "value": 164,
+    "unit": "℃",
+    "type": "Int"
+  },
+  "A组连接管设定值": {
+    "address": "VW150",
+    "value": 235,
+    "unit": "℃",
+    "type": "Int"
+  },
+  "A组连接管实际值": {
+    "address": "VW350",
+    "value": 229,
+    "unit": "℃",
+    "type": "Int"
+  },
+  "B组合流芯设定值": {
+    "address": "VW152",
+    "value": 165,
+    "unit": "℃",
+    "type": "Int"
+  },
+  "B组合流芯实际值": {
+    "address": "VW352",
+    "value": 30,
+    "unit": "℃",
+    "type": "Int"
+  },
+  "B组转接模设定值": {
+    "address": "VW162",
+    "value": 165,
+    "unit": "℃",
+    "type": "Int"
+  },
+  "B组转接模实际值": {
+    "address": "VW362",
+    "value": 30,
+    "unit": "℃",
+    "type": "Int"
+  },
+  "B组连接管设定值": {
+    "address": "VW164",
+    "value": 230,
+    "unit": "℃",
+    "type": "Int"
+  },
+  "B组连接管实际值": {
+    "address": "VW364",
+    "value": 31,
+    "unit": "℃",
+    "type": "Int"
+  },
+  "35A转速设定值": {
+    "address": "VD508",
+    "value": 0.0,
+    "unit": "RPM",
+    "type": "Real"
+  },
+  "35A转速实际值": {
+    "address": "VD532",
+    "value": 0.0,
+    "unit": "RPM",
+    "type": "Real"
+  },
+  "35A电流设定值": {
+    "address": "VD2300",
+    "value": 0.0,
+    "unit": "%",
+    "type": "Real"
+  },
+  "35A电流实际值": {
+    "address": "VD556",
+    "value": 0.0,
+    "unit": "A",
+    "type": "Real"
+  },
+  "35B转速设定值": {
+    "address": "VD212",
+    "value": 0.0,
+    "unit": "RPM",
+    "type": "Real"
+  },
+  "35B转速实际值": {
+    "address": "VD236",
+    "value": 0.0,
+    "unit": "RPM",
+    "type": "Real"
+  },
+  "35B电流设定值": {
+    "address": "VD3308",
+    "value": 0.0,
+    "unit": "%",
+    "type": "Real"
+  },
+  "35B电流实际值": {
+    "address": "VD264",
+    "value": 0.0,
+    "unit": "A",
+    "type": "Real"
+  },
+  "A组35机1区设定值": {
+    "address": "VW116",
+    "value": 145,
+    "unit": "℃",
+    "type": "Int"
+  },
+  "A组35机1区实际值": {
+    "address": "VW316",
+    "value": 146,
+    "unit": "℃",
+    "type": "Int"
+  },
+  "A组35机2区实际值": {
+    "address": "VW318",
+    "value": 169,
+    "unit": "℃",
+    "type": "Int"
+  },
+  "A组35机3区设定值": {
+    "address": "VW168",
+    "value": 165,
+    "unit": "℃",
+    "type": "Int"
+  },
+  "A组35机3区实际值": {
+    "address": "VW368",
+    "value": 165,
+    "unit": "℃",
+    "type": "Int"
+  },
+  "B组35机1区设定值": {
+    "address": "VW170",
+    "value": 145,
+    "unit": "℃",
+    "type": "Int"
+  },
+  "B组35机1区实际值": {
+    "address": "VW370",
+    "value": 27,
+    "unit": "℃",
+    "type": "Int"
+  },
+  "B组35机2区设定值": {
+    "address": "VW120",
+    "value": 180,
+    "unit": "℃",
+    "type": "Int"
+  },
+  "B组35机2区实际值": {
+    "address": "VW322",
+    "value": 27,
+    "unit": "℃",
+    "type": "Int"
+  },
+  "B组35机3区设定值": {
+    "address": "VW112",
+    "value": 180,
+    "unit": "℃",
+    "type": "Int"
+  },
+  "B组35机3区实际值": {
+    "address": "VW312",
+    "value": 28,
+    "unit": "℃",
+    "type": "Int"
+  },
+  "A组备用1设定值": {
+    "address": "VW160",
+    "value": 0,
+    "unit": "℃",
+    "type": "Int"
+  },
+  "A组备用1实际值": {
+    "address": "VW360",
+    "value": 3276,
+    "unit": "℃",
+    "type": "Int"
+  },
+  "A组备用2设定值": {
+    "address": "VW166",
+    "value": 0,
+    "unit": "℃",
+    "type": "Int"
+  },
+  "A组备用2实际值": {
+    "address": "VW366",
+    "value": 3276,
+    "unit": "℃",
+    "type": "Int"
+  },
+  "B组备用1设定值": {
+    "address": "VW156",
+    "value": 0,
+    "unit": "℃",
+    "type": "Int"
+  },
+  "B组备用1实际值": {
+    "address": "VW356",
+    "value": 3276,
+    "unit": "℃",
+    "type": "Int"
+  },
+  "B组备用2设定值": {
+    "address": "VW158",
+    "value": 0,
+    "unit": "℃",
+    "type": "Int"
+  },
+  "B组备用2实际值": {
+    "address": "VW358",
+    "value": 3276,
+    "unit": "℃",
+    "type": "Int"
+  },
+  "25B调速故障": {
+    "address": "V4550.7",
+    "value": false,
+    "unit": "",
+    "type": "Bool"
+  },
+  "25B料筒冷却风机故障": {
+    "address": "V4550.4",
+    "value": false,
+    "unit": "",
+    "type": "Bool"
+  },
+  "25A调速故障": {
+    "address": "V4551.4",
+    "value": false,
+    "unit": "",
+    "type": "Bool"
+  },
+  "25A料筒冷却风机故障": {
+    "address": "V4550.6",
+    "value": false,
+    "unit": "",
+    "type": "Bool"
+  },
+  "25A过电流": {
+    "address": "V4551.7",
+    "value": false,
+    "unit": "",
+    "type": "Bool"
+  },
+  "25B转速设定值": {
+    "address": "VD212",
+    "value": 43.310550689697266,
+    "unit": "RPM",
+    "type": "Real"
+  },
+  "25B转速实际值": {
+    "address": "VD532",
+    "value": 0.0,
+    "unit": "RPM",
+    "type": "Real"
+  },
+  "25B电流设定值": {
+    "address": "VD2300",
+    "value": 0.0,
+    "unit": "%",
+    "type": "Real"
+  },
+  "25B电流实际值": {
+    "address": "VD556",
+    "value": 0.0,
+    "unit": "A",
+    "type": "Real"
+  },
+  "25A转速设定值": {
+    "address": "VD208",
+    "value": 12.300010681152344,
+    "unit": "RPM",
+    "type": "Real"
+  },
+  "25A转速实际值": {
+    "address": "VD232",
+    "value": 0.0,
+    "unit": "RPM",
+    "type": "Real"
+  },
+  "25A电流设定值": {
+    "address": "VD3300",
+    "value": 0.0,
+    "unit": "%",
+    "type": "Real"
+  },
+  "25A电流实际值": {
+    "address": "VD256",
+    "value": 0.0,
+    "unit": "A",
+    "type": "Real"
+  },
+  "B组25机1区设定值": {
+    "address": "VW102",
+    "value": 145,
+    "unit": "℃",
+    "type": "Int"
+  },
+  "B组25机1区实际值": {
+    "address": "VW302",
+    "value": 29,
+    "unit": "℃",
+    "type": "Int"
+  },
+  "B组25机2区设定值": {
+    "address": "VW104",
+    "value": 235,
+    "unit": "℃",
+    "type": "Int"
+  },
+  "B组25机2区实际值": {
+    "address": "VW304",
+    "value": 29,
+    "unit": "℃",
+    "type": "Int"
+  },
+  "B组25机3区设定值": {
+    "address": "VW106",
+    "value": 235,
+    "unit": "℃",
+    "type": "Int"
+  },
+  "B组25机3区实际值": {
+    "address": "VW306",
+    "value": 29,
+    "unit": "℃",
+    "type": "Int"
+  },
+  "A组25机1区设定值": {
+    "address": "VW108",
+    "value": 145,
+    "unit": "℃",
+    "type": "Int"
+  },
+  "A组25机1区实际值": {
+    "address": "VW308",
+    "value": 145,
+    "unit": "℃",
+    "type": "Int"
+  },
+  "A组25机2区设定值": {
+    "address": "VW116",
+    "value": 235,
+    "unit": "℃",
+    "type": "Int"
+  },
+  "A组25机2区实际值": {
+    "address": "VW316",
+    "value": 232,
+    "unit": "℃",
+    "type": "Int"
+  },
+  "A组25机3区设定值": {
+    "address": "VW118",
+    "value": 235,
+    "unit": "℃",
+    "type": "Int"
+  },
+  "A组25机3区实际值": {
+    "address": "VW318",
+    "value": 229,
+    "unit": "℃",
+    "type": "Int"
+  },
+  "25B共挤备用1设定值": {
+    "address": "VW130",
+    "value": 0,
+    "unit": "℃",
+    "type": "Int"
+  },
+  "25B共挤备用1实际值": {
+    "address": "VW330",
+    "value": 3276,
+    "unit": "℃",
+    "type": "Int"
+  },
+  "25B共挤备用2设定值": {
+    "address": "VW132",
+    "value": 0,
+    "unit": "℃",
+    "type": "Int"
+  },
+  "25B共挤备用2实际值": {
+    "address": "VW332",
+    "value": 3276,
+    "unit": "℃",
+    "type": "Int"
+  },
+  "25A共挤备用1设定值": {
+    "address": "VW134",
+    "value": 0,
+    "unit": "℃",
+    "type": "Int"
+  },
+  "25A共挤备用1实际值": {
+    "address": "VW334",
+    "value": 3276,
+    "unit": "℃",
+    "type": "Int"
+  },
+  "25A共挤备用2设定值": {
+    "address": "VW136",
+    "value": 0,
+    "unit": "℃",
+    "type": "Int"
+  },
+  "25A共挤备用2实际值": {
+    "address": "VW336",
+    "value": 3276,
+    "unit": "℃",
+    "type": "Int"
+  }
+}
+详情: 机台: 默认挤出机 (ID: 1), 参数数量: 121
+返回结果:
+{
+  "machine": {
+    "id": 1,
+    "name": "默认挤出机"
+  },
+  "parameters": {
+    "主机料温过低": {
+      "address": "V4551.2",
+      "value": false,
+      "unit": "",
+      "type": "Bool",
+      "is_readonly": true,
+      "slot": 2
+    },
+    "主机料温过高": {
+      "address": "V4551.1",
+      "value": false,
+      "unit": "",
+      "type": "Bool",
+      "is_readonly": true,
+      "slot": 2
+    },
+    "主机调速故障": {
+      "address": "V4551.4",
+      "value": false,
+      "unit": "",
+      "type": "Bool",
+      "is_readonly": true,
+      "slot": 2
+    },
+    "主机过电流": {
+      "address": "V4551.7",
+      "value": false,
+      "unit": "",
+      "type": "Bool",
+      "is_readonly": true,
+      "slot": 2
+    },
+    "主机料筒冷却风机故障": {
+      "address": "V4550.4",
+      "value": false,
+      "unit": "",
+      "type": "Bool",
+      "is_readonly": true,
+      "slot": 2
+    },
+    "喂料调速器故障": {
+      "address": "V4553.0",
+      "value": false,
+      "unit": "",
+      "type": "Bool",
+      "is_readonly": true,
+      "slot": 2
+    },
+    "喂料过电流": {
+      "address": "V4553.1",
+      "value": false,
+      "unit": "",
+      "type": "Bool",
+      "is_readonly": true,
+      "slot": 2
+    },
+    "螺杆异位报警": {
+      "address": "V4551.3",
+      "value": false,
+      "unit": "",
+      "type": "Bool",
+      "is_readonly": true,
+      "slot": 2
+    },
+    "主机急停未松开": {
+      "address": "V4551.0",
+      "value": false,
+      "unit": "",
+      "type": "Bool",
+      "is_readonly": true,
+      "slot": 2
+    },
+    "35A调速故障": {
+      "address": "V4550.1",
+      "value": false,
+      "unit": "",
+      "type": "Bool",
+      "is_readonly": true,
+      "slot": 2
+    },
+    "35A过电流": {
+      "address": "V4550.7",
+      "value": false,
+      "unit": "",
+      "type": "Bool",
+      "is_readonly": true,
+      "slot": 2
+    },
+    "35A料筒冷却风机故障": {
+      "address": "V4550.6",
+      "value": false,
+      "unit": "",
+      "type": "Bool",
+      "is_readonly": true,
+      "slot": 2
+    },
+    "35B调速故障": {
+      "address": "V4550.5",
+      "value": false,
+      "unit": "",
+      "type": "Bool",
+      "is_readonly": true,
+      "slot": 2
+    },
+    "35B过电流": {
+      "address": "V4550.0",
+      "value": false,
+      "unit": "",
+      "type": "Bool",
+      "is_readonly": true,
+      "slot": 2
+    },
+    "35B料筒冷却风机故障": {
+      "address": "V4553.2",
+      "value": false,
+      "unit": "",
+      "type": "Bool",
+      "is_readonly": true,
+      "slot": 2
+    },
+    "主机转速设定值": {
+      "address": "VD208",
+      "value": 7.5,
+      "unit": "RPM",
+      "type": "Real",
+      "is_readonly": false,
+      "slot": 2
+    },
+    "主机转速实际值": {
+      "address": "VD232",
+      "value": 7.517971992492676,
+      "unit": "RPM",
+      "type": "Real",
+      "is_readonly": true,
+      "slot": 2
+    },
+    "主机电流负载占比": {
+      "address": "VD3300",
+      "value": 68.1656265258789,
+      "unit": "%",
+      "type": "Real",
+      "is_readonly": true,
+      "slot": 2
+    },
+    "主机电流值": {
+      "address": "VD256",
+      "value": 43.625999450683594,
+      "unit": "A",
+      "type": "Real",
+      "is_readonly": true,
+      "slot": 2
+    },
+    "喂料转速设定值": {
+      "address": "VD32",
+      "value": 15.000003814697266,
+      "unit": "RPM",
+      "type": "Real",
+      "is_readonly": false,
+      "slot": 2
+    },
+    "喂料转速实际值": {
+      "address": "VD244",
+      "value": 15.196874618530273,
+      "unit": "RPM",
+      "type": "Real",
+      "is_readonly": true,
+      "slot": 2
+    },
+    "喂料电流负载占比": {
+      "address": "VD3304",
+      "value": 67.03437805175781,
+      "unit": "%",
+      "type": "Real",
+      "is_readonly": true,
+      "slot": 2
+    },
+    "喂料电流值": {
+      "address": "VD260",
+      "value": 1.8769625425338745,
+      "unit": "A",
+      "type": "Real",
+      "is_readonly": true,
+      "slot": 2
+    },
+    "65机筒1区设定值": {
+      "address": "VW102",
+      "value": 180,
+      "unit": "℃",
+      "type": "Int",
+      "is_readonly": false,
+      "slot": 2
+    },
+    "65机筒1区实际值": {
+      "address": "VW302",
+      "value": 175,
+      "unit": "℃",
+      "type": "Int",
+      "is_readonly": true,
+      "slot": 2
+    },
+    "65机筒2区设定值": {
+      "address": "VW104",
+      "value": 185,
+      "unit": "℃",
+      "type": "Int",
+      "is_readonly": false,
+      "slot": 2
+    },
+    "65机筒2区实际值": {
+      "address": "VW304",
+      "value": 181,
+      "unit": "℃",
+      "type": "Int",
+      "is_readonly": true,
+      "slot": 2
+    },
+    "65机筒3区设定值": {
+      "address": "VW106",
+      "value": 140,
+      "unit": "℃",
+      "type": "Int",
+      "is_readonly": false,
+      "slot": 2
+    },
+    "65机筒3区实际值": {
+      "address": "VW306",
+      "value": 142,
+      "unit": "℃",
+      "type": "Int",
+      "is_readonly": true,
+      "slot": 2
+    },
+    "65机筒4区设定值": {
+      "address": "VW108",
+      "value": 140,
+      "unit": "℃",
+      "type": "Int",
+      "is_readonly": false,
+      "slot": 2
+    },
+    "65机筒4区实际值": {
+      "address": "VW308",
+      "value": 142,
+      "unit": "℃",
+      "type": "Int",
+      "is_readonly": true,
+      "slot": 2
+    },
+    "65机合流芯设定值": {
+      "address": "VW154",
+      "value": 140,
+      "unit": "℃",
+      "type": "Int",
+      "is_readonly": false,
+      "slot": 2
+    },
+    "65机合流芯实际值": {
+      "address": "VW354",
+      "value": 139,
+      "unit": "℃",
+      "type": "Int",
+      "is_readonly": true,
+      "slot": 2
+    },
+    "芯层模具上设定值": {
+      "address": "VW1130",
+      "value": 140,
+      "unit": "℃",
+      "type": "Int",
+      "is_readonly": false,
+      "slot": 2
+    },
+    "芯层模具上实际值": {
+      "address": "VW330",
+      "value": 144,
+      "unit": "℃",
+      "type": "Int",
+      "is_readonly": true,
+      "slot": 2
+    },
+    "芯层模具下设定值": {
+      "address": "VW1132",
+      "value": 140,
+      "unit": "℃",
+      "type": "Int",
+      "is_readonly": false,
+      "slot": 2
+    },
+    "芯层模具下实际值": {
+      "address": "VW332",
+      "value": 148,
+      "unit": "℃",
+      "type": "Int",
+      "is_readonly": true,
+      "slot": 2
+    },
+    "芯层模具左设定值": {
+      "address": "VW1134",
+      "value": 140,
+      "unit": "℃",
+      "type": "Int",
+      "is_readonly": false,
+      "slot": 2
+    },
+    "芯层模具左实际值": {
+      "address": "VW334",
+      "value": 141,
+      "unit": "℃",
+      "type": "Int",
+      "is_readonly": true,
+      "slot": 2
+    },
+    "芯层模具右设定值": {
+      "address": "VW1136",
+      "value": 145,
+      "unit": "℃",
+      "type": "Int",
+      "is_readonly": false,
+      "slot": 2
+    },
+    "芯层模具右实际值": {
+      "address": "VW336",
+      "value": 143,
+      "unit": "℃",
+      "type": "Int",
+      "is_readonly": true,
+      "slot": 2
+    },
+    "外层模具上设定值": {
+      "address": "VW1138",
+      "value": 180,
+      "unit": "℃",
+      "type": "Int",
+      "is_readonly": false,
+      "slot": 2
+    },
+    "外层模具上实际值": {
+      "address": "VW338",
+      "value": 181,
+      "unit": "℃",
+      "type": "Int",
+      "is_readonly": true,
+      "slot": 2
+    },
+    "外层模具下设定值": {
+      "address": "VW1140",
+      "value": 180,
+      "unit": "℃",
+      "type": "Int",
+      "is_readonly": false,
+      "slot": 2
+    },
+    "外层模具下实际值": {
+      "address": "VW340",
+      "value": 178,
+      "unit": "℃",
+      "type": "Int",
+      "is_readonly": true,
+      "slot": 2
+    },
+    "外层模具左设定值": {
+      "address": "VW1142",
+      "value": 180,
+      "unit": "℃",
+      "type": "Int",
+      "is_readonly": false,
+      "slot": 2
+    },
+    "外层模具左实际值": {
+      "address": "VW342",
+      "value": 178,
+      "unit": "",
+      "type": "Int",
+      "is_readonly": true,
+      "slot": 2
+    },
+    "外层模具石设定值": {
+      "address": "VW344",
+      "value": 178,
+      "unit": "℃",
+      "type": "Int",
+      "is_readonly": false,
+      "slot": 2
+    },
+    "外层模具石实际值": {
+      "address": "VW344",
+      "value": 178,
+      "unit": "℃",
+      "type": "Int",
+      "is_readonly": true,
+      "slot": 2
+    },
+    "A组合流芯设定值": {
+      "address": "VW146",
+      "value": 160,
+      "unit": "℃",
+      "type": "Int",
+      "is_readonly": false,
+      "slot": 2
+    },
+    "A组合流芯实际值": {
+      "address": "VW346",
+      "value": 159,
+      "unit": "℃",
+      "type": "Int",
+      "is_readonly": true,
+      "slot": 2
+    },
+    "A组转接模设定值": {
+      "address": "VW148",
+      "value": 165,
+      "unit": "℃",
+      "type": "Int",
+      "is_readonly": false,
+      "slot": 2
+    },
+    "A组转接模实际值": {
+      "address": "VW348",
+      "value": 164,
+      "unit": "℃",
+      "type": "Int",
+      "is_readonly": true,
+      "slot": 2
+    },
+    "A组连接管设定值": {
+      "address": "VW150",
+      "value": 235,
+      "unit": "℃",
+      "type": "Int",
+      "is_readonly": false,
+      "slot": 2
+    },
+    "A组连接管实际值": {
+      "address": "VW350",
+      "value": 229,
+      "unit": "℃",
+      "type": "Int",
+      "is_readonly": true,
+      "slot": 2
+    },
+    "B组合流芯设定值": {
+      "address": "VW152",
+      "value": 165,
+      "unit": "℃",
+      "type": "Int",
+      "is_readonly": false,
+      "slot": 2
+    },
+    "B组合流芯实际值": {
+      "address": "VW352",
+      "value": 30,
+      "unit": "℃",
+      "type": "Int",
+      "is_readonly": true,
+      "slot": 2
+    },
+    "B组转接模设定值": {
+      "address": "VW162",
+      "value": 165,
+      "unit": "℃",
+      "type": "Int",
+      "is_readonly": false,
+      "slot": 2
+    },
+    "B组转接模实际值": {
+      "address": "VW362",
+      "value": 30,
+      "unit": "℃",
+      "type": "Int",
+      "is_readonly": true,
+      "slot": 2
+    },
+    "B组连接管设定值": {
+      "address": "VW164",
+      "value": 230,
+      "unit": "℃",
+      "type": "Int",
+      "is_readonly": false,
+      "slot": 2
+    },
+    "B组连接管实际值": {
+      "address": "VW364",
+      "value": 31,
+      "unit": "℃",
+      "type": "Int",
+      "is_readonly": true,
+      "slot": 2
+    },
+    "35A转速设定值": {
+      "address": "VD508",
+      "value": 0.0,
+      "unit": "RPM",
+      "type": "Real",
+      "is_readonly": false,
+      "slot": 2
+    },
+    "35A转速实际值": {
+      "address": "VD532",
+      "value": 0.0,
+      "unit": "RPM",
+      "type": "Real",
+      "is_readonly": true,
+      "slot": 2
+    },
+    "35A电流设定值": {
+      "address": "VD2300",
+      "value": 0.0,
+      "unit": "%",
+      "type": "Real",
+      "is_readonly": false,
+      "slot": 2
+    },
+    "35A电流实际值": {
+      "address": "VD556",
+      "value": 0.0,
+      "unit": "A",
+      "type": "Real",
+      "is_readonly": true,
+      "slot": 2
+    },
+    "35B转速设定值": {
+      "address": "VD212",
+      "value": 0.0,
+      "unit": "RPM",
+      "type": "Real",
+      "is_readonly": false,
+      "slot": 2
+    },
+    "35B转速实际值": {
+      "address": "VD236",
+      "value": 0.0,
+      "unit": "RPM",
+      "type": "Real",
+      "is_readonly": true,
+      "slot": 2
+    },
+    "35B电流设定值": {
+      "address": "VD3308",
+      "value": 0.0,
+      "unit": "%",
+      "type": "Real",
+      "is_readonly": false,
+      "slot": 2
+    },
+    "35B电流实际值": {
+      "address": "VD264",
+      "value": 0.0,
+      "unit": "A",
+      "type": "Real",
+      "is_readonly": true,
+      "slot": 2
+    },
+    "A组35机1区设定值": {
+      "address": "VW116",
+      "value": 145,
+      "unit": "℃",
+      "type": "Int",
+      "is_readonly": false,
+      "slot": 2
+    },
+    "A组35机1区实际值": {
+      "address": "VW316",
+      "value": 146,
+      "unit": "℃",
+      "type": "Int",
+      "is_readonly": true,
+      "slot": 2
+    },
+    "A组35机2区实际值": {
+      "address": "VW318",
+      "value": 169,
+      "unit": "℃",
+      "type": "Int",
+      "is_readonly": true,
+      "slot": 2
+    },
+    "A组35机3区设定值": {
+      "address": "VW168",
+      "value": 165,
+      "unit": "℃",
+      "type": "Int",
+      "is_readonly": false,
+      "slot": 2
+    },
+    "A组35机3区实际值": {
+      "address": "VW368",
+      "value": 165,
+      "unit": "℃",
+      "type": "Int",
+      "is_readonly": true,
+      "slot": 2
+    },
+    "B组35机1区设定值": {
+      "address": "VW170",
+      "value": 145,
+      "unit": "℃",
+      "type": "Int",
+      "is_readonly": false,
+      "slot": 2
+    },
+    "B组35机1区实际值": {
+      "address": "VW370",
+      "value": 27,
+      "unit": "℃",
+      "type": "Int",
+      "is_readonly": true,
+      "slot": 2
+    },
+    "B组35机2区设定值": {
+      "address": "VW120",
+      "value": 180,
+      "unit": "℃",
+      "type": "Int",
+      "is_readonly": false,
+      "slot": 2
+    },
+    "B组35机2区实际值": {
+      "address": "VW322",
+      "value": 27,
+      "unit": "℃",
+      "type": "Int",
+      "is_readonly": true,
+      "slot": 2
+    },
+    "B组35机3区设定值": {
+      "address": "VW112",
+      "value": 180,
+      "unit": "℃",
+      "type": "Int",
+      "is_readonly": false,
+      "slot": 2
+    },
+    "B组35机3区实际值": {
+      "address": "VW312",
+      "value": 28,
+      "unit": "℃",
+      "type": "Int",
+      "is_readonly": true,
+      "slot": 2
+    },
+    "A组备用1设定值": {
+      "address": "VW160",
+      "value": 0,
+      "unit": "℃",
+      "type": "Int",
+      "is_readonly": false,
+      "slot": 2
+    },
+    "A组备用1实际值": {
+      "address": "VW360",
+      "value": 3276,
+      "unit": "℃",
+      "type": "Int",
+      "is_readonly": true,
+      "slot": 2
+    },
+    "A组备用2设定值": {
+      "address": "VW166",
+      "value": 0,
+      "unit": "℃",
+      "type": "Int",
+      "is_readonly": false,
+      "slot": 2
+    },
+    "A组备用2实际值": {
+      "address": "VW366",
+      "value": 3276,
+      "unit": "℃",
+      "type": "Int",
+      "is_readonly": true,
+      "slot": 2
+    },
+    "B组备用1设定值": {
+      "address": "VW156",
+      "value": 0,
+      "unit": "℃",
+      "type": "Int",
+      "is_readonly": false,
+      "slot": 2
+    },
+    "B组备用1实际值": {
+      "address": "VW356",
+      "value": 3276,
+      "unit": "℃",
+      "type": "Int",
+      "is_readonly": true,
+      "slot": 2
+    },
+    "B组备用2设定值": {
+      "address": "VW158",
+      "value": 0,
+      "unit": "℃",
+      "type": "Int",
+      "is_readonly": false,
+      "slot": 2
+    },
+    "B组备用2实际值": {
+      "address": "VW358",
+      "value": 3276,
+      "unit": "℃",
+      "type": "Int",
+      "is_readonly": true,
+      "slot": 2
+    },
+    "25B调速故障": {
+      "address": "V4550.7",
+      "value": false,
+      "unit": "",
+      "type": "Bool",
+      "is_readonly": true,
+      "slot": 3
+    },
+    "25B料筒冷却风机故障": {
+      "address": "V4550.4",
+      "value": false,
+      "unit": "",
+      "type": "Bool",
+      "is_readonly": false,
+      "slot": 3
+    },
+    "25A调速故障": {
+      "address": "V4551.4",
+      "value": false,
+      "unit": "",
+      "type": "Bool",
+      "is_readonly": true,
+      "slot": 3
+    },
+    "25A料筒冷却风机故障": {
+      "address": "V4550.6",
+      "value": false,
+      "unit": "",
+      "type": "Bool",
+      "is_readonly": true,
+      "slot": 3
+    },
+    "25A过电流": {
+      "address": "V4551.7",
+      "value": false,
+      "unit": "",
+      "type": "Bool",
+      "is_readonly": false,
+      "slot": 3
+    },
+    "25B转速设定值": {
+      "address": "VD212",
+      "value": 43.310550689697266,
+      "unit": "RPM",
+      "type": "Real",
+      "is_readonly": false,
+      "slot": 3
+    },
+    "25B转速实际值": {
+      "address": "VD532",
+      "value": 0.0,
+      "unit": "RPM",
+      "type": "Real",
+      "is_readonly": true,
+      "slot": 3
+    },
+    "25B电流设定值": {
+      "address": "VD2300",
+      "value": 0.0,
+      "unit": "%",
+      "type": "Real",
+      "is_readonly": false,
+      "slot": 3
+    },
+    "25B电流实际值": {
+      "address": "VD556",
+      "value": 0.0,
+      "unit": "A",
+      "type": "Real",
+      "is_readonly": true,
+      "slot": 3
+    },
+    "25A转速设定值": {
+      "address": "VD208",
+      "value": 12.300010681152344,
+      "unit": "RPM",
+      "type": "Real",
+      "is_readonly": false,
+      "slot": 3
+    },
+    "25A转速实际值": {
+      "address": "VD232",
+      "value": 0.0,
+      "unit": "RPM",
+      "type": "Real",
+      "is_readonly": true,
+      "slot": 3
+    },
+    "25A电流设定值": {
+      "address": "VD3300",
+      "value": 0.0,
+      "unit": "%",
+      "type": "Real",
+      "is_readonly": false,
+      "slot": 3
+    },
+    "25A电流实际值": {
+      "address": "VD256",
+      "value": 0.0,
+      "unit": "A",
+      "type": "Real",
+      "is_readonly": true,
+      "slot": 3
+    },
+    "B组25机1区设定值": {
+      "address": "VW102",
+      "value": 145,
+      "unit": "℃",
+      "type": "Int",
+      "is_readonly": false,
+      "slot": 3
+    },
+    "B组25机1区实际值": {
+      "address": "VW302",
+      "value": 29,
+      "unit": "℃",
+      "type": "Int",
+      "is_readonly": true,
+      "slot": 3
+    },
+    "B组25机2区设定值": {
+      "address": "VW104",
+      "value": 235,
+      "unit": "℃",
+      "type": "Int",
+      "is_readonly": false,
+      "slot": 3
+    },
+    "B组25机2区实际值": {
+      "address": "VW304",
+      "value": 29,
+      "unit": "℃",
+      "type": "Int",
+      "is_readonly": true,
+      "slot": 3
+    },
+    "B组25机3区设定值": {
+      "address": "VW106",
+      "value": 235,
+      "unit": "℃",
+      "type": "Int",
+      "is_readonly": false,
+      "slot": 3
+    },
+    "B组25机3区实际值": {
+      "address": "VW306",
+      "value": 29,
+      "unit": "℃",
+      "type": "Int",
+      "is_readonly": true,
+      "slot": 3
+    },
+    "A组25机1区设定值": {
+      "address": "VW108",
+      "value": 145,
+      "unit": "℃",
+      "type": "Int",
+      "is_readonly": false,
+      "slot": 3
+    },
+    "A组25机1区实际值": {
+      "address": "VW308",
+      "value": 145,
+      "unit": "℃",
+      "type": "Int",
+      "is_readonly": true,
+      "slot": 3
+    },
+    "A组25机2区设定值": {
+      "address": "VW116",
+      "value": 235,
+      "unit": "℃",
+      "type": "Int",
+      "is_readonly": false,
+      "slot": 3
+    },
+    "A组25机2区实际值": {
+      "address": "VW316",
+      "value": 232,
+      "unit": "℃",
+      "type": "Int",
+      "is_readonly": true,
+      "slot": 3
+    },
+    "A组25机3区设定值": {
+      "address": "VW118",
+      "value": 235,
+      "unit": "℃",
+      "type": "Int",
+      "is_readonly": false,
+      "slot": 3
+    },
+    "A组25机3区实际值": {
+      "address": "VW318",
+      "value": 229,
+      "unit": "℃",
+      "type": "Int",
+      "is_readonly": true,
+      "slot": 3
+    },
+    "25B共挤备用1设定值": {
+      "address": "VW130",
+      "value": 0,
+      "unit": "℃",
+      "type": "Int",
+      "is_readonly": false,
+      "slot": 3
+    },
+    "25B共挤备用1实际值": {
+      "address": "VW330",
+      "value": 3276,
+      "unit": "℃",
+      "type": "Int",
+      "is_readonly": true,
+      "slot": 3
+    },
+    "25B共挤备用2设定值": {
+      "address": "VW132",
+      "value": 0,
+      "unit": "℃",
+      "type": "Int",
+      "is_readonly": false,
+      "slot": 3
+    },
+    "25B共挤备用2实际值": {
+      "address": "VW332",
+      "value": 3276,
+      "unit": "℃",
+      "type": "Int",
+      "is_readonly": true,
+      "slot": 3
+    },
+    "25A共挤备用1设定值": {
+      "address": "VW134",
+      "value": 0,
+      "unit": "℃",
+      "type": "Int",
+      "is_readonly": false,
+      "slot": 3
+    },
+    "25A共挤备用1实际值": {
+      "address": "VW334",
+      "value": 3276,
+      "unit": "℃",
+      "type": "Int",
+      "is_readonly": true,
+      "slot": 3
+    },
+    "25A共挤备用2设定值": {
+      "address": "VW136",
+      "value": 0,
+      "unit": "℃",
+      "type": "Int",
+      "is_readonly": false,
+      "slot": 3
+    },
+    "25A共挤备用2实际值": {
+      "address": "VW336",
+      "value": 3276,
+      "unit": "℃",
+      "type": "Int",
+      "is_readonly": true,
+      "slot": 3
+    }
+  }
+}
+------------------------------------------------------------
+2026-05-18 10:58:46 | 创建 | 产品 | 用户ID:1
+详情: 创建产品: 空心地板
+------------------------------------------------------------
+2026-05-18 11:02:30 | 创建 | 产品 | 用户ID:1
+详情: 创建产品: 测试新产品
+------------------------------------------------------------
+2026-05-18 11:02:38 | 删除 | 产品 | 用户ID:1
+详情: 删除产品: 测试新产品
+------------------------------------------------------------
+2026-05-18 11:14:39 | 读取PLC | 机台 | 用户ID:1
+请求参数:
+{
+  "主机料温过低": {
+    "address": "V4551.2",
+    "value": false,
+    "unit": "",
+    "type": "Bool"
+  },
+  "主机料温过高": {
+    "address": "V4551.1",
+    "value": false,
+    "unit": "",
+    "type": "Bool"
+  },
+  "主机调速故障": {
+    "address": "V4551.4",
+    "value": false,
+    "unit": "",
+    "type": "Bool"
+  },
+  "主机过电流": {
+    "address": "V4551.7",
+    "value": false,
+    "unit": "",
+    "type": "Bool"
+  },
+  "主机料筒冷却风机故障": {
+    "address": "V4550.4",
+    "value": false,
+    "unit": "",
+    "type": "Bool"
+  },
+  "喂料调速器故障": {
+    "address": "V4553.0",
+    "value": false,
+    "unit": "",
+    "type": "Bool"
+  },
+  "喂料过电流": {
+    "address": "V4553.1",
+    "value": false,
+    "unit": "",
+    "type": "Bool"
+  },
+  "螺杆异位报警": {
+    "address": "V4551.3",
+    "value": false,
+    "unit": "",
+    "type": "Bool"
+  },
+  "主机急停未松开": {
+    "address": "V4551.0",
+    "value": false,
+    "unit": "",
+    "type": "Bool"
+  },
+  "35A调速故障": {
+    "address": "V4550.1",
+    "value": false,
+    "unit": "",
+    "type": "Bool"
+  },
+  "35A过电流": {
+    "address": "V4550.7",
+    "value": false,
+    "unit": "",
+    "type": "Bool"
+  },
+  "35A料筒冷却风机故障": {
+    "address": "V4550.6",
+    "value": false,
+    "unit": "",
+    "type": "Bool"
+  },
+  "35B调速故障": {
+    "address": "V4550.5",
+    "value": false,
+    "unit": "",
+    "type": "Bool"
+  },
+  "35B过电流": {
+    "address": "V4550.0",
+    "value": false,
+    "unit": "",
+    "type": "Bool"
+  },
+  "35B料筒冷却风机故障": {
+    "address": "V4553.2",
+    "value": false,
+    "unit": "",
+    "type": "Bool"
+  },
+  "主机转速设定值": {
+    "address": "VD208",
+    "value": 7.5,
+    "unit": "RPM",
+    "type": "Real"
+  },
+  "主机转速实际值": {
+    "address": "VD232",
+    "value": 7.517971992492676,
+    "unit": "RPM",
+    "type": "Real"
+  },
+  "主机电流负载占比": {
+    "address": "VD3300",
+    "value": 68.0718765258789,
+    "unit": "%",
+    "type": "Real"
+  },
+  "主机电流值": {
+    "address": "VD256",
+    "value": 43.56399917602539,
+    "unit": "A",
+    "type": "Real"
+  },
+  "喂料转速设定值": {
+    "address": "VD32",
+    "value": 15.000003814697266,
+    "unit": "RPM",
+    "type": "Real"
+  },
+  "喂料转速实际值": {
+    "address": "VD244",
+    "value": 15.184374809265137,
+    "unit": "RPM",
+    "type": "Real"
+  },
+  "喂料电流负载占比": {
+    "address": "VD3304",
+    "value": 67.30937194824219,
+    "unit": "%",
+    "type": "Real"
+  },
+  "喂料电流值": {
+    "address": "VD260",
+    "value": 1.884662389755249,
+    "unit": "A",
+    "type": "Real"
+  },
+  "65机筒1区设定值": {
+    "address": "VW102",
+    "value": 180,
+    "unit": "℃",
+    "type": "Int"
+  },
+  "65机筒1区实际值": {
+    "address": "VW302",
+    "value": 175,
+    "unit": "℃",
+    "type": "Int"
+  },
+  "65机筒2区设定值": {
+    "address": "VW104",
+    "value": 185,
+    "unit": "℃",
+    "type": "Int"
+  },
+  "65机筒2区实际值": {
+    "address": "VW304",
+    "value": 181,
+    "unit": "℃",
+    "type": "Int"
+  },
+  "65机筒3区设定值": {
+    "address": "VW106",
+    "value": 140,
+    "unit": "℃",
+    "type": "Int"
+  },
+  "65机筒3区实际值": {
+    "address": "VW306",
+    "value": 141,
+    "unit": "℃",
+    "type": "Int"
+  },
+  "65机筒4区设定值": {
+    "address": "VW108",
+    "value": 140,
+    "unit": "℃",
+    "type": "Int"
+  },
+  "65机筒4区实际值": {
+    "address": "VW308",
+    "value": 141,
+    "unit": "℃",
+    "type": "Int"
+  },
+  "65机合流芯设定值": {
+    "address": "VW154",
+    "value": 140,
+    "unit": "℃",
+    "type": "Int"
+  },
+  "65机合流芯实际值": {
+    "address": "VW354",
+    "value": 139,
+    "unit": "℃",
+    "type": "Int"
+  },
+  "芯层模具上设定值": {
+    "address": "VW1130",
+    "value": 140,
+    "unit": "℃",
+    "type": "Int"
+  },
+  "芯层模具上实际值": {
+    "address": "VW330",
+    "value": 145,
+    "unit": "℃",
+    "type": "Int"
+  },
+  "芯层模具下设定值": {
+    "address": "VW1132",
+    "value": 140,
+    "unit": "℃",
+    "type": "Int"
+  },
+  "芯层模具下实际值": {
+    "address": "VW332",
+    "value": 148,
+    "unit": "℃",
+    "type": "Int"
+  },
+  "芯层模具左设定值": {
+    "address": "VW1134",
+    "value": 140,
+    "unit": "℃",
+    "type": "Int"
+  },
+  "芯层模具左实际值": {
+    "address": "VW334",
+    "value": 143,
+    "unit": "℃",
+    "type": "Int"
+  },
+  "芯层模具右设定值": {
+    "address": "VW1136",
+    "value": 145,
+    "unit": "℃",
+    "type": "Int"
+  },
+  "芯层模具右实际值": {
+    "address": "VW336",
+    "value": 144,
+    "unit": "℃",
+    "type": "Int"
+  },
+  "外层模具上设定值": {
+    "address": "VW1138",
+    "value": 180,
+    "unit": "℃",
+    "type": "Int"
+  },
+  "外层模具上实际值": {
+    "address": "VW338",
+    "value": 180,
+    "unit": "℃",
+    "type": "Int"
+  },
+  "外层模具下设定值": {
+    "address": "VW1140",
+    "value": 180,
+    "unit": "℃",
+    "type": "Int"
+  },
+  "外层模具下实际值": {
+    "address": "VW340",
+    "value": 179,
+    "unit": "℃",
+    "type": "Int"
+  },
+  "外层模具左设定值": {
+    "address": "VW1142",
+    "value": 180,
+    "unit": "℃",
+    "type": "Int"
+  },
+  "外层模具左实际值": {
+    "address": "VW342",
+    "value": 178,
+    "unit": "",
+    "type": "Int"
+  },
+  "外层模具石设定值": {
+    "address": "VW344",
+    "value": 178,
+    "unit": "℃",
+    "type": "Int"
+  },
+  "外层模具石实际值": {
+    "address": "VW344",
+    "value": 178,
+    "unit": "℃",
+    "type": "Int"
+  },
+  "A组合流芯设定值": {
+    "address": "VW146",
+    "value": 160,
+    "unit": "℃",
+    "type": "Int"
+  },
+  "A组合流芯实际值": {
+    "address": "VW346",
+    "value": 160,
+    "unit": "℃",
+    "type": "Int"
+  },
+  "A组转接模设定值": {
+    "address": "VW148",
+    "value": 165,
+    "unit": "℃",
+    "type": "Int"
+  },
+  "A组转接模实际值": {
+    "address": "VW348",
+    "value": 162,
+    "unit": "℃",
+    "type": "Int"
+  },
+  "A组连接管设定值": {
+    "address": "VW150",
+    "value": 235,
+    "unit": "℃",
+    "type": "Int"
+  },
+  "A组连接管实际值": {
+    "address": "VW350",
+    "value": 229,
+    "unit": "℃",
+    "type": "Int"
+  },
+  "B组合流芯设定值": {
+    "address": "VW152",
+    "value": 165,
+    "unit": "℃",
+    "type": "Int"
+  },
+  "B组合流芯实际值": {
+    "address": "VW352",
+    "value": 33,
+    "unit": "℃",
+    "type": "Int"
+  },
+  "B组转接模设定值": {
+    "address": "VW162",
+    "value": 165,
+    "unit": "℃",
+    "type": "Int"
+  },
+  "B组转接模实际值": {
+    "address": "VW362",
+    "value": 33,
+    "unit": "℃",
+    "type": "Int"
+  },
+  "B组连接管设定值": {
+    "address": "VW164",
+    "value": 230,
+    "unit": "℃",
+    "type": "Int"
+  },
+  "B组连接管实际值": {
+    "address": "VW364",
+    "value": 34,
+    "unit": "℃",
+    "type": "Int"
+  },
+  "35A转速设定值": {
+    "address": "VD508",
+    "value": 0.0,
+    "unit": "RPM",
+    "type": "Real"
+  },
+  "35A转速实际值": {
+    "address": "VD532",
+    "value": 0.0,
+    "unit": "RPM",
+    "type": "Real"
+  },
+  "35A电流设定值": {
+    "address": "VD2300",
+    "value": 0.0,
+    "unit": "%",
+    "type": "Real"
+  },
+  "35A电流实际值": {
+    "address": "VD556",
+    "value": 0.0,
+    "unit": "A",
+    "type": "Real"
+  },
+  "35B转速设定值": {
+    "address": "VD212",
+    "value": 0.0,
+    "unit": "RPM",
+    "type": "Real"
+  },
+  "35B转速实际值": {
+    "address": "VD236",
+    "value": 0.0,
+    "unit": "RPM",
+    "type": "Real"
+  },
+  "35B电流设定值": {
+    "address": "VD3308",
+    "value": 0.0,
+    "unit": "%",
+    "type": "Real"
+  },
+  "35B电流实际值": {
+    "address": "VD264",
+    "value": 0.0,
+    "unit": "A",
+    "type": "Real"
+  },
+  "A组35机1区设定值": {
+    "address": "VW116",
+    "value": 145,
+    "unit": "℃",
+    "type": "Int"
+  },
+  "A组35机1区实际值": {
+    "address": "VW316",
+    "value": 143,
+    "unit": "℃",
+    "type": "Int"
+  },
+  "A组35机2区实际值": {
+    "address": "VW318",
+    "value": 169,
+    "unit": "℃",
+    "type": "Int"
+  },
+  "A组35机3区设定值": {
+    "address": "VW168",
+    "value": 165,
+    "unit": "℃",
+    "type": "Int"
+  },
+  "A组35机3区实际值": {
+    "address": "VW368",
+    "value": 164,
+    "unit": "℃",
+    "type": "Int"
+  },
+  "B组35机1区设定值": {
+    "address": "VW170",
+    "value": 145,
+    "unit": "℃",
+    "type": "Int"
+  },
+  "B组35机1区实际值": {
+    "address": "VW370",
+    "value": 30,
+    "unit": "℃",
+    "type": "Int"
+  },
+  "B组35机2区设定值": {
+    "address": "VW120",
+    "value": 180,
+    "unit": "℃",
+    "type": "Int"
+  },
+  "B组35机2区实际值": {
+    "address": "VW322",
+    "value": 30,
+    "unit": "℃",
+    "type": "Int"
+  },
+  "B组35机3区设定值": {
+    "address": "VW112",
+    "value": 180,
+    "unit": "℃",
+    "type": "Int"
+  },
+  "B组35机3区实际值": {
+    "address": "VW312",
+    "value": 31,
+    "unit": "℃",
+    "type": "Int"
+  },
+  "A组备用1设定值": {
+    "address": "VW160",
+    "value": 0,
+    "unit": "℃",
+    "type": "Int"
+  },
+  "A组备用1实际值": {
+    "address": "VW360",
+    "value": 3276,
+    "unit": "℃",
+    "type": "Int"
+  },
+  "A组备用2设定值": {
+    "address": "VW166",
+    "value": 0,
+    "unit": "℃",
+    "type": "Int"
+  },
+  "A组备用2实际值": {
+    "address": "VW366",
+    "value": 3276,
+    "unit": "℃",
+    "type": "Int"
+  },
+  "B组备用1设定值": {
+    "address": "VW156",
+    "value": 0,
+    "unit": "℃",
+    "type": "Int"
+  },
+  "B组备用1实际值": {
+    "address": "VW356",
+    "value": 3276,
+    "unit": "℃",
+    "type": "Int"
+  },
+  "B组备用2设定值": {
+    "address": "VW158",
+    "value": 0,
+    "unit": "℃",
+    "type": "Int"
+  },
+  "B组备用2实际值": {
+    "address": "VW358",
+    "value": 3276,
+    "unit": "℃",
+    "type": "Int"
+  },
+  "25B调速故障": {
+    "address": "V4550.7",
+    "value": false,
+    "unit": "",
+    "type": "Bool"
+  },
+  "25B料筒冷却风机故障": {
+    "address": "V4550.4",
+    "value": false,
+    "unit": "",
+    "type": "Bool"
+  },
+  "25A调速故障": {
+    "address": "V4551.4",
+    "value": false,
+    "unit": "",
+    "type": "Bool"
+  },
+  "25A料筒冷却风机故障": {
+    "address": "V4550.6",
+    "value": false,
+    "unit": "",
+    "type": "Bool"
+  },
+  "25A过电流": {
+    "address": "V4551.7",
+    "value": false,
+    "unit": "",
+    "type": "Bool"
+  },
+  "25B转速设定值": {
+    "address": "VD212",
+    "value": 43.310550689697266,
+    "unit": "RPM",
+    "type": "Real"
+  },
+  "25B转速实际值": {
+    "address": "VD532",
+    "value": 0.0,
+    "unit": "RPM",
+    "type": "Real"
+  },
+  "25B电流设定值": {
+    "address": "VD2300",
+    "value": 0.0,
+    "unit": "%",
+    "type": "Real"
+  },
+  "25B电流实际值": {
+    "address": "VD556",
+    "value": 0.0,
+    "unit": "A",
+    "type": "Real"
+  },
+  "25A转速设定值": {
+    "address": "VD208",
+    "value": 12.300010681152344,
+    "unit": "RPM",
+    "type": "Real"
+  },
+  "25A转速实际值": {
+    "address": "VD232",
+    "value": 0.0,
+    "unit": "RPM",
+    "type": "Real"
+  },
+  "25A电流设定值": {
+    "address": "VD3300",
+    "value": 0.0,
+    "unit": "%",
+    "type": "Real"
+  },
+  "25A电流实际值": {
+    "address": "VD256",
+    "value": 0.0,
+    "unit": "A",
+    "type": "Real"
+  },
+  "B组25机1区设定值": {
+    "address": "VW102",
+    "value": 145,
+    "unit": "℃",
+    "type": "Int"
+  },
+  "B组25机1区实际值": {
+    "address": "VW302",
+    "value": 32,
+    "unit": "℃",
+    "type": "Int"
+  },
+  "B组25机2区设定值": {
+    "address": "VW104",
+    "value": 235,
+    "unit": "℃",
+    "type": "Int"
+  },
+  "B组25机2区实际值": {
+    "address": "VW304",
+    "value": 32,
+    "unit": "℃",
+    "type": "Int"
+  },
+  "B组25机3区设定值": {
+    "address": "VW106",
+    "value": 235,
+    "unit": "℃",
+    "type": "Int"
+  },
+  "B组25机3区实际值": {
+    "address": "VW306",
+    "value": 32,
+    "unit": "℃",
+    "type": "Int"
+  },
+  "A组25机1区设定值": {
+    "address": "VW108",
+    "value": 145,
+    "unit": "℃",
+    "type": "Int"
+  },
+  "A组25机1区实际值": {
+    "address": "VW308",
+    "value": 144,
+    "unit": "℃",
+    "type": "Int"
+  },
+  "A组25机2区设定值": {
+    "address": "VW116",
+    "value": 235,
+    "unit": "℃",
+    "type": "Int"
+  },
+  "A组25机2区实际值": {
+    "address": "VW316",
+    "value": 233,
+    "unit": "℃",
+    "type": "Int"
+  },
+  "A组25机3区设定值": {
+    "address": "VW118",
+    "value": 235,
+    "unit": "℃",
+    "type": "Int"
+  },
+  "A组25机3区实际值": {
+    "address": "VW318",
+    "value": 230,
+    "unit": "℃",
+    "type": "Int"
+  },
+  "25B共挤备用1设定值": {
+    "address": "VW130",
+    "value": 0,
+    "unit": "℃",
+    "type": "Int"
+  },
+  "25B共挤备用1实际值": {
+    "address": "VW330",
+    "value": 3276,
+    "unit": "℃",
+    "type": "Int"
+  },
+  "25B共挤备用2设定值": {
+    "address": "VW132",
+    "value": 0,
+    "unit": "℃",
+    "type": "Int"
+  },
+  "25B共挤备用2实际值": {
+    "address": "VW332",
+    "value": 3276,
+    "unit": "℃",
+    "type": "Int"
+  },
+  "25A共挤备用1设定值": {
+    "address": "VW134",
+    "value": 0,
+    "unit": "℃",
+    "type": "Int"
+  },
+  "25A共挤备用1实际值": {
+    "address": "VW334",
+    "value": 3276,
+    "unit": "℃",
+    "type": "Int"
+  },
+  "25A共挤备用2设定值": {
+    "address": "VW136",
+    "value": 0,
+    "unit": "℃",
+    "type": "Int"
+  },
+  "25A共挤备用2实际值": {
+    "address": "VW336",
+    "value": 3276,
+    "unit": "℃",
+    "type": "Int"
+  }
+}
+详情: 机台: 默认挤出机 (ID: 1), 参数数量: 121
+返回结果:
+{
+  "machine": {
+    "id": 1,
+    "name": "默认挤出机"
+  },
+  "parameters": {
+    "主机料温过低": {
+      "address": "V4551.2",
+      "value": false,
+      "unit": "",
+      "type": "Bool",
+      "is_readonly": true,
+      "slot": 2
+    },
+    "主机料温过高": {
+      "address": "V4551.1",
+      "value": false,
+      "unit": "",
+      "type": "Bool",
+      "is_readonly": true,
+      "slot": 2
+    },
+    "主机调速故障": {
+      "address": "V4551.4",
+      "value": false,
+      "unit": "",
+      "type": "Bool",
+      "is_readonly": true,
+      "slot": 2
+    },
+    "主机过电流": {
+      "address": "V4551.7",
+      "value": false,
+      "unit": "",
+      "type": "Bool",
+      "is_readonly": true,
+      "slot": 2
+    },
+    "主机料筒冷却风机故障": {
+      "address": "V4550.4",
+      "value": false,
+      "unit": "",
+      "type": "Bool",
+      "is_readonly": true,
+      "slot": 2
+    },
+    "喂料调速器故障": {
+      "address": "V4553.0",
+      "value": false,
+      "unit": "",
+      "type": "Bool",
+      "is_readonly": true,
+      "slot": 2
+    },
+    "喂料过电流": {
+      "address": "V4553.1",
+      "value": false,
+      "unit": "",
+      "type": "Bool",
+      "is_readonly": true,
+      "slot": 2
+    },
+    "螺杆异位报警": {
+      "address": "V4551.3",
+      "value": false,
+      "unit": "",
+      "type": "Bool",
+      "is_readonly": true,
+      "slot": 2
+    },
+    "主机急停未松开": {
+      "address": "V4551.0",
+      "value": false,
+      "unit": "",
+      "type": "Bool",
+      "is_readonly": true,
+      "slot": 2
+    },
+    "35A调速故障": {
+      "address": "V4550.1",
+      "value": false,
+      "unit": "",
+      "type": "Bool",
+      "is_readonly": true,
+      "slot": 2
+    },
+    "35A过电流": {
+      "address": "V4550.7",
+      "value": false,
+      "unit": "",
+      "type": "Bool",
+      "is_readonly": true,
+      "slot": 2
+    },
+    "35A料筒冷却风机故障": {
+      "address": "V4550.6",
+      "value": false,
+      "unit": "",
+      "type": "Bool",
+      "is_readonly": true,
+      "slot": 2
+    },
+    "35B调速故障": {
+      "address": "V4550.5",
+      "value": false,
+      "unit": "",
+      "type": "Bool",
+      "is_readonly": true,
+      "slot": 2
+    },
+    "35B过电流": {
+      "address": "V4550.0",
+      "value": false,
+      "unit": "",
+      "type": "Bool",
+      "is_readonly": true,
+      "slot": 2
+    },
+    "35B料筒冷却风机故障": {
+      "address": "V4553.2",
+      "value": false,
+      "unit": "",
+      "type": "Bool",
+      "is_readonly": true,
+      "slot": 2
+    },
+    "主机转速设定值": {
+      "address": "VD208",
+      "value": 7.5,
+      "unit": "RPM",
+      "type": "Real",
+      "is_readonly": false,
+      "slot": 2
+    },
+    "主机转速实际值": {
+      "address": "VD232",
+      "value": 7.517971992492676,
+      "unit": "RPM",
+      "type": "Real",
+      "is_readonly": true,
+      "slot": 2
+    },
+    "主机电流负载占比": {
+      "address": "VD3300",
+      "value": 68.0718765258789,
+      "unit": "%",
+      "type": "Real",
+      "is_readonly": true,
+      "slot": 2
+    },
+    "主机电流值": {
+      "address": "VD256",
+      "value": 43.56399917602539,
+      "unit": "A",
+      "type": "Real",
+      "is_readonly": true,
+      "slot": 2
+    },
+    "喂料转速设定值": {
+      "address": "VD32",
+      "value": 15.000003814697266,
+      "unit": "RPM",
+      "type": "Real",
+      "is_readonly": false,
+      "slot": 2
+    },
+    "喂料转速实际值": {
+      "address": "VD244",
+      "value": 15.184374809265137,
+      "unit": "RPM",
+      "type": "Real",
+      "is_readonly": true,
+      "slot": 2
+    },
+    "喂料电流负载占比": {
+      "address": "VD3304",
+      "value": 67.30937194824219,
+      "unit": "%",
+      "type": "Real",
+      "is_readonly": true,
+      "slot": 2
+    },
+    "喂料电流值": {
+      "address": "VD260",
+      "value": 1.884662389755249,
+      "unit": "A",
+      "type": "Real",
+      "is_readonly": true,
+      "slot": 2
+    },
+    "65机筒1区设定值": {
+      "address": "VW102",
+      "value": 180,
+      "unit": "℃",
+      "type": "Int",
+      "is_readonly": false,
+      "slot": 2
+    },
+    "65机筒1区实际值": {
+      "address": "VW302",
+      "value": 175,
+      "unit": "℃",
+      "type": "Int",
+      "is_readonly": true,
+      "slot": 2
+    },
+    "65机筒2区设定值": {
+      "address": "VW104",
+      "value": 185,
+      "unit": "℃",
+      "type": "Int",
+      "is_readonly": false,
+      "slot": 2
+    },
+    "65机筒2区实际值": {
+      "address": "VW304",
+      "value": 181,
+      "unit": "℃",
+      "type": "Int",
+      "is_readonly": true,
+      "slot": 2
+    },
+    "65机筒3区设定值": {
+      "address": "VW106",
+      "value": 140,
+      "unit": "℃",
+      "type": "Int",
+      "is_readonly": false,
+      "slot": 2
+    },
+    "65机筒3区实际值": {
+      "address": "VW306",
+      "value": 141,
+      "unit": "℃",
+      "type": "Int",
+      "is_readonly": true,
+      "slot": 2
+    },
+    "65机筒4区设定值": {
+      "address": "VW108",
+      "value": 140,
+      "unit": "℃",
+      "type": "Int",
+      "is_readonly": false,
+      "slot": 2
+    },
+    "65机筒4区实际值": {
+      "address": "VW308",
+      "value": 141,
+      "unit": "℃",
+      "type": "Int",
+      "is_readonly": true,
+      "slot": 2
+    },
+    "65机合流芯设定值": {
+      "address": "VW154",
+      "value": 140,
+      "unit": "℃",
+      "type": "Int",
+      "is_readonly": false,
+      "slot": 2
+    },
+    "65机合流芯实际值": {
+      "address": "VW354",
+      "value": 139,
+      "unit": "℃",
+      "type": "Int",
+      "is_readonly": true,
+      "slot": 2
+    },
+    "芯层模具上设定值": {
+      "address": "VW1130",
+      "value": 140,
+      "unit": "℃",
+      "type": "Int",
+      "is_readonly": false,
+      "slot": 2
+    },
+    "芯层模具上实际值": {
+      "address": "VW330",
+      "value": 145,
+      "unit": "℃",
+      "type": "Int",
+      "is_readonly": true,
+      "slot": 2
+    },
+    "芯层模具下设定值": {
+      "address": "VW1132",
+      "value": 140,
+      "unit": "℃",
+      "type": "Int",
+      "is_readonly": false,
+      "slot": 2
+    },
+    "芯层模具下实际值": {
+      "address": "VW332",
+      "value": 148,
+      "unit": "℃",
+      "type": "Int",
+      "is_readonly": true,
+      "slot": 2
+    },
+    "芯层模具左设定值": {
+      "address": "VW1134",
+      "value": 140,
+      "unit": "℃",
+      "type": "Int",
+      "is_readonly": false,
+      "slot": 2
+    },
+    "芯层模具左实际值": {
+      "address": "VW334",
+      "value": 143,
+      "unit": "℃",
+      "type": "Int",
+      "is_readonly": true,
+      "slot": 2
+    },
+    "芯层模具右设定值": {
+      "address": "VW1136",
+      "value": 145,
+      "unit": "℃",
+      "type": "Int",
+      "is_readonly": false,
+      "slot": 2
+    },
+    "芯层模具右实际值": {
+      "address": "VW336",
+      "value": 144,
+      "unit": "℃",
+      "type": "Int",
+      "is_readonly": true,
+      "slot": 2
+    },
+    "外层模具上设定值": {
+      "address": "VW1138",
+      "value": 180,
+      "unit": "℃",
+      "type": "Int",
+      "is_readonly": false,
+      "slot": 2
+    },
+    "外层模具上实际值": {
+      "address": "VW338",
+      "value": 180,
+      "unit": "℃",
+      "type": "Int",
+      "is_readonly": true,
+      "slot": 2
+    },
+    "外层模具下设定值": {
+      "address": "VW1140",
+      "value": 180,
+      "unit": "℃",
+      "type": "Int",
+      "is_readonly": false,
+      "slot": 2
+    },
+    "外层模具下实际值": {
+      "address": "VW340",
+      "value": 179,
+      "unit": "℃",
+      "type": "Int",
+      "is_readonly": true,
+      "slot": 2
+    },
+    "外层模具左设定值": {
+      "address": "VW1142",
+      "value": 180,
+      "unit": "℃",
+      "type": "Int",
+      "is_readonly": false,
+      "slot": 2
+    },
+    "外层模具左实际值": {
+      "address": "VW342",
+      "value": 178,
+      "unit": "",
+      "type": "Int",
+      "is_readonly": true,
+      "slot": 2
+    },
+    "外层模具石设定值": {
+      "address": "VW344",
+      "value": 178,
+      "unit": "℃",
+      "type": "Int",
+      "is_readonly": false,
+      "slot": 2
+    },
+    "外层模具石实际值": {
+      "address": "VW344",
+      "value": 178,
+      "unit": "℃",
+      "type": "Int",
+      "is_readonly": true,
+      "slot": 2
+    },
+    "A组合流芯设定值": {
+      "address": "VW146",
+      "value": 160,
+      "unit": "℃",
+      "type": "Int",
+      "is_readonly": false,
+      "slot": 2
+    },
+    "A组合流芯实际值": {
+      "address": "VW346",
+      "value": 160,
+      "unit": "℃",
+      "type": "Int",
+      "is_readonly": true,
+      "slot": 2
+    },
+    "A组转接模设定值": {
+      "address": "VW148",
+      "value": 165,
+      "unit": "℃",
+      "type": "Int",
+      "is_readonly": false,
+      "slot": 2
+    },
+    "A组转接模实际值": {
+      "address": "VW348",
+      "value": 162,
+      "unit": "℃",
+      "type": "Int",
+      "is_readonly": true,
+      "slot": 2
+    },
+    "A组连接管设定值": {
+      "address": "VW150",
+      "value": 235,
+      "unit": "℃",
+      "type": "Int",
+      "is_readonly": false,
+      "slot": 2
+    },
+    "A组连接管实际值": {
+      "address": "VW350",
+      "value": 229,
+      "unit": "℃",
+      "type": "Int",
+      "is_readonly": true,
+      "slot": 2
+    },
+    "B组合流芯设定值": {
+      "address": "VW152",
+      "value": 165,
+      "unit": "℃",
+      "type": "Int",
+      "is_readonly": false,
+      "slot": 2
+    },
+    "B组合流芯实际值": {
+      "address": "VW352",
+      "value": 33,
+      "unit": "℃",
+      "type": "Int",
+      "is_readonly": true,
+      "slot": 2
+    },
+    "B组转接模设定值": {
+      "address": "VW162",
+      "value": 165,
+      "unit": "℃",
+      "type": "Int",
+      "is_readonly": false,
+      "slot": 2
+    },
+    "B组转接模实际值": {
+      "address": "VW362",
+      "value": 33,
+      "unit": "℃",
+      "type": "Int",
+      "is_readonly": true,
+      "slot": 2
+    },
+    "B组连接管设定值": {
+      "address": "VW164",
+      "value": 230,
+      "unit": "℃",
+      "type": "Int",
+      "is_readonly": false,
+      "slot": 2
+    },
+    "B组连接管实际值": {
+      "address": "VW364",
+      "value": 34,
+      "unit": "℃",
+      "type": "Int",
+      "is_readonly": true,
+      "slot": 2
+    },
+    "35A转速设定值": {
+      "address": "VD508",
+      "value": 0.0,
+      "unit": "RPM",
+      "type": "Real",
+      "is_readonly": false,
+      "slot": 2
+    },
+    "35A转速实际值": {
+      "address": "VD532",
+      "value": 0.0,
+      "unit": "RPM",
+      "type": "Real",
+      "is_readonly": true,
+      "slot": 2
+    },
+    "35A电流设定值": {
+      "address": "VD2300",
+      "value": 0.0,
+      "unit": "%",
+      "type": "Real",
+      "is_readonly": false,
+      "slot": 2
+    },
+    "35A电流实际值": {
+      "address": "VD556",
+      "value": 0.0,
+      "unit": "A",
+      "type": "Real",
+      "is_readonly": true,
+      "slot": 2
+    },
+    "35B转速设定值": {
+      "address": "VD212",
+      "value": 0.0,
+      "unit": "RPM",
+      "type": "Real",
+      "is_readonly": false,
+      "slot": 2
+    },
+    "35B转速实际值": {
+      "address": "VD236",
+      "value": 0.0,
+      "unit": "RPM",
+      "type": "Real",
+      "is_readonly": true,
+      "slot": 2
+    },
+    "35B电流设定值": {
+      "address": "VD3308",
+      "value": 0.0,
+      "unit": "%",
+      "type": "Real",
+      "is_readonly": false,
+      "slot": 2
+    },
+    "35B电流实际值": {
+      "address": "VD264",
+      "value": 0.0,
+      "unit": "A",
+      "type": "Real",
+      "is_readonly": true,
+      "slot": 2
+    },
+    "A组35机1区设定值": {
+      "address": "VW116",
+      "value": 145,
+      "unit": "℃",
+      "type": "Int",
+      "is_readonly": false,
+      "slot": 2
+    },
+    "A组35机1区实际值": {
+      "address": "VW316",
+      "value": 143,
+      "unit": "℃",
+      "type": "Int",
+      "is_readonly": true,
+      "slot": 2
+    },
+    "A组35机2区实际值": {
+      "address": "VW318",
+      "value": 169,
+      "unit": "℃",
+      "type": "Int",
+      "is_readonly": true,
+      "slot": 2
+    },
+    "A组35机3区设定值": {
+      "address": "VW168",
+      "value": 165,
+      "unit": "℃",
+      "type": "Int",
+      "is_readonly": false,
+      "slot": 2
+    },
+    "A组35机3区实际值": {
+      "address": "VW368",
+      "value": 164,
+      "unit": "℃",
+      "type": "Int",
+      "is_readonly": true,
+      "slot": 2
+    },
+    "B组35机1区设定值": {
+      "address": "VW170",
+      "value": 145,
+      "unit": "℃",
+      "type": "Int",
+      "is_readonly": false,
+      "slot": 2
+    },
+    "B组35机1区实际值": {
+      "address": "VW370",
+      "value": 30,
+      "unit": "℃",
+      "type": "Int",
+      "is_readonly": true,
+      "slot": 2
+    },
+    "B组35机2区设定值": {
+      "address": "VW120",
+      "value": 180,
+      "unit": "℃",
+      "type": "Int",
+      "is_readonly": false,
+      "slot": 2
+    },
+    "B组35机2区实际值": {
+      "address": "VW322",
+      "value": 30,
+      "unit": "℃",
+      "type": "Int",
+      "is_readonly": true,
+      "slot": 2
+    },
+    "B组35机3区设定值": {
+      "address": "VW112",
+      "value": 180,
+      "unit": "℃",
+      "type": "Int",
+      "is_readonly": false,
+      "slot": 2
+    },
+    "B组35机3区实际值": {
+      "address": "VW312",
+      "value": 31,
+      "unit": "℃",
+      "type": "Int",
+      "is_readonly": true,
+      "slot": 2
+    },
+    "A组备用1设定值": {
+      "address": "VW160",
+      "value": 0,
+      "unit": "℃",
+      "type": "Int",
+      "is_readonly": false,
+      "slot": 2
+    },
+    "A组备用1实际值": {
+      "address": "VW360",
+      "value": 3276,
+      "unit": "℃",
+      "type": "Int",
+      "is_readonly": true,
+      "slot": 2
+    },
+    "A组备用2设定值": {
+      "address": "VW166",
+      "value": 0,
+      "unit": "℃",
+      "type": "Int",
+      "is_readonly": false,
+      "slot": 2
+    },
+    "A组备用2实际值": {
+      "address": "VW366",
+      "value": 3276,
+      "unit": "℃",
+      "type": "Int",
+      "is_readonly": true,
+      "slot": 2
+    },
+    "B组备用1设定值": {
+      "address": "VW156",
+      "value": 0,
+      "unit": "℃",
+      "type": "Int",
+      "is_readonly": false,
+      "slot": 2
+    },
+    "B组备用1实际值": {
+      "address": "VW356",
+      "value": 3276,
+      "unit": "℃",
+      "type": "Int",
+      "is_readonly": true,
+      "slot": 2
+    },
+    "B组备用2设定值": {
+      "address": "VW158",
+      "value": 0,
+      "unit": "℃",
+      "type": "Int",
+      "is_readonly": false,
+      "slot": 2
+    },
+    "B组备用2实际值": {
+      "address": "VW358",
+      "value": 3276,
+      "unit": "℃",
+      "type": "Int",
+      "is_readonly": true,
+      "slot": 2
+    },
+    "25B调速故障": {
+      "address": "V4550.7",
+      "value": false,
+      "unit": "",
+      "type": "Bool",
+      "is_readonly": true,
+      "slot": 3
+    },
+    "25B料筒冷却风机故障": {
+      "address": "V4550.4",
+      "value": false,
+      "unit": "",
+      "type": "Bool",
+      "is_readonly": false,
+      "slot": 3
+    },
+    "25A调速故障": {
+      "address": "V4551.4",
+      "value": false,
+      "unit": "",
+      "type": "Bool",
+      "is_readonly": true,
+      "slot": 3
+    },
+    "25A料筒冷却风机故障": {
+      "address": "V4550.6",
+      "value": false,
+      "unit": "",
+      "type": "Bool",
+      "is_readonly": true,
+      "slot": 3
+    },
+    "25A过电流": {
+      "address": "V4551.7",
+      "value": false,
+      "unit": "",
+      "type": "Bool",
+      "is_readonly": false,
+      "slot": 3
+    },
+    "25B转速设定值": {
+      "address": "VD212",
+      "value": 43.310550689697266,
+      "unit": "RPM",
+      "type": "Real",
+      "is_readonly": false,
+      "slot": 3
+    },
+    "25B转速实际值": {
+      "address": "VD532",
+      "value": 0.0,
+      "unit": "RPM",
+      "type": "Real",
+      "is_readonly": true,
+      "slot": 3
+    },
+    "25B电流设定值": {
+      "address": "VD2300",
+      "value": 0.0,
+      "unit": "%",
+      "type": "Real",
+      "is_readonly": false,
+      "slot": 3
+    },
+    "25B电流实际值": {
+      "address": "VD556",
+      "value": 0.0,
+      "unit": "A",
+      "type": "Real",
+      "is_readonly": true,
+      "slot": 3
+    },
+    "25A转速设定值": {
+      "address": "VD208",
+      "value": 12.300010681152344,
+      "unit": "RPM",
+      "type": "Real",
+      "is_readonly": false,
+      "slot": 3
+    },
+    "25A转速实际值": {
+      "address": "VD232",
+      "value": 0.0,
+      "unit": "RPM",
+      "type": "Real",
+      "is_readonly": true,
+      "slot": 3
+    },
+    "25A电流设定值": {
+      "address": "VD3300",
+      "value": 0.0,
+      "unit": "%",
+      "type": "Real",
+      "is_readonly": false,
+      "slot": 3
+    },
+    "25A电流实际值": {
+      "address": "VD256",
+      "value": 0.0,
+      "unit": "A",
+      "type": "Real",
+      "is_readonly": true,
+      "slot": 3
+    },
+    "B组25机1区设定值": {
+      "address": "VW102",
+      "value": 145,
+      "unit": "℃",
+      "type": "Int",
+      "is_readonly": false,
+      "slot": 3
+    },
+    "B组25机1区实际值": {
+      "address": "VW302",
+      "value": 32,
+      "unit": "℃",
+      "type": "Int",
+      "is_readonly": true,
+      "slot": 3
+    },
+    "B组25机2区设定值": {
+      "address": "VW104",
+      "value": 235,
+      "unit": "℃",
+      "type": "Int",
+      "is_readonly": false,
+      "slot": 3
+    },
+    "B组25机2区实际值": {
+      "address": "VW304",
+      "value": 32,
+      "unit": "℃",
+      "type": "Int",
+      "is_readonly": true,
+      "slot": 3
+    },
+    "B组25机3区设定值": {
+      "address": "VW106",
+      "value": 235,
+      "unit": "℃",
+      "type": "Int",
+      "is_readonly": false,
+      "slot": 3
+    },
+    "B组25机3区实际值": {
+      "address": "VW306",
+      "value": 32,
+      "unit": "℃",
+      "type": "Int",
+      "is_readonly": true,
+      "slot": 3
+    },
+    "A组25机1区设定值": {
+      "address": "VW108",
+      "value": 145,
+      "unit": "℃",
+      "type": "Int",
+      "is_readonly": false,
+      "slot": 3
+    },
+    "A组25机1区实际值": {
+      "address": "VW308",
+      "value": 144,
+      "unit": "℃",
+      "type": "Int",
+      "is_readonly": true,
+      "slot": 3
+    },
+    "A组25机2区设定值": {
+      "address": "VW116",
+      "value": 235,
+      "unit": "℃",
+      "type": "Int",
+      "is_readonly": false,
+      "slot": 3
+    },
+    "A组25机2区实际值": {
+      "address": "VW316",
+      "value": 233,
+      "unit": "℃",
+      "type": "Int",
+      "is_readonly": true,
+      "slot": 3
+    },
+    "A组25机3区设定值": {
+      "address": "VW118",
+      "value": 235,
+      "unit": "℃",
+      "type": "Int",
+      "is_readonly": false,
+      "slot": 3
+    },
+    "A组25机3区实际值": {
+      "address": "VW318",
+      "value": 230,
+      "unit": "℃",
+      "type": "Int",
+      "is_readonly": true,
+      "slot": 3
+    },
+    "25B共挤备用1设定值": {
+      "address": "VW130",
+      "value": 0,
+      "unit": "℃",
+      "type": "Int",
+      "is_readonly": false,
+      "slot": 3
+    },
+    "25B共挤备用1实际值": {
+      "address": "VW330",
+      "value": 3276,
+      "unit": "℃",
+      "type": "Int",
+      "is_readonly": true,
+      "slot": 3
+    },
+    "25B共挤备用2设定值": {
+      "address": "VW132",
+      "value": 0,
+      "unit": "℃",
+      "type": "Int",
+      "is_readonly": false,
+      "slot": 3
+    },
+    "25B共挤备用2实际值": {
+      "address": "VW332",
+      "value": 3276,
+      "unit": "℃",
+      "type": "Int",
+      "is_readonly": true,
+      "slot": 3
+    },
+    "25A共挤备用1设定值": {
+      "address": "VW134",
+      "value": 0,
+      "unit": "℃",
+      "type": "Int",
+      "is_readonly": false,
+      "slot": 3
+    },
+    "25A共挤备用1实际值": {
+      "address": "VW334",
+      "value": 3276,
+      "unit": "℃",
+      "type": "Int",
+      "is_readonly": true,
+      "slot": 3
+    },
+    "25A共挤备用2设定值": {
+      "address": "VW136",
+      "value": 0,
+      "unit": "℃",
+      "type": "Int",
+      "is_readonly": false,
+      "slot": 3
+    },
+    "25A共挤备用2实际值": {
+      "address": "VW336",
+      "value": 3276,
+      "unit": "℃",
+      "type": "Int",
+      "is_readonly": true,
+      "slot": 3
+    }
+  }
+}
+------------------------------------------------------------
+2026-05-18 11:24:21 | 读取PLC | 机台 | 用户ID:1
+请求参数:
+{
+  "主机料温过低": {
+    "address": "V4551.2",
+    "value": false,
+    "unit": "",
+    "type": "Bool"
+  },
+  "主机料温过高": {
+    "address": "V4551.1",
+    "value": false,
+    "unit": "",
+    "type": "Bool"
+  },
+  "主机调速故障": {
+    "address": "V4551.4",
+    "value": false,
+    "unit": "",
+    "type": "Bool"
+  },
+  "主机过电流": {
+    "address": "V4551.7",
+    "value": false,
+    "unit": "",
+    "type": "Bool"
+  },
+  "主机料筒冷却风机故障": {
+    "address": "V4550.4",
+    "value": false,
+    "unit": "",
+    "type": "Bool"
+  },
+  "喂料调速器故障": {
+    "address": "V4553.0",
+    "value": false,
+    "unit": "",
+    "type": "Bool"
+  },
+  "喂料过电流": {
+    "address": "V4553.1",
+    "value": false,
+    "unit": "",
+    "type": "Bool"
+  },
+  "螺杆异位报警": {
+    "address": "V4551.3",
+    "value": false,
+    "unit": "",
+    "type": "Bool"
+  },
+  "主机急停未松开": {
+    "address": "V4551.0",
+    "value": false,
+    "unit": "",
+    "type": "Bool"
+  },
+  "35A调速故障": {
+    "address": "V4550.1",
+    "value": false,
+    "unit": "",
+    "type": "Bool"
+  },
+  "35A过电流": {
+    "address": "V4550.7",
+    "value": false,
+    "unit": "",
+    "type": "Bool"
+  },
+  "35A料筒冷却风机故障": {
+    "address": "V4550.6",
+    "value": false,
+    "unit": "",
+    "type": "Bool"
+  },
+  "35B调速故障": {
+    "address": "V4550.5",
+    "value": false,
+    "unit": "",
+    "type": "Bool"
+  },
+  "35B过电流": {
+    "address": "V4550.0",
+    "value": false,
+    "unit": "",
+    "type": "Bool"
+  },
+  "35B料筒冷却风机故障": {
+    "address": "V4553.2",
+    "value": false,
+    "unit": "",
+    "type": "Bool"
+  },
+  "主机转速设定值": {
+    "address": "VD208",
+    "value": 7.5,
+    "unit": "RPM",
+    "type": "Real"
+  },
+  "主机转速实际值": {
+    "address": "VD232",
+    "value": 7.516887664794922,
+    "unit": "RPM",
+    "type": "Real"
+  },
+  "主机电流负载占比": {
+    "address": "VD3300",
+    "value": 65.11250305175781,
+    "unit": "%",
+    "type": "Real"
+  },
+  "主机电流值": {
+    "address": "VD256",
+    "value": 41.67399978637695,
+    "unit": "A",
+    "type": "Real"
+  },
+  "喂料转速设定值": {
+    "address": "VD32",
+    "value": 15.000003814697266,
+    "unit": "RPM",
+    "type": "Real"
+  },
+  "喂料转速实际值": {
+    "address": "VD244",
+    "value": 15.1875,
+    "unit": "RPM",
+    "type": "Real"
+  },
+  "喂料电流负载占比": {
+    "address": "VD3304",
+    "value": 67.3375015258789,
+    "unit": "%",
+    "type": "Real"
+  },
+  "喂料电流值": {
+    "address": "VD260",
+    "value": 1.885450005531311,
+    "unit": "A",
+    "type": "Real"
+  },
+  "65机筒1区设定值": {
+    "address": "VW102",
+    "value": 180,
+    "unit": "℃",
+    "type": "Int"
+  },
+  "65机筒1区实际值": {
+    "address": "VW302",
+    "value": 175,
+    "unit": "℃",
+    "type": "Int"
+  },
+  "65机筒2区设定值": {
+    "address": "VW104",
+    "value": 185,
+    "unit": "℃",
+    "type": "Int"
+  },
+  "65机筒2区实际值": {
+    "address": "VW304",
+    "value": 182,
+    "unit": "℃",
+    "type": "Int"
+  },
+  "65机筒3区设定值": {
+    "address": "VW106",
+    "value": 140,
+    "unit": "℃",
+    "type": "Int"
+  },
+  "65机筒3区实际值": {
+    "address": "VW306",
+    "value": 139,
+    "unit": "℃",
+    "type": "Int"
+  },
+  "65机筒4区设定值": {
+    "address": "VW108",
+    "value": 140,
+    "unit": "℃",
+    "type": "Int"
+  },
+  "65机筒4区实际值": {
+    "address": "VW308",
+    "value": 140,
+    "unit": "℃",
+    "type": "Int"
+  },
+  "65机合流芯设定值": {
+    "address": "VW154",
+    "value": 140,
+    "unit": "℃",
+    "type": "Int"
+  },
+  "65机合流芯实际值": {
+    "address": "VW354",
+    "value": 139,
+    "unit": "℃",
+    "type": "Int"
+  },
+  "芯层模具上设定值": {
+    "address": "VW1130",
+    "value": 140,
+    "unit": "℃",
+    "type": "Int"
+  },
+  "芯层模具上实际值": {
+    "address": "VW330",
+    "value": 145,
+    "unit": "℃",
+    "type": "Int"
+  },
+  "芯层模具下设定值": {
+    "address": "VW1132",
+    "value": 140,
+    "unit": "℃",
+    "type": "Int"
+  },
+  "芯层模具下实际值": {
+    "address": "VW332",
+    "value": 147,
+    "unit": "℃",
+    "type": "Int"
+  },
+  "芯层模具左设定值": {
+    "address": "VW1134",
+    "value": 140,
+    "unit": "℃",
+    "type": "Int"
+  },
+  "芯层模具左实际值": {
+    "address": "VW334",
+    "value": 143,
+    "unit": "℃",
+    "type": "Int"
+  },
+  "芯层模具右设定值": {
+    "address": "VW1136",
+    "value": 145,
+    "unit": "℃",
+    "type": "Int"
+  },
+  "芯层模具右实际值": {
+    "address": "VW336",
+    "value": 143,
+    "unit": "℃",
+    "type": "Int"
+  },
+  "外层模具上设定值": {
+    "address": "VW1138",
+    "value": 180,
+    "unit": "℃",
+    "type": "Int"
+  },
+  "外层模具上实际值": {
+    "address": "VW338",
+    "value": 178,
+    "unit": "℃",
+    "type": "Int"
+  },
+  "外层模具下设定值": {
+    "address": "VW1140",
+    "value": 180,
+    "unit": "℃",
+    "type": "Int"
+  },
+  "外层模具下实际值": {
+    "address": "VW340",
+    "value": 179,
+    "unit": "℃",
+    "type": "Int"
+  },
+  "外层模具左设定值": {
+    "address": "VW1142",
+    "value": 180,
+    "unit": "℃",
+    "type": "Int"
+  },
+  "外层模具左实际值": {
+    "address": "VW342",
+    "value": 178,
+    "unit": "",
+    "type": "Int"
+  },
+  "外层模具石设定值": {
+    "address": "VW344",
+    "value": 178,
+    "unit": "℃",
+    "type": "Int"
+  },
+  "外层模具石实际值": {
+    "address": "VW344",
+    "value": 178,
+    "unit": "℃",
+    "type": "Int"
+  },
+  "A组合流芯设定值": {
+    "address": "VW146",
+    "value": 160,
+    "unit": "℃",
+    "type": "Int"
+  },
+  "A组合流芯实际值": {
+    "address": "VW346",
+    "value": 156,
+    "unit": "℃",
+    "type": "Int"
+  },
+  "A组转接模设定值": {
+    "address": "VW148",
+    "value": 165,
+    "unit": "℃",
+    "type": "Int"
+  },
+  "A组转接模实际值": {
+    "address": "VW348",
+    "value": 162,
+    "unit": "℃",
+    "type": "Int"
+  },
+  "A组连接管设定值": {
+    "address": "VW150",
+    "value": 235,
+    "unit": "℃",
+    "type": "Int"
+  },
+  "A组连接管实际值": {
+    "address": "VW350",
+    "value": 229,
+    "unit": "℃",
+    "type": "Int"
+  },
+  "B组合流芯设定值": {
+    "address": "VW152",
+    "value": 165,
+    "unit": "℃",
+    "type": "Int"
+  },
+  "B组合流芯实际值": {
+    "address": "VW352",
+    "value": 34,
+    "unit": "℃",
+    "type": "Int"
+  },
+  "B组转接模设定值": {
+    "address": "VW162",
+    "value": 165,
+    "unit": "℃",
+    "type": "Int"
+  },
+  "B组转接模实际值": {
+    "address": "VW362",
+    "value": 33,
+    "unit": "℃",
+    "type": "Int"
+  },
+  "B组连接管设定值": {
+    "address": "VW164",
+    "value": 230,
+    "unit": "℃",
+    "type": "Int"
+  },
+  "B组连接管实际值": {
+    "address": "VW364",
+    "value": 34,
+    "unit": "℃",
+    "type": "Int"
+  },
+  "35A转速设定值": {
+    "address": "VD508",
+    "value": 0.0,
+    "unit": "RPM",
+    "type": "Real"
+  },
+  "35A转速实际值": {
+    "address": "VD532",
+    "value": 0.0,
+    "unit": "RPM",
+    "type": "Real"
+  },
+  "35A电流设定值": {
+    "address": "VD2300",
+    "value": 0.0,
+    "unit": "%",
+    "type": "Real"
+  },
+  "35A电流实际值": {
+    "address": "VD556",
+    "value": 0.0,
+    "unit": "A",
+    "type": "Real"
+  },
+  "35B转速设定值": {
+    "address": "VD212",
+    "value": 0.0,
+    "unit": "RPM",
+    "type": "Real"
+  },
+  "35B转速实际值": {
+    "address": "VD236",
+    "value": 0.0,
+    "unit": "RPM",
+    "type": "Real"
+  },
+  "35B电流设定值": {
+    "address": "VD3308",
+    "value": 0.0,
+    "unit": "%",
+    "type": "Real"
+  },
+  "35B电流实际值": {
+    "address": "VD264",
+    "value": 0.0,
+    "unit": "A",
+    "type": "Real"
+  },
+  "A组35机1区设定值": {
+    "address": "VW116",
+    "value": 145,
+    "unit": "℃",
+    "type": "Int"
+  },
+  "A组35机1区实际值": {
+    "address": "VW316",
+    "value": 145,
+    "unit": "℃",
+    "type": "Int"
+  },
+  "A组35机2区实际值": {
+    "address": "VW318",
+    "value": 170,
+    "unit": "℃",
+    "type": "Int"
+  },
+  "A组35机3区设定值": {
+    "address": "VW168",
+    "value": 165,
+    "unit": "℃",
+    "type": "Int"
+  },
+  "A组35机3区实际值": {
+    "address": "VW368",
+    "value": 164,
+    "unit": "℃",
+    "type": "Int"
+  },
+  "B组35机1区设定值": {
+    "address": "VW170",
+    "value": 145,
+    "unit": "℃",
+    "type": "Int"
+  },
+  "B组35机1区实际值": {
+    "address": "VW370",
+    "value": 30,
+    "unit": "℃",
+    "type": "Int"
+  },
+  "B组35机2区设定值": {
+    "address": "VW120",
+    "value": 180,
+    "unit": "℃",
+    "type": "Int"
+  },
+  "B组35机2区实际值": {
+    "address": "VW322",
+    "value": 30,
+    "unit": "℃",
+    "type": "Int"
+  },
+  "B组35机3区设定值": {
+    "address": "VW112",
+    "value": 180,
+    "unit": "℃",
+    "type": "Int"
+  },
+  "B组35机3区实际值": {
+    "address": "VW312",
+    "value": 31,
+    "unit": "℃",
+    "type": "Int"
+  },
+  "A组备用1设定值": {
+    "address": "VW160",
+    "value": 0,
+    "unit": "℃",
+    "type": "Int"
+  },
+  "A组备用1实际值": {
+    "address": "VW360",
+    "value": 3276,
+    "unit": "℃",
+    "type": "Int"
+  },
+  "A组备用2设定值": {
+    "address": "VW166",
+    "value": 0,
+    "unit": "℃",
+    "type": "Int"
+  },
+  "A组备用2实际值": {
+    "address": "VW366",
+    "value": 3276,
+    "unit": "℃",
+    "type": "Int"
+  },
+  "B组备用1设定值": {
+    "address": "VW156",
+    "value": 0,
+    "unit": "℃",
+    "type": "Int"
+  },
+  "B组备用1实际值": {
+    "address": "VW356",
+    "value": 3276,
+    "unit": "℃",
+    "type": "Int"
+  },
+  "B组备用2设定值": {
+    "address": "VW158",
+    "value": 0,
+    "unit": "℃",
+    "type": "Int"
+  },
+  "B组备用2实际值": {
+    "address": "VW358",
+    "value": 3276,
+    "unit": "℃",
+    "type": "Int"
+  },
+  "25B调速故障": {
+    "address": "V4550.7",
+    "value": false,
+    "unit": "",
+    "type": "Bool"
+  },
+  "25B料筒冷却风机故障": {
+    "address": "V4550.4",
+    "value": false,
+    "unit": "",
+    "type": "Bool"
+  },
+  "25A调速故障": {
+    "address": "V4551.4",
+    "value": false,
+    "unit": "",
+    "type": "Bool"
+  },
+  "25A料筒冷却风机故障": {
+    "address": "V4550.6",
+    "value": false,
+    "unit": "",
+    "type": "Bool"
+  },
+  "25A过电流": {
+    "address": "V4551.7",
+    "value": false,
+    "unit": "",
+    "type": "Bool"
+  },
+  "25B转速设定值": {
+    "address": "VD212",
+    "value": 43.310550689697266,
+    "unit": "RPM",
+    "type": "Real"
+  },
+  "25B转速实际值": {
+    "address": "VD532",
+    "value": 0.0,
+    "unit": "RPM",
+    "type": "Real"
+  },
+  "25B电流设定值": {
+    "address": "VD2300",
+    "value": 0.0,
+    "unit": "%",
+    "type": "Real"
+  },
+  "25B电流实际值": {
+    "address": "VD556",
+    "value": 0.0,
+    "unit": "A",
+    "type": "Real"
+  },
+  "25A转速设定值": {
+    "address": "VD208",
+    "value": 12.300010681152344,
+    "unit": "RPM",
+    "type": "Real"
+  },
+  "25A转速实际值": {
+    "address": "VD232",
+    "value": 0.0,
+    "unit": "RPM",
+    "type": "Real"
+  },
+  "25A电流设定值": {
+    "address": "VD3300",
+    "value": 0.0,
+    "unit": "%",
+    "type": "Real"
+  },
+  "25A电流实际值": {
+    "address": "VD256",
+    "value": 0.0,
+    "unit": "A",
+    "type": "Real"
+  },
+  "B组25机1区设定值": {
+    "address": "VW102",
+    "value": 145,
+    "unit": "℃",
+    "type": "Int"
+  },
+  "B组25机1区实际值": {
+    "address": "VW302",
+    "value": 33,
+    "unit": "℃",
+    "type": "Int"
+  },
+  "B组25机2区设定值": {
+    "address": "VW104",
+    "value": 235,
+    "unit": "℃",
+    "type": "Int"
+  },
+  "B组25机2区实际值": {
+    "address": "VW304",
+    "value": 32,
+    "unit": "℃",
+    "type": "Int"
+  },
+  "B组25机3区设定值": {
+    "address": "VW106",
+    "value": 235,
+    "unit": "℃",
+    "type": "Int"
+  },
+  "B组25机3区实际值": {
+    "address": "VW306",
+    "value": 33,
+    "unit": "℃",
+    "type": "Int"
+  },
+  "A组25机1区设定值": {
+    "address": "VW108",
+    "value": 145,
+    "unit": "℃",
+    "type": "Int"
+  },
+  "A组25机1区实际值": {
+    "address": "VW308",
+    "value": 145,
+    "unit": "℃",
+    "type": "Int"
+  },
+  "A组25机2区设定值": {
+    "address": "VW116",
+    "value": 235,
+    "unit": "℃",
+    "type": "Int"
+  },
+  "A组25机2区实际值": {
+    "address": "VW316",
+    "value": 232,
+    "unit": "℃",
+    "type": "Int"
+  },
+  "A组25机3区设定值": {
+    "address": "VW118",
+    "value": 235,
+    "unit": "℃",
+    "type": "Int"
+  },
+  "A组25机3区实际值": {
+    "address": "VW318",
+    "value": 230,
+    "unit": "℃",
+    "type": "Int"
+  },
+  "25B共挤备用1设定值": {
+    "address": "VW130",
+    "value": 0,
+    "unit": "℃",
+    "type": "Int"
+  },
+  "25B共挤备用1实际值": {
+    "address": "VW330",
+    "value": 3276,
+    "unit": "℃",
+    "type": "Int"
+  },
+  "25B共挤备用2设定值": {
+    "address": "VW132",
+    "value": 0,
+    "unit": "℃",
+    "type": "Int"
+  },
+  "25B共挤备用2实际值": {
+    "address": "VW332",
+    "value": 3276,
+    "unit": "℃",
+    "type": "Int"
+  },
+  "25A共挤备用1设定值": {
+    "address": "VW134",
+    "value": 0,
+    "unit": "℃",
+    "type": "Int"
+  },
+  "25A共挤备用1实际值": {
+    "address": "VW334",
+    "value": 3276,
+    "unit": "℃",
+    "type": "Int"
+  },
+  "25A共挤备用2设定值": {
+    "address": "VW136",
+    "value": 0,
+    "unit": "℃",
+    "type": "Int"
+  },
+  "25A共挤备用2实际值": {
+    "address": "VW336",
+    "value": 3276,
+    "unit": "℃",
+    "type": "Int"
+  }
+}
+详情: 机台: 默认挤出机 (ID: 1), 参数数量: 121
+返回结果:
+{
+  "machine": {
+    "id": 1,
+    "name": "默认挤出机"
+  },
+  "parameters": {
+    "主机料温过低": {
+      "address": "V4551.2",
+      "value": false,
+      "unit": "",
+      "type": "Bool",
+      "is_readonly": true,
+      "slot": 2
+    },
+    "主机料温过高": {
+      "address": "V4551.1",
+      "value": false,
+      "unit": "",
+      "type": "Bool",
+      "is_readonly": true,
+      "slot": 2
+    },
+    "主机调速故障": {
+      "address": "V4551.4",
+      "value": false,
+      "unit": "",
+      "type": "Bool",
+      "is_readonly": true,
+      "slot": 2
+    },
+    "主机过电流": {
+      "address": "V4551.7",
+      "value": false,
+      "unit": "",
+      "type": "Bool",
+      "is_readonly": true,
+      "slot": 2
+    },
+    "主机料筒冷却风机故障": {
+      "address": "V4550.4",
+      "value": false,
+      "unit": "",
+      "type": "Bool",
+      "is_readonly": true,
+      "slot": 2
+    },
+    "喂料调速器故障": {
+      "address": "V4553.0",
+      "value": false,
+      "unit": "",
+      "type": "Bool",
+      "is_readonly": true,
+      "slot": 2
+    },
+    "喂料过电流": {
+      "address": "V4553.1",
+      "value": false,
+      "unit": "",
+      "type": "Bool",
+      "is_readonly": true,
+      "slot": 2
+    },
+    "螺杆异位报警": {
+      "address": "V4551.3",
+      "value": false,
+      "unit": "",
+      "type": "Bool",
+      "is_readonly": true,
+      "slot": 2
+    },
+    "主机急停未松开": {
+      "address": "V4551.0",
+      "value": false,
+      "unit": "",
+      "type": "Bool",
+      "is_readonly": true,
+      "slot": 2
+    },
+    "35A调速故障": {
+      "address": "V4550.1",
+      "value": false,
+      "unit": "",
+      "type": "Bool",
+      "is_readonly": true,
+      "slot": 2
+    },
+    "35A过电流": {
+      "address": "V4550.7",
+      "value": false,
+      "unit": "",
+      "type": "Bool",
+      "is_readonly": true,
+      "slot": 2
+    },
+    "35A料筒冷却风机故障": {
+      "address": "V4550.6",
+      "value": false,
+      "unit": "",
+      "type": "Bool",
+      "is_readonly": true,
+      "slot": 2
+    },
+    "35B调速故障": {
+      "address": "V4550.5",
+      "value": false,
+      "unit": "",
+      "type": "Bool",
+      "is_readonly": true,
+      "slot": 2
+    },
+    "35B过电流": {
+      "address": "V4550.0",
+      "value": false,
+      "unit": "",
+      "type": "Bool",
+      "is_readonly": true,
+      "slot": 2
+    },
+    "35B料筒冷却风机故障": {
+      "address": "V4553.2",
+      "value": false,
+      "unit": "",
+      "type": "Bool",
+      "is_readonly": true,
+      "slot": 2
+    },
+    "主机转速设定值": {
+      "address": "VD208",
+      "value": 7.5,
+      "unit": "RPM",
+      "type": "Real",
+      "is_readonly": false,
+      "slot": 2
+    },
+    "主机转速实际值": {
+      "address": "VD232",
+      "value": 7.516887664794922,
+      "unit": "RPM",
+      "type": "Real",
+      "is_readonly": true,
+      "slot": 2
+    },
+    "主机电流负载占比": {
+      "address": "VD3300",
+      "value": 65.11250305175781,
+      "unit": "%",
+      "type": "Real",
+      "is_readonly": true,
+      "slot": 2
+    },
+    "主机电流值": {
+      "address": "VD256",
+      "value": 41.67399978637695,
+      "unit": "A",
+      "type": "Real",
+      "is_readonly": true,
+      "slot": 2
+    },
+    "喂料转速设定值": {
+      "address": "VD32",
+      "value": 15.000003814697266,
+      "unit": "RPM",
+      "type": "Real",
+      "is_readonly": false,
+      "slot": 2
+    },
+    "喂料转速实际值": {
+      "address": "VD244",
+      "value": 15.1875,
+      "unit": "RPM",
+      "type": "Real",
+      "is_readonly": true,
+      "slot": 2
+    },
+    "喂料电流负载占比": {
+      "address": "VD3304",
+      "value": 67.3375015258789,
+      "unit": "%",
+      "type": "Real",
+      "is_readonly": true,
+      "slot": 2
+    },
+    "喂料电流值": {
+      "address": "VD260",
+      "value": 1.885450005531311,
+      "unit": "A",
+      "type": "Real",
+      "is_readonly": true,
+      "slot": 2
+    },
+    "65机筒1区设定值": {
+      "address": "VW102",
+      "value": 180,
+      "unit": "℃",
+      "type": "Int",
+      "is_readonly": false,
+      "slot": 2
+    },
+    "65机筒1区实际值": {
+      "address": "VW302",
+      "value": 175,
+      "unit": "℃",
+      "type": "Int",
+      "is_readonly": true,
+      "slot": 2
+    },
+    "65机筒2区设定值": {
+      "address": "VW104",
+      "value": 185,
+      "unit": "℃",
+      "type": "Int",
+      "is_readonly": false,
+      "slot": 2
+    },
+    "65机筒2区实际值": {
+      "address": "VW304",
+      "value": 182,
+      "unit": "℃",
+      "type": "Int",
+      "is_readonly": true,
+      "slot": 2
+    },
+    "65机筒3区设定值": {
+      "address": "VW106",
+      "value": 140,
+      "unit": "℃",
+      "type": "Int",
+      "is_readonly": false,
+      "slot": 2
+    },
+    "65机筒3区实际值": {
+      "address": "VW306",
+      "value": 139,
+      "unit": "℃",
+      "type": "Int",
+      "is_readonly": true,
+      "slot": 2
+    },
+    "65机筒4区设定值": {
+      "address": "VW108",
+      "value": 140,
+      "unit": "℃",
+      "type": "Int",
+      "is_readonly": false,
+      "slot": 2
+    },
+    "65机筒4区实际值": {
+      "address": "VW308",
+      "value": 140,
+      "unit": "℃",
+      "type": "Int",
+      "is_readonly": true,
+      "slot": 2
+    },
+    "65机合流芯设定值": {
+      "address": "VW154",
+      "value": 140,
+      "unit": "℃",
+      "type": "Int",
+      "is_readonly": false,
+      "slot": 2
+    },
+    "65机合流芯实际值": {
+      "address": "VW354",
+      "value": 139,
+      "unit": "℃",
+      "type": "Int",
+      "is_readonly": true,
+      "slot": 2
+    },
+    "芯层模具上设定值": {
+      "address": "VW1130",
+      "value": 140,
+      "unit": "℃",
+      "type": "Int",
+      "is_readonly": false,
+      "slot": 2
+    },
+    "芯层模具上实际值": {
+      "address": "VW330",
+      "value": 145,
+      "unit": "℃",
+      "type": "Int",
+      "is_readonly": true,
+      "slot": 2
+    },
+    "芯层模具下设定值": {
+      "address": "VW1132",
+      "value": 140,
+      "unit": "℃",
+      "type": "Int",
+      "is_readonly": false,
+      "slot": 2
+    },
+    "芯层模具下实际值": {
+      "address": "VW332",
+      "value": 147,
+      "unit": "℃",
+      "type": "Int",
+      "is_readonly": true,
+      "slot": 2
+    },
+    "芯层模具左设定值": {
+      "address": "VW1134",
+      "value": 140,
+      "unit": "℃",
+      "type": "Int",
+      "is_readonly": false,
+      "slot": 2
+    },
+    "芯层模具左实际值": {
+      "address": "VW334",
+      "value": 143,
+      "unit": "℃",
+      "type": "Int",
+      "is_readonly": true,
+      "slot": 2
+    },
+    "芯层模具右设定值": {
+      "address": "VW1136",
+      "value": 145,
+      "unit": "℃",
+      "type": "Int",
+      "is_readonly": false,
+      "slot": 2
+    },
+    "芯层模具右实际值": {
+      "address": "VW336",
+      "value": 143,
+      "unit": "℃",
+      "type": "Int",
+      "is_readonly": true,
+      "slot": 2
+    },
+    "外层模具上设定值": {
+      "address": "VW1138",
+      "value": 180,
+      "unit": "℃",
+      "type": "Int",
+      "is_readonly": false,
+      "slot": 2
+    },
+    "外层模具上实际值": {
+      "address": "VW338",
+      "value": 178,
+      "unit": "℃",
+      "type": "Int",
+      "is_readonly": true,
+      "slot": 2
+    },
+    "外层模具下设定值": {
+      "address": "VW1140",
+      "value": 180,
+      "unit": "℃",
+      "type": "Int",
+      "is_readonly": false,
+      "slot": 2
+    },
+    "外层模具下实际值": {
+      "address": "VW340",
+      "value": 179,
+      "unit": "℃",
+      "type": "Int",
+      "is_readonly": true,
+      "slot": 2
+    },
+    "外层模具左设定值": {
+      "address": "VW1142",
+      "value": 180,
+      "unit": "℃",
+      "type": "Int",
+      "is_readonly": false,
+      "slot": 2
+    },
+    "外层模具左实际值": {
+      "address": "VW342",
+      "value": 178,
+      "unit": "",
+      "type": "Int",
+      "is_readonly": true,
+      "slot": 2
+    },
+    "外层模具石设定值": {
+      "address": "VW344",
+      "value": 178,
+      "unit": "℃",
+      "type": "Int",
+      "is_readonly": false,
+      "slot": 2
+    },
+    "外层模具石实际值": {
+      "address": "VW344",
+      "value": 178,
+      "unit": "℃",
+      "type": "Int",
+      "is_readonly": true,
+      "slot": 2
+    },
+    "A组合流芯设定值": {
+      "address": "VW146",
+      "value": 160,
+      "unit": "℃",
+      "type": "Int",
+      "is_readonly": false,
+      "slot": 2
+    },
+    "A组合流芯实际值": {
+      "address": "VW346",
+      "value": 156,
+      "unit": "℃",
+      "type": "Int",
+      "is_readonly": true,
+      "slot": 2
+    },
+    "A组转接模设定值": {
+      "address": "VW148",
+      "value": 165,
+      "unit": "℃",
+      "type": "Int",
+      "is_readonly": false,
+      "slot": 2
+    },
+    "A组转接模实际值": {
+      "address": "VW348",
+      "value": 162,
+      "unit": "℃",
+      "type": "Int",
+      "is_readonly": true,
+      "slot": 2
+    },
+    "A组连接管设定值": {
+      "address": "VW150",
+      "value": 235,
+      "unit": "℃",
+      "type": "Int",
+      "is_readonly": false,
+      "slot": 2
+    },
+    "A组连接管实际值": {
+      "address": "VW350",
+      "value": 229,
+      "unit": "℃",
+      "type": "Int",
+      "is_readonly": true,
+      "slot": 2
+    },
+    "B组合流芯设定值": {
+      "address": "VW152",
+      "value": 165,
+      "unit": "℃",
+      "type": "Int",
+      "is_readonly": false,
+      "slot": 2
+    },
+    "B组合流芯实际值": {
+      "address": "VW352",
+      "value": 34,
+      "unit": "℃",
+      "type": "Int",
+      "is_readonly": true,
+      "slot": 2
+    },
+    "B组转接模设定值": {
+      "address": "VW162",
+      "value": 165,
+      "unit": "℃",
+      "type": "Int",
+      "is_readonly": false,
+      "slot": 2
+    },
+    "B组转接模实际值": {
+      "address": "VW362",
+      "value": 33,
+      "unit": "℃",
+      "type": "Int",
+      "is_readonly": true,
+      "slot": 2
+    },
+    "B组连接管设定值": {
+      "address": "VW164",
+      "value": 230,
+      "unit": "℃",
+      "type": "Int",
+      "is_readonly": false,
+      "slot": 2
+    },
+    "B组连接管实际值": {
+      "address": "VW364",
+      "value": 34,
+      "unit": "℃",
+      "type": "Int",
+      "is_readonly": true,
+      "slot": 2
+    },
+    "35A转速设定值": {
+      "address": "VD508",
+      "value": 0.0,
+      "unit": "RPM",
+      "type": "Real",
+      "is_readonly": false,
+      "slot": 2
+    },
+    "35A转速实际值": {
+      "address": "VD532",
+      "value": 0.0,
+      "unit": "RPM",
+      "type": "Real",
+      "is_readonly": true,
+      "slot": 2
+    },
+    "35A电流设定值": {
+      "address": "VD2300",
+      "value": 0.0,
+      "unit": "%",
+      "type": "Real",
+      "is_readonly": false,
+      "slot": 2
+    },
+    "35A电流实际值": {
+      "address": "VD556",
+      "value": 0.0,
+      "unit": "A",
+      "type": "Real",
+      "is_readonly": true,
+      "slot": 2
+    },
+    "35B转速设定值": {
+      "address": "VD212",
+      "value": 0.0,
+      "unit": "RPM",
+      "type": "Real",
+      "is_readonly": false,
+      "slot": 2
+    },
+    "35B转速实际值": {
+      "address": "VD236",
+      "value": 0.0,
+      "unit": "RPM",
+      "type": "Real",
+      "is_readonly": true,
+      "slot": 2
+    },
+    "35B电流设定值": {
+      "address": "VD3308",
+      "value": 0.0,
+      "unit": "%",
+      "type": "Real",
+      "is_readonly": false,
+      "slot": 2
+    },
+    "35B电流实际值": {
+      "address": "VD264",
+      "value": 0.0,
+      "unit": "A",
+      "type": "Real",
+      "is_readonly": true,
+      "slot": 2
+    },
+    "A组35机1区设定值": {
+      "address": "VW116",
+      "value": 145,
+      "unit": "℃",
+      "type": "Int",
+      "is_readonly": false,
+      "slot": 2
+    },
+    "A组35机1区实际值": {
+      "address": "VW316",
+      "value": 145,
+      "unit": "℃",
+      "type": "Int",
+      "is_readonly": true,
+      "slot": 2
+    },
+    "A组35机2区实际值": {
+      "address": "VW318",
+      "value": 170,
+      "unit": "℃",
+      "type": "Int",
+      "is_readonly": true,
+      "slot": 2
+    },
+    "A组35机3区设定值": {
+      "address": "VW168",
+      "value": 165,
+      "unit": "℃",
+      "type": "Int",
+      "is_readonly": false,
+      "slot": 2
+    },
+    "A组35机3区实际值": {
+      "address": "VW368",
+      "value": 164,
+      "unit": "℃",
+      "type": "Int",
+      "is_readonly": true,
+      "slot": 2
+    },
+    "B组35机1区设定值": {
+      "address": "VW170",
+      "value": 145,
+      "unit": "℃",
+      "type": "Int",
+      "is_readonly": false,
+      "slot": 2
+    },
+    "B组35机1区实际值": {
+      "address": "VW370",
+      "value": 30,
+      "unit": "℃",
+      "type": "Int",
+      "is_readonly": true,
+      "slot": 2
+    },
+    "B组35机2区设定值": {
+      "address": "VW120",
+      "value": 180,
+      "unit": "℃",
+      "type": "Int",
+      "is_readonly": false,
+      "slot": 2
+    },
+    "B组35机2区实际值": {
+      "address": "VW322",
+      "value": 30,
+      "unit": "℃",
+      "type": "Int",
+      "is_readonly": true,
+      "slot": 2
+    },
+    "B组35机3区设定值": {
+      "address": "VW112",
+      "value": 180,
+      "unit": "℃",
+      "type": "Int",
+      "is_readonly": false,
+      "slot": 2
+    },
+    "B组35机3区实际值": {
+      "address": "VW312",
+      "value": 31,
+      "unit": "℃",
+      "type": "Int",
+      "is_readonly": true,
+      "slot": 2
+    },
+    "A组备用1设定值": {
+      "address": "VW160",
+      "value": 0,
+      "unit": "℃",
+      "type": "Int",
+      "is_readonly": false,
+      "slot": 2
+    },
+    "A组备用1实际值": {
+      "address": "VW360",
+      "value": 3276,
+      "unit": "℃",
+      "type": "Int",
+      "is_readonly": true,
+      "slot": 2
+    },
+    "A组备用2设定值": {
+      "address": "VW166",
+      "value": 0,
+      "unit": "℃",
+      "type": "Int",
+      "is_readonly": false,
+      "slot": 2
+    },
+    "A组备用2实际值": {
+      "address": "VW366",
+      "value": 3276,
+      "unit": "℃",
+      "type": "Int",
+      "is_readonly": true,
+      "slot": 2
+    },
+    "B组备用1设定值": {
+      "address": "VW156",
+      "value": 0,
+      "unit": "℃",
+      "type": "Int",
+      "is_readonly": false,
+      "slot": 2
+    },
+    "B组备用1实际值": {
+      "address": "VW356",
+      "value": 3276,
+      "unit": "℃",
+      "type": "Int",
+      "is_readonly": true,
+      "slot": 2
+    },
+    "B组备用2设定值": {
+      "address": "VW158",
+      "value": 0,
+      "unit": "℃",
+      "type": "Int",
+      "is_readonly": false,
+      "slot": 2
+    },
+    "B组备用2实际值": {
+      "address": "VW358",
+      "value": 3276,
+      "unit": "℃",
+      "type": "Int",
+      "is_readonly": true,
+      "slot": 2
+    },
+    "25B调速故障": {
+      "address": "V4550.7",
+      "value": false,
+      "unit": "",
+      "type": "Bool",
+      "is_readonly": true,
+      "slot": 3
+    },
+    "25B料筒冷却风机故障": {
+      "address": "V4550.4",
+      "value": false,
+      "unit": "",
+      "type": "Bool",
+      "is_readonly": false,
+      "slot": 3
+    },
+    "25A调速故障": {
+      "address": "V4551.4",
+      "value": false,
+      "unit": "",
+      "type": "Bool",
+      "is_readonly": true,
+      "slot": 3
+    },
+    "25A料筒冷却风机故障": {
+      "address": "V4550.6",
+      "value": false,
+      "unit": "",
+      "type": "Bool",
+      "is_readonly": true,
+      "slot": 3
+    },
+    "25A过电流": {
+      "address": "V4551.7",
+      "value": false,
+      "unit": "",
+      "type": "Bool",
+      "is_readonly": false,
+      "slot": 3
+    },
+    "25B转速设定值": {
+      "address": "VD212",
+      "value": 43.310550689697266,
+      "unit": "RPM",
+      "type": "Real",
+      "is_readonly": false,
+      "slot": 3
+    },
+    "25B转速实际值": {
+      "address": "VD532",
+      "value": 0.0,
+      "unit": "RPM",
+      "type": "Real",
+      "is_readonly": true,
+      "slot": 3
+    },
+    "25B电流设定值": {
+      "address": "VD2300",
+      "value": 0.0,
+      "unit": "%",
+      "type": "Real",
+      "is_readonly": false,
+      "slot": 3
+    },
+    "25B电流实际值": {
+      "address": "VD556",
+      "value": 0.0,
+      "unit": "A",
+      "type": "Real",
+      "is_readonly": true,
+      "slot": 3
+    },
+    "25A转速设定值": {
+      "address": "VD208",
+      "value": 12.300010681152344,
+      "unit": "RPM",
+      "type": "Real",
+      "is_readonly": false,
+      "slot": 3
+    },
+    "25A转速实际值": {
+      "address": "VD232",
+      "value": 0.0,
+      "unit": "RPM",
+      "type": "Real",
+      "is_readonly": true,
+      "slot": 3
+    },
+    "25A电流设定值": {
+      "address": "VD3300",
+      "value": 0.0,
+      "unit": "%",
+      "type": "Real",
+      "is_readonly": false,
+      "slot": 3
+    },
+    "25A电流实际值": {
+      "address": "VD256",
+      "value": 0.0,
+      "unit": "A",
+      "type": "Real",
+      "is_readonly": true,
+      "slot": 3
+    },
+    "B组25机1区设定值": {
+      "address": "VW102",
+      "value": 145,
+      "unit": "℃",
+      "type": "Int",
+      "is_readonly": false,
+      "slot": 3
+    },
+    "B组25机1区实际值": {
+      "address": "VW302",
+      "value": 33,
+      "unit": "℃",
+      "type": "Int",
+      "is_readonly": true,
+      "slot": 3
+    },
+    "B组25机2区设定值": {
+      "address": "VW104",
+      "value": 235,
+      "unit": "℃",
+      "type": "Int",
+      "is_readonly": false,
+      "slot": 3
+    },
+    "B组25机2区实际值": {
+      "address": "VW304",
+      "value": 32,
+      "unit": "℃",
+      "type": "Int",
+      "is_readonly": true,
+      "slot": 3
+    },
+    "B组25机3区设定值": {
+      "address": "VW106",
+      "value": 235,
+      "unit": "℃",
+      "type": "Int",
+      "is_readonly": false,
+      "slot": 3
+    },
+    "B组25机3区实际值": {
+      "address": "VW306",
+      "value": 33,
+      "unit": "℃",
+      "type": "Int",
+      "is_readonly": true,
+      "slot": 3
+    },
+    "A组25机1区设定值": {
+      "address": "VW108",
+      "value": 145,
+      "unit": "℃",
+      "type": "Int",
+      "is_readonly": false,
+      "slot": 3
+    },
+    "A组25机1区实际值": {
+      "address": "VW308",
+      "value": 145,
+      "unit": "℃",
+      "type": "Int",
+      "is_readonly": true,
+      "slot": 3
+    },
+    "A组25机2区设定值": {
+      "address": "VW116",
+      "value": 235,
+      "unit": "℃",
+      "type": "Int",
+      "is_readonly": false,
+      "slot": 3
+    },
+    "A组25机2区实际值": {
+      "address": "VW316",
+      "value": 232,
+      "unit": "℃",
+      "type": "Int",
+      "is_readonly": true,
+      "slot": 3
+    },
+    "A组25机3区设定值": {
+      "address": "VW118",
+      "value": 235,
+      "unit": "℃",
+      "type": "Int",
+      "is_readonly": false,
+      "slot": 3
+    },
+    "A组25机3区实际值": {
+      "address": "VW318",
+      "value": 230,
+      "unit": "℃",
+      "type": "Int",
+      "is_readonly": true,
+      "slot": 3
+    },
+    "25B共挤备用1设定值": {
+      "address": "VW130",
+      "value": 0,
+      "unit": "℃",
+      "type": "Int",
+      "is_readonly": false,
+      "slot": 3
+    },
+    "25B共挤备用1实际值": {
+      "address": "VW330",
+      "value": 3276,
+      "unit": "℃",
+      "type": "Int",
+      "is_readonly": true,
+      "slot": 3
+    },
+    "25B共挤备用2设定值": {
+      "address": "VW132",
+      "value": 0,
+      "unit": "℃",
+      "type": "Int",
+      "is_readonly": false,
+      "slot": 3
+    },
+    "25B共挤备用2实际值": {
+      "address": "VW332",
+      "value": 3276,
+      "unit": "℃",
+      "type": "Int",
+      "is_readonly": true,
+      "slot": 3
+    },
+    "25A共挤备用1设定值": {
+      "address": "VW134",
+      "value": 0,
+      "unit": "℃",
+      "type": "Int",
+      "is_readonly": false,
+      "slot": 3
+    },
+    "25A共挤备用1实际值": {
+      "address": "VW334",
+      "value": 3276,
+      "unit": "℃",
+      "type": "Int",
+      "is_readonly": true,
+      "slot": 3
+    },
+    "25A共挤备用2设定值": {
+      "address": "VW136",
+      "value": 0,
+      "unit": "℃",
+      "type": "Int",
+      "is_readonly": false,
+      "slot": 3
+    },
+    "25A共挤备用2实际值": {
+      "address": "VW336",
+      "value": 3276,
+      "unit": "℃",
+      "type": "Int",
+      "is_readonly": true,
+      "slot": 3
+    }
+  }
+}
+------------------------------------------------------------
