@@ -1,0 +1,22 @@
+version: '3.8'
+
+services:
+  plctodb:
+    image: crpi-q3rxr07mg0fclq9r.cn-hangzhou.personal.cr.aliyuncs.com/pcb0y1/plctodb:1.1.1
+    container_name: plctodb-app
+    ports:
+      - "9527:9527"
+    environment:
+      - DB_HOST=host.docker.internal
+      - DB_PORT=3307
+      - DB_USER=root
+      - DB_PASSWORD=F3jD8gH2mB6
+      - DB_NAME=plc_process_db
+      - SECRET_KEY=0e25261d7a9d0150ff5cd84ede4a92e5f53f227a4e10ddf68b7ebbd7f0c58136
+      - ALGORITHM=HS256
+      - ACCESS_TOKEN_EXPIRE_MINUTES=1440
+      - PLC_PORT=102
+      - PLC_DB_NUMBER=1
+    volumes:
+      - ./uploads:/app/frontend/uploads
+    restart: always
