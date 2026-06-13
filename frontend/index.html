@@ -684,6 +684,7 @@
         }
 
     </style>
+    <script src="https://cdn.jsdelivr.net/npm/echarts@5.5.0/dist/echarts.min.js"></script>
 </head>
 <body>
     <div id="app">
@@ -742,6 +743,7 @@
                         <li :class="{ active: currentView === 'parameters' }" @click="currentView = 'parameters'">工艺参数</li>
                         <li :class="{ active: currentView === 'templates' }" @click="currentView = 'templates'; loadTemplates(1)">模板管理</li>
                         <li :class="{ active: currentView === 'records' }" @click="currentView = 'records'; loadProcessRecords(1)">存档参数</li>
+                        <li :class="{ active: currentView === 'trends' }" @click="currentView = 'trends'; initTrendsView()">趋势图</li>
                         <li :class="{ active: currentView === 'logs' }" @click="currentView = 'logs'; loadLogs(1)" v-if="currentUser.role === 'admin'">操作日志</li>
                         <li :class="{ active: currentView === 'users' }" @click="currentView = 'users'; loadUsers(1)" v-if="currentUser.role === 'admin'">用户管理</li>
                     </ul>
@@ -1295,6 +1297,81 @@
                                 <button class="btn" @click="() => handlePageChange(currentPage + 1)" :disabled="currentPage * pageSize >= total" style="padding: 6px 14px; font-size: 14px; border: 1px solid #4CAF50; border-radius: 4px; background: rgba(76,175,80,0.1); color: #4CAF50; box-shadow: 0 0 10px rgba(76,175,80,0.2);">下一页</button>
                                 <button class="btn" @click="() => handlePageChange(Math.ceil(total / pageSize))" :disabled="currentPage === Math.ceil(total / pageSize)" style="padding: 6px 14px; font-size: 14px; border: 1px solid #4CAF50; border-radius: 4px; background: rgba(76,175,80,0.1); color: #4CAF50; box-shadow: 0 0 10px rgba(76,175,80,0.2);">末页</button>
                             </div>
+                        </div>
+                    </div>
+
+                    <!-- 趋势图视图 -->
+                    <div v-if="currentView === 'trends'" class="card">
+                        <h2>参数趋势图</h2>
+                        <!-- 筛选条件 -->
+                        <div style="display: flex; flex-wrap: wrap; gap: 15px; margin-bottom: 20px; align-items: flex-end;">
+                            <!-- 机台选择 -->
+                            <div style="min-width: 180px;">
+                                <label style="display: block; margin-bottom: 5px; color: #4CAF50; font-size: 13px;">机台</label>
+                                <select v-model="trendFilter.machine_id" @change="onTrendMachineChange" style="width: 100%; padding: 8px 12px; border: 1px solid rgba(76,175,80,0.4); border-radius: 4px; background: rgba(0,0,0,0.3); color: #fff; font-size: 14px;">
+                                    <option value="">请选择机台</option>
+                                    <option v-for="m in trendMachines" :key="m.id" :value="m.id">{{ m.machine_name }}</option>
+                                </select>
+                            </div>
+                            <!-- 时间模式切换 -->
+                            <div style="min-width: 140px;">
+                                <label style="display: block; margin-bottom: 5px; color: #4CAF50; font-size: 13px;">时间模式</label>
+                                <select v-model="trendFilter.mode" style="width: 100%; padding: 8px 12px; border: 1px solid rgba(76,175,80,0.4); border-radius: 4px; background: rgba(0,0,0,0.3); color: #fff; font-size: 14px;">
+                                    <option value="quick">快捷选择</option>
+                                    <option value="custom">自定义时间段</option>
+                                </select>
+                            </div>
+                            <!-- 快捷时间范围 -->
+                            <div v-if="trendFilter.mode === 'quick'" style="min-width: 120px;">
+                                <label style="display: block; margin-bottom: 5px; color: #4CAF50; font-size: 13px;">时间范围</label>
+                                <select v-model="trendFilter.hours" style="width: 100%; padding: 8px 12px; border: 1px solid rgba(76,175,80,0.4); border-radius: 4px; background: rgba(0,0,0,0.3); color: #fff; font-size: 14px;">
+                                    <option value="0.083">5分钟</option>
+                                    <option value="0.5">30分钟</option>
+                                    <option value="1">1小时</option>
+                                    <option value="6">6小时</option>
+                                    <option value="24">24小时</option>
+                                    <option value="168">7天</option>
+                                    <option value="720">30天</option>
+                                    <option value="8760">1年</option>
+                                </select>
+                            </div>
+                            <!-- 自定义时间段 -->
+                            <div v-if="trendFilter.mode === 'custom'" style="display: flex; gap: 10px; align-items: flex-end;">
+                                <div>
+                                    <label style="display: block; margin-bottom: 5px; color: #4CAF50; font-size: 13px;">开始时间</label>
+                                    <input type="datetime-local" v-model="trendFilter.start_time" style="padding: 7px 10px; border: 1px solid rgba(76,175,80,0.4); border-radius: 4px; background: rgba(0,0,0,0.3); color: #fff; font-size: 13px;">
+                                </div>
+                                <div>
+                                    <label style="display: block; margin-bottom: 5px; color: #4CAF50; font-size: 13px;">结束时间</label>
+                                    <input type="datetime-local" v-model="trendFilter.end_time" style="padding: 7px 10px; border: 1px solid rgba(76,175,80,0.4); border-radius: 4px; background: rgba(0,0,0,0.3); color: #fff; font-size: 13px;">
+                                </div>
+                            </div>
+                            <!-- 查询按钮 -->
+                            <button class="btn btn-primary" @click="loadTrendData" :disabled="!trendFilter.machine_id || trendLoading">
+                                {{ trendLoading ? '加载中...' : '查询' }}
+                            </button>
+                        </div>
+                        <!-- 参数选择 (复选框) -->
+                        <div v-if="trendParameters.length > 0" style="margin-bottom: 15px;">
+                            <label style="display: block; margin-bottom: 8px; color: #4CAF50; font-size: 13px;">选择参数（可多选）</label>
+                            <div style="display: flex; flex-wrap: wrap; gap: 8px; max-height: 120px; overflow-y: auto; padding: 8px; border: 1px solid rgba(76,175,80,0.2); border-radius: 4px;">
+                                <label v-for="param in trendParameters" :key="param.parameter_name" style="display: flex; align-items: center; gap: 4px; padding: 4px 10px; border-radius: 4px; cursor: pointer; font-size: 13px; color: #ccc; transition: all 0.2s;"
+                                    :style="{ background: selectedTrendParams.includes(param.parameter_name) ? 'rgba(76,175,80,0.3)' : 'rgba(255,255,255,0.05)', border: selectedTrendParams.includes(param.parameter_name) ? '1px solid #4CAF50' : '1px solid rgba(255,255,255,0.1)' }">
+                                    <input type="checkbox" :value="param.parameter_name" v-model="selectedTrendParams" style="accent-color: #4CAF50;">
+                                    {{ param.parameter_name }}<span v-if="param.parameter_unit" style="color: #888; font-size: 11px; margin-left: 2px;">({{ param.parameter_unit }})</span>
+                                </label>
+                            </div>
+                            <div style="margin-top: 6px; font-size: 12px; color: #888;">
+                                已选 {{ selectedTrendParams.length }} 个参数
+                                <a href="#" @click.prevent="selectedTrendParams = trendParameters.slice(0, 6).map(p => p.parameter_name)" style="color: #4CAF50; margin-left: 10px;">选择前6个</a>
+                                <a href="#" @click.prevent="selectedTrendParams = []" style="color: #ff9800; margin-left: 10px;">清空</a>
+                            </div>
+                        </div>
+                        <!-- 图表容器 -->
+                        <div id="trendChart" style="width: 100%; height: 500px; background: rgba(0,0,0,0.2); border-radius: 8px; border: 1px solid rgba(76,175,80,0.2);"></div>
+                        <!-- 无数据提示 -->
+                        <div v-if="trendNoData" style="text-align: center; padding: 40px; color: #888; font-size: 14px;">
+                            暂无数据，请选择机台和参数后点击查询
                         </div>
                     </div>
                 </div>
@@ -2944,6 +3021,156 @@
                     }
                 };
                 
+                // ===== 趋势图相关 =====
+                const trendFilter = ref({ machine_id: '', hours: '1', mode: 'quick', start_time: '', end_time: '' });
+                const trendMachines = ref([]);
+                const trendParameters = ref([]);
+                const selectedTrendParams = ref([]);
+                const trendLoading = ref(false);
+                const trendNoData = ref(true);
+                let trendChartInstance = null;
+
+                const initTrendsView = async () => {
+                    try {
+                        const res = await fetch(`${API_BASE}/parameter-history/machines`, {
+                            headers: { 'Authorization': `Bearer ${token.value}` }
+                        });
+                        if (res.ok) {
+                            trendMachines.value = await res.json();
+                        }
+                    } catch (e) {
+                        console.error('加载机台列表失败:', e);
+                    }
+                };
+
+                const onTrendMachineChange = async () => {
+                    selectedTrendParams.value = [];
+                    trendParameters.value = [];
+                    trendNoData.value = true;
+                    if (!trendFilter.value.machine_id) return;
+                    try {
+                        const res = await fetch(`${API_BASE}/parameter-history/parameters?machine_id=${trendFilter.value.machine_id}`, {
+                            headers: { 'Authorization': `Bearer ${token.value}` }
+                        });
+                        if (res.ok) {
+                            trendParameters.value = await res.json();
+                        }
+                    } catch (e) {
+                        console.error('加载参数列表失败:', e);
+                    }
+                };
+
+                const loadTrendData = async () => {
+                    if (!trendFilter.value.machine_id || selectedTrendParams.value.length === 0) {
+                        trendNoData.value = true;
+                        return;
+                    }
+                    trendLoading.value = true;
+                    trendNoData.value = false;
+                    try {
+                        const names = encodeURIComponent(selectedTrendParams.value.join(','));
+                        let url = `${API_BASE}/parameter-history?machine_id=${trendFilter.value.machine_id}&parameter_name=${names}`;
+                        if (trendFilter.value.mode === 'custom') {
+                            if (!trendFilter.value.start_time || !trendFilter.value.end_time) {
+                                alert('请选择开始时间和结束时间');
+                                trendLoading.value = false;
+                                trendNoData.value = true;
+                                return;
+                            }
+                            url += `&start_time=${encodeURIComponent(trendFilter.value.start_time)}&end_time=${encodeURIComponent(trendFilter.value.end_time)}`;
+                        } else {
+                            url += `&hours=${trendFilter.value.hours}`;
+                        }
+                        const res = await fetch(url, {
+                            headers: { 'Authorization': `Bearer ${token.value}` }
+                        });
+                        if (!res.ok) {
+                            alert('查询失败: ' + res.status);
+                            trendNoData.value = true;
+                            return;
+                        }
+                        const data = await res.json();
+                        renderTrendChart(data);
+                    } catch (e) {
+                        console.error('查询趋势数据失败:', e);
+                        trendNoData.value = true;
+                    } finally {
+                        trendLoading.value = false;
+                    }
+                };
+
+                const renderTrendChart = (data) => {
+                    const chartDom = document.getElementById('trendChart');
+                    if (!chartDom) return;
+                    if (trendChartInstance) {
+                        trendChartInstance.dispose();
+                    }
+                    trendChartInstance = echarts.init(chartDom, 'dark');
+
+                    const series = data.series || [];
+                    if (series.length === 0) {
+                        trendNoData.value = true;
+                        return;
+                    }
+
+                    const colors = ['#4CAF50', '#2196F3', '#FF9800', '#E91E63', '#9C27B0', '#00BCD4', '#FF5722', '#795548', '#607D8B', '#CDDC39'];
+                    const echartsSeries = series.map((s, i) => ({
+                        name: s.parameter_name + (s.unit ? ` (${s.unit})` : ''),
+                        type: 'line',
+                        smooth: true,
+                        symbol: 'circle',
+                        symbolSize: 4,
+                        lineStyle: { width: 2, color: colors[i % colors.length] },
+                        itemStyle: { color: colors[i % colors.length] },
+                        data: s.data.map(d => [new Date(d.time).getTime(), d.value])
+                    }));
+
+                    const option = {
+                        backgroundColor: 'transparent',
+                        tooltip: {
+                            trigger: 'axis',
+                            backgroundColor: 'rgba(20,20,20,0.9)',
+                            borderColor: '#4CAF50',
+                            textStyle: { color: '#fff', fontSize: 12 },
+                            formatter: function(params) {
+                                let tip = `<div style="font-weight:bold;margin-bottom:4px;">${new Date(params[0].value[0]).toLocaleString()}</div>`;
+                                params.forEach(p => {
+                                    tip += `<div>${p.marker} ${p.seriesName}: <b>${p.value[1] !== null ? p.value[1].toFixed(2) : '—'}</b></div>`;
+                                });
+                                return tip;
+                            }
+                        },
+                        legend: {
+                            type: 'scroll',
+                            top: 0,
+                            textStyle: { color: '#ccc', fontSize: 11 },
+                            pageTextStyle: { color: '#4CAF50' }
+                        },
+                        grid: { left: 60, right: 30, top: 50, bottom: 50 },
+                        xAxis: {
+                            type: 'time',
+                            axisLine: { lineStyle: { color: 'rgba(76,175,80,0.4)' } },
+                            axisLabel: { color: '#aaa', fontSize: 11 },
+                            splitLine: { show: false }
+                        },
+                        yAxis: {
+                            type: 'value',
+                            axisLine: { lineStyle: { color: 'rgba(76,175,80,0.4)' } },
+                            axisLabel: { color: '#aaa', fontSize: 11 },
+                            splitLine: { lineStyle: { color: 'rgba(76,175,80,0.1)' } }
+                        },
+                        dataZoom: [
+                            { type: 'inside', start: 0, end: 100 },
+                            { type: 'slider', start: 0, end: 100, borderColor: 'rgba(76,175,80,0.3)', fillerColor: 'rgba(76,175,80,0.1)', handleStyle: { color: '#4CAF50' }, textStyle: { color: '#aaa' } }
+                        ],
+                        series: echartsSeries
+                    };
+                    trendChartInstance.setOption(option);
+                    window.addEventListener('resize', () => {
+                        trendChartInstance && trendChartInstance.resize();
+                    });
+                };
+                
                 return {
                     isLoggedIn, currentUser, currentView,
                     loginForm, errorMessage, machines, products, users, processParameters, groupedProcessParameters, processRecords, templates,
@@ -2972,7 +3199,10 @@
                     formatDate, formatJson, truncateText,
                     showLogDetailModal, logDetailTitle, logDetailContent, showLogDetail, closeLogDetailModal,
                     showPageSizeDropdown, showLogLimitDropdown, pageSizeOptions, logLimitOptions,
-                    togglePageSizeDropdown, toggleLogLimitDropdown, selectPageSize, selectLogLimit
+                    togglePageSizeDropdown, toggleLogLimitDropdown, selectPageSize, selectLogLimit,
+                    // 趋势图相关
+                    trendFilter, trendMachines, trendParameters, selectedTrendParams, trendLoading, trendNoData,
+                    initTrendsView, onTrendMachineChange, loadTrendData
                 };
             }
         }).mount('#app');

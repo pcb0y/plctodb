@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, String, Boolean, DateTime, ForeignKey, Text
+from sqlalchemy import Column, Integer, String, Boolean, DateTime, Float, ForeignKey, Text
 from sqlalchemy.orm import relationship
 from sqlalchemy.sql import func
 from database import Base
@@ -139,3 +139,17 @@ class AlarmParameter(Base):
     updated_at = Column(DateTime(timezone=True), onupdate=func.now())
     
     machine = relationship("Machine", backref="alarm_parameters")
+
+class ParameterCollection(Base):
+    __tablename__ = "parameter_collection"
+    
+    id = Column(Integer, primary_key=True, index=True)
+    machine_id = Column(Integer, ForeignKey("machines.id", ondelete="CASCADE"), nullable=False, index=True)
+    parameter_name = Column(String(100), nullable=False, index=True)
+    parameter_address = Column(String(50), nullable=False)
+    parameter_value = Column(Float, nullable=True)
+    parameter_unit = Column(String(20))
+    parameter_type = Column(String(20), default="Int")
+    collected_at = Column(DateTime(timezone=True), server_default=func.now(), index=True)
+    
+    machine = relationship("Machine", backref="parameter_collections")

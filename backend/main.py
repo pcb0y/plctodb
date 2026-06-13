@@ -5,13 +5,19 @@ from fastapi.responses import RedirectResponse
 from pathlib import Path
 import shutil
 import uuid
+import asyncio
+import logging
 
 from database import engine, Base
 from config import settings
 from models import User
-from routers import auth, machines, products, parameters, templates, logs
+from routers import auth, machines, products, parameters, templates, logs, history
+from scheduler import start_scheduler, stop_scheduler
 
-app = FastAPI(title="挤出机工艺参数管理系统", version="1.1.0")
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
+
+app = FastAPI(title="挤出机工艺参数管理系统", version="1.2.0")
 
 app.add_middleware(
     CORSMiddleware,
@@ -35,6 +41,7 @@ app.include_router(products.router)
 app.include_router(parameters.router)
 app.include_router(templates.router)
 app.include_router(logs.router)
+app.include_router(history.router)
 
 @app.post("/api/upload")
 async def upload_file(file: UploadFile = File(...)):
@@ -90,6 +97,15 @@ async def startup():
         except Exception as e:
             print(f"⚠️  创建默认管理员失败: {e}")
     db.close()
+    
+    # 启动PLC参数定时采集任务
+    asyncio.create_task(start_scheduler())
+    logger.info("✅ PLC参数定时采集任务已启动")
+
+@app.on_event("shutdown")
+async def shutdown():
+    stop_scheduler()
+    logger.info("✅ 服务已停止")
 
 if __name__ == "__main__":
     import uvicorn

@@ -148,6 +148,23 @@ CREATE TABLE IF NOT EXISTS alarm_parameters (
     INDEX idx_alarm_parameters_is_active (is_active)
 );
 
+-- 定时采集参数表（v1.2.0）- 与手动保存的process_records完全分离
+CREATE TABLE IF NOT EXISTS parameter_collection (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    machine_id INT NOT NULL,
+    parameter_name VARCHAR(100) NOT NULL,
+    parameter_address VARCHAR(50) NOT NULL,
+    parameter_value FLOAT,
+    parameter_unit VARCHAR(20),
+    parameter_type VARCHAR(20) DEFAULT 'Int',
+    collected_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (machine_id) REFERENCES machines(id) ON DELETE CASCADE,
+    INDEX idx_parameter_collection_machine_id (machine_id),
+    INDEX idx_parameter_collection_parameter_name (parameter_name),
+    INDEX idx_parameter_collection_collected_at (collected_at),
+    INDEX idx_parameter_collection_machine_time (machine_id, collected_at)
+);
+
 -- 插入默认管理员用户（密码：Windows,.1）
 INSERT INTO users (username, hashed_password, role) VALUES 
 ('admin', '$2b$12$LQv3c1yqBWVHxkd0LHAkCOYz6TtxMQJqhN8/X4.VTtYA.qGZvKG6G', 'admin');
